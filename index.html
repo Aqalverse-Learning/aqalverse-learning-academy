@@ -426,6 +426,30 @@
 <button class="board-button">Federal Board (FBISE)</button>
 <button class="board-button">AJK Boards</button>
   </div>
+</div><div id="subject-selection" class="card" style="display:none; margin-top:25px;">
+  <h3>Select Your Subject</h3>
+
+  <p>
+    Selected Grade:
+    <strong id="subject-grade"></strong>
+  </p>
+
+  <p>
+    Selected Board:
+    <strong id="selected-board"></strong>
+  </p>
+
+  <div class="grade-buttons">
+    <button class="subject-button">Biology</button>
+    <button class="subject-button">Chemistry</button>
+    <button class="subject-button">Physics</button>
+    <button class="subject-button">Mathematics</button>
+    <button class="subject-button">English</button>
+    <button class="subject-button">Urdu</button>
+    <button class="subject-button">Islamiyat</button>
+    <button class="subject-button">Pakistan Studies</button>
+    <button class="subject-button">Computer Science</button>
+  </div>
 </div>
   <p class="section-intro">
   Explore subjects for Grades 9, 10, 11 and 12 across Pakistani boards.
@@ -506,8 +530,25 @@
 
 </footer>
 <script>
-  const gradeButtons = document.querySelectorAll('.grade-selector .grade-buttons button');
-  const boardButtons = document.querySelectorAll('.board-button');
+  const gradeButtons = document.querySelectorAll(
+    '.grade-selector .grade-buttons button'
+  );
+
+  const boardButtons = document.querySelectorAll(
+    '.board-button'
+  );
+
+  const subjectButtons = document.querySelectorAll(
+    '.subject-button'
+  );
+
+  const boardSection = document.getElementById(
+    'board-selection'
+  );
+
+  const subjectSection = document.getElementById(
+    'subject-selection'
+  );
 
   gradeButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -520,12 +561,13 @@
 
       const selectedGrade = button.textContent;
 
-      const boardSection = document.getElementById('board-selection');
-
       boardSection.style.display = 'block';
 
-      document.getElementById('selected-grade').textContent =
-        selectedGrade;
+      document.getElementById(
+        'selected-grade'
+      ).textContent = selectedGrade;
+
+      subjectSection.style.display = 'none';
     });
   });
 
@@ -533,6 +575,32 @@
     button.addEventListener('click', () => {
 
       boardButtons.forEach(btn => {
+        btn.classList.remove('selected');
+      });
+
+      button.classList.add('selected');
+
+      const selectedBoard = button.textContent;
+
+      subjectSection.style.display = 'block';
+
+      document.getElementById(
+        'selected-board'
+      ).textContent = selectedBoard;
+
+      document.getElementById(
+        'subject-grade'
+      ).textContent =
+        document.getElementById(
+          'selected-grade'
+        ).textContent;
+    });
+  });
+
+  subjectButtons.forEach(button => {
+    button.addEventListener('click', () => {
+
+      subjectButtons.forEach(btn => {
         btn.classList.remove('selected');
       });
 
