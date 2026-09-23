@@ -419,12 +419,12 @@
   </p>
 
   <div class="grade-buttons">
-    <button>Khyber Pakhtunkhwa Boards</button>
-    <button>Punjab Boards</button>
-    <button>Sindh Boards</button>
-    <button>Balochistan Boards</button>
-    <button>Federal Board (FBISE)</button>
-    <button>AJK Boards</button>
+    <button class="board-button">Khyber Pakhtunkhwa Boards</button>
+<button class="board-button">Punjab Boards</button>
+<button class="board-button">Sindh Boards</button>
+<button class="board-button">Balochistan Boards</button>
+<button class="board-button">Federal Board (FBISE)</button>
+<button class="board-button">AJK Boards</button>
   </div>
 </div>
   <p class="section-intro">
@@ -507,6 +507,7 @@
 </footer>
 <script>
   const gradeButtons = document.querySelectorAll('.grade-selector .grade-buttons button');
+  const boardButtons = document.querySelectorAll('.board-button');
 
   gradeButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -525,6 +526,22 @@
 
       document.getElementById('selected-grade').textContent =
         selectedGrade;
+    });
+  });
+
+  boardButtons.forEach(button => {
+    button.addEventListener('click', () => {
+
+      boardButtons.forEach(btn => {
+        btn.classList.remove('selected');
+      });
+
+      button.classList.add('selected');
+
+      alert(
+        'You selected ' +
+        button.textContent
+      );
     });
   });
 </script>
