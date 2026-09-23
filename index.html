@@ -490,6 +490,21 @@
     Start Lesson
   </button>
 </div>
+  <div id="test-section" class="card" style="display:none; margin-top:25px;">
+  <h3>Lesson Test</h3>
+
+  <p>
+    Test: Introduction to Biology - Test 1
+  </p>
+
+  <p>
+    Passing Percentage: <strong>60%</strong>
+  </p>
+
+  <button class="test-button">
+    Start Test
+  </button>
+</div>
   <p class="section-intro">
   Explore subjects for Grades 9, 10, 11 and 12 across Pakistani boards.
 </p>
@@ -594,6 +609,13 @@ const chapterButtons = document.querySelectorAll(
 const lessonButtons = document.querySelectorAll(
   '.lesson-button'
 );
+  const testSection = document.getElementById(
+  'test-section'
+);
+
+const testButtons = document.querySelectorAll(
+  '.test-button'
+);
   const boardSection = document.getElementById(
     'board-selection'
   );
@@ -665,6 +687,12 @@ chapterButtons.forEach(button => {
     button.classList.add('selected');
 
     lessonSection.style.display = 'block';
+  });
+});
+      lessonButtons.forEach(button => {
+  button.addEventListener('click', () => {
+
+    testSection.style.display = 'block';
   });
 });
       button.classList.add('selected');
