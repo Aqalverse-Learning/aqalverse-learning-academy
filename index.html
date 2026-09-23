@@ -475,6 +475,21 @@
     </button>
   </div>
 </div>
+  <div id="lesson-selection" class="card" style="display:none; margin-top:25px;">
+  <h3>Lesson 1</h3>
+
+  <p>
+    <strong>Introduction to Biology</strong>
+  </p>
+
+  <p>
+    Learn the basic concepts and fundamental ideas of Biology.
+  </p>
+
+  <button class="lesson-button">
+    Start Lesson
+  </button>
+</div>
   <p class="section-intro">
   Explore subjects for Grades 9, 10, 11 and 12 across Pakistani boards.
 </p>
@@ -572,6 +587,13 @@ const chapterSection = document.getElementById(
 const chapterButtons = document.querySelectorAll(
   '.chapter-button'
 );
+  const lessonSection = document.getElementById(
+  'lesson-selection'
+);
+
+const lessonButtons = document.querySelectorAll(
+  '.lesson-button'
+);
   const boardSection = document.getElementById(
     'board-selection'
   );
@@ -633,7 +655,18 @@ const chapterButtons = document.querySelectorAll(
       subjectButtons.forEach(btn => {
         btn.classList.remove('selected');
       });
+chapterButtons.forEach(button => {
+  button.addEventListener('click', () => {
 
+    chapterButtons.forEach(btn => {
+      btn.classList.remove('selected');
+    });
+
+    button.classList.add('selected');
+
+    lessonSection.style.display = 'block';
+  });
+});
       button.classList.add('selected');
 
      chapterSection.style.display = 'block';
