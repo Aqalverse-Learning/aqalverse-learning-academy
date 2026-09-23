@@ -488,6 +488,18 @@
   </p>
 
 </footer>
+<script>
+  const gradeButtons = document.querySelectorAll('.grade-buttons button');
 
+  gradeButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      gradeButtons.forEach(btn => btn.classList.remove('selected'));
+      button.classList.add('selected');
+
+      const selectedGrade = button.textContent;
+      alert('You selected ' + selectedGrade);
+    });
+  });
+</script>
 </body>
 </html>
