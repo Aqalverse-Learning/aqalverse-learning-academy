@@ -506,15 +506,25 @@
 
 </footer>
 <script>
-  const gradeButtons = document.querySelectorAll('.grade-buttons button');
+  const gradeButtons = document.querySelectorAll('.grade-selector .grade-buttons button');
 
   gradeButtons.forEach(button => {
     button.addEventListener('click', () => {
-      gradeButtons.forEach(btn => btn.classList.remove('selected'));
+
+      gradeButtons.forEach(btn => {
+        btn.classList.remove('selected');
+      });
+
       button.classList.add('selected');
 
       const selectedGrade = button.textContent;
-      alert('You selected ' + selectedGrade);
+
+      const boardSection = document.getElementById('board-selection');
+
+      boardSection.style.display = 'block';
+
+      document.getElementById('selected-grade').textContent =
+        selectedGrade;
     });
   });
 </script>
