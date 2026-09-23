@@ -451,6 +451,30 @@
     <button class="subject-button">Computer Science</button>
   </div>
 </div>
+  <div id="chapter-selection" class="card" style="display:none; margin-top:25px;">
+  <h3>Select Your Chapter</h3>
+
+  <p>
+    Grade:
+    <strong id="chapter-grade"></strong>
+  </p>
+
+  <p>
+    Board:
+    <strong id="chapter-board"></strong>
+  </p>
+
+  <p>
+    Subject:
+    <strong id="selected-subject"></strong>
+  </p>
+
+  <div class="grade-buttons">
+    <button class="chapter-button">
+      Chapter 1 - Introduction to Biology
+    </button>
+  </div>
+</div>
   <p class="section-intro">
   Explore subjects for Grades 9, 10, 11 and 12 across Pakistani boards.
 </p>
@@ -541,7 +565,13 @@
   const subjectButtons = document.querySelectorAll(
     '.subject-button'
   );
+const chapterSection = document.getElementById(
+  'chapter-selection'
+);
 
+const chapterButtons = document.querySelectorAll(
+  '.chapter-button'
+);
   const boardSection = document.getElementById(
     'board-selection'
   );
@@ -606,10 +636,25 @@
 
       button.classList.add('selected');
 
-      alert(
-        'You selected ' +
-        button.textContent
-      );
+     chapterSection.style.display = 'block';
+
+document.getElementById(
+  'selected-subject'
+).textContent = button.textContent;
+
+document.getElementById(
+  'chapter-grade'
+).textContent =
+  document.getElementById(
+    'selected-grade'
+  ).textContent;
+
+document.getElementById(
+  'chapter-board'
+).textContent =
+  document.getElementById(
+    'selected-board'
+  ).textContent;
     });
   });
 </script>
