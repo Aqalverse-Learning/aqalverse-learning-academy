@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1914,6 +1915,446 @@
     });
 
   });
+```html
+/* =========================================================
+   AQALVERSE SUPABASE AUTHENTICATION
+   ========================================================= */
+
+/* Supabase project configuration */
+const SUPABASE_URL = "https://lmfkrykuxspddjfcwpuf.supabase.co";
+
+/*
+   Use your publishable/anon key here.
+   Do NOT use a service_role or secret key.
+*/
+const SUPABASE_ANON_KEY = "sb_publishable_4mtcQW0b7WZzuCAnfrBpcA_KCp-F7Oc";
+
+
+/* Create Supabase client */
+const { createClient } = supabase;
+
+const aqalverseSupabase = createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+
+/* =========================================================
+   LOGIN / REGISTER FORM SWITCHING
+   ========================================================= */
+
+const loginCard = document.getElementById("loginCard");
+const registerCard = document.getElementById("registerCard");
+
+const showRegister = document.getElementById("showRegister");
+const showLogin = document.getElementById("showLogin");
+
+if (showRegister) {
+
+  showRegister.addEventListener("click", function () {
+
+    loginCard.style.display = "none";
+    registerCard.style.display = "block";
+
+  });
+
+}
+
+
+if (showLogin) {
+
+  showLogin.addEventListener("click", function () {
+
+    registerCard.style.display = "none";
+    loginCard.style.display = "block";
+
+  });
+
+}
+
+
+/* =========================================================
+   STUDENT REGISTRATION
+   ========================================================= */
+
+const registerForm =
+  document.getElementById("studentRegisterForm");
+
+
+if (registerForm) {
+
+  registerForm.addEventListener("submit", async function (event) {
+
+    event.preventDefault();
+
+
+    const fullName =
+      document.getElementById("registerName").value.trim();
+
+    const username =
+      document.getElementById("registerUsername").value.trim();
+
+    const email =
+      document.getElementById("registerEmail").value.trim();
+
+    const password =
+      document.getElementById("registerPassword").value;
+
+    const gradeNumber =
+      parseInt(
+        document.getElementById("registerGrade").value
+      );
+
+    const boardName =
+      document.getElementById("registerBoard").value;
+
+
+    const message =
+      document.getElementById("registerMessage");
+
+
+    message.textContent = "Creating your account...";
+    message.style.color = "";
+
+
+    try {
+
+      /* -----------------------------------------
+         Find selected grade
+         ----------------------------------------- */
+
+      const { data: gradeData, error: gradeError } =
+        await aqalverseSupabase
+          .from("grades")
+          .select("id, grade_number")
+          .eq("grade_number", gradeNumber)
+          .single();
+
+
+      if (gradeError || !gradeData) {
+
+        throw new Error(
+          "Selected grade was not found in the database."
+        );
+
+      }
+
+
+      /* -----------------------------------------
+         Find selected board
+         ----------------------------------------- */
+
+      const { data: boardData, error: boardError } =
+        await aqalverseSupabase
+          .from("boards")
+          .select("id, name")
+          .eq("name", boardName)
+          .single();
+
+
+      if (boardError || !boardData) {
+
+        throw new Error(
+          "Selected board was not found in the database."
+        );
+
+      }
+
+
+      /* -----------------------------------------
+         Create Supabase Auth account
+         ----------------------------------------- */
+
+      const { data: authData, error: authError } =
+        await aqalverseSupabase.auth.signUp({
+
+          email: email,
+
+          password: password,
+
+          options: {
+
+            data: {
+
+              full_name: fullName,
+
+              username: username
+
+            }
+
+          }
+
+        });
+
+
+      if (authError) {
+
+        throw authError;
+
+      }
+
+
+      if (!authData.user) {
+
+        throw new Error(
+          "Account could not be created."
+        );
+
+      }
+
+
+      const userId = authData.user.id;
+
+
+      /* -----------------------------------------
+         Give the new student a 2-day trial
+         ----------------------------------------- */
+
+      const trialStart = new Date();
+
+      const trialEnd = new Date();
+
+      trialEnd.setDate(
+        trialEnd.getDate() + 2
+      );
+
+
+      /* -----------------------------------------
+         Create student record
+         ----------------------------------------- */
+
+      const { error: studentError } =
+        await aqalverseSupabase
+          .from("students")
+          .insert({
+
+            id: userId,
+
+            board_id: boardData.id,
+
+            grade_id: gradeData.id,
+
+            trial_started_at:
+              trialStart.toISOString(),
+
+            trial_ends_at:
+              trialEnd.toISOString(),
+
+            account_status: "trial"
+
+          });
+
+
+      if (studentError) {
+
+        console.error(
+          "Student record error:",
+          studentError
+        );
+
+        throw new Error(
+          "Account was created, but the student profile could not be completed. Please contact the academy."
+        );
+
+      }
+
+
+      /* -----------------------------------------
+         Success
+         ----------------------------------------- */
+
+      message.textContent =
+        "Account created successfully! Your 2-day free trial has started.";
+
+      message.style.color = "green";
+
+
+      registerForm.reset();
+
+
+      /*
+         If email confirmation is enabled in Supabase,
+         the student will need to confirm their email.
+      */
+
+      setTimeout(function () {
+
+        registerCard.style.display = "none";
+
+        loginCard.style.display = "block";
+
+      }, 2500);
+
+
+    } catch (error) {
+
+      console.error(
+        "Registration error:",
+        error
+      );
+
+
+      message.textContent =
+        error.message ||
+        "Registration failed. Please try again.";
+
+      message.style.color = "red";
+
+    }
+
+  });
+
+}
+
+
+/* =========================================================
+   STUDENT LOGIN
+   ========================================================= */
+
+const loginForm =
+  document.getElementById("studentLoginForm");
+
+
+if (loginForm) {
+
+  loginForm.addEventListener("submit", async function (event) {
+
+    event.preventDefault();
+
+
+    const email =
+      document.getElementById("loginEmail").value.trim();
+
+    const password =
+      document.getElementById("loginPassword").value;
+
+    const message =
+      document.getElementById("loginMessage");
+
+
+    message.textContent =
+      "Logging in...";
+
+
+    try {
+
+      const { data, error } =
+        await aqalverseSupabase.auth.signInWithPassword({
+
+          email: email,
+
+          password: password
+
+        });
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      if (!data.user) {
+
+        throw new Error(
+          "Login failed."
+        );
+
+      }
+
+
+      message.textContent =
+        "Login successful. Welcome to Aqalverse!";
+
+      message.style.color = "green";
+
+
+      /*
+         Temporary dashboard behavior.
+         We will replace this with the real
+         student dashboard in the next stage.
+      */
+
+      setTimeout(function () {
+
+        alert(
+          "Welcome to Aqalverse Learning Academy!"
+        );
+
+      }, 500);
+
+
+    } catch (error) {
+
+      console.error(
+        "Login error:",
+        error
+      );
+
+
+      message.textContent =
+        error.message ||
+        "Login failed. Please check your email and password.";
+
+      message.style.color = "red";
+
+    }
+
+  });
+
+}
+
+
+/* =========================================================
+   CHECK CURRENT LOGIN SESSION
+   ========================================================= */
+
+async function checkAqalverseSession() {
+
+  const { data } =
+    await aqalverseSupabase.auth.getSession();
+
+
+  if (data.session) {
+
+    console.log(
+      "Aqalverse user is logged in:",
+      data.session.user.email
+    );
+
+  }
+
+}
+
+
+checkAqalverseSession();
+
+
+/* =========================================================
+   AUTH STATE LISTENER
+   ========================================================= */
+
+aqalverseSupabase.auth.onAuthStateChange(
+  function (event, session) {
+
+    console.log(
+      "Aqalverse auth event:",
+      event
+    );
+
+    if (session) {
+
+      console.log(
+        "Logged-in user:",
+        session.user.email
+      );
+
+    }
+
+  }
+);
+```
 
 </script>
 
