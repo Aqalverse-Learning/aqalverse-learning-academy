@@ -1268,46 +1268,211 @@
 </section>
 
 
-<!-- LOGIN PLACEHOLDER -->
+```html
+<!-- STUDENT AUTHENTICATION -->
 
 <section class="section" id="login">
 
-  <h2>Student & Teacher Access</h2>
+  <h2>Student Access</h2>
 
   <p class="section-intro">
-    Secure login and separate dashboards will be connected
-    to the academy database in the next stage.
+    Create your Aqalverse student account or login to continue your learning.
   </p>
 
-  <div class="cards">
+  <div class="auth-container">
 
-    <div class="card">
+    <!-- LOGIN FORM -->
+    <div class="auth-card" id="loginCard">
+
       <h3>Student Login</h3>
-      <p>
-        Students will use their own username and password
-        to access their courses and progress.
+
+      <form id="studentLoginForm">
+
+        <div class="form-group">
+          <label for="loginEmail">Email</label>
+          <input
+            type="email"
+            id="loginEmail"
+            placeholder="Enter your email"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input
+            type="password"
+            id="loginPassword"
+            placeholder="Enter your password"
+            required
+          >
+        </div>
+
+        <button type="submit" class="btn">
+          Login
+        </button>
+
+      </form>
+
+      <p id="loginMessage" class="auth-message"></p>
+
+      <p class="auth-switch">
+        Don't have an account?
+        <button type="button" id="showRegister">
+          Create Student Account
+        </button>
       </p>
+
     </div>
 
-    <div class="card">
-      <h3>Teacher/Admin Login</h3>
-      <p>
-        Teachers and administrators will manage lessons,
-        questions, assignments and student records.
-      </p>
-    </div>
 
-    <div class="card">
-      <h3>Parent Portal</h3>
-      <p>
-        Parents will be able to monitor their child's
-        learning progress and performance.
+    <!-- REGISTER FORM -->
+    <div class="auth-card" id="registerCard" style="display:none;">
+
+      <h3>Create Student Account</h3>
+
+      <form id="studentRegisterForm">
+
+        <div class="form-group">
+          <label for="registerName">Full Name</label>
+          <input
+            type="text"
+            id="registerName"
+            placeholder="Enter your full name"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="registerUsername">Username</label>
+          <input
+            type="text"
+            id="registerUsername"
+            placeholder="Choose a username"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="registerEmail">Email</label>
+          <input
+            type="email"
+            id="registerEmail"
+            placeholder="Enter your email"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="registerPassword">Password</label>
+          <input
+            type="password"
+            id="registerPassword"
+            placeholder="Create a password"
+            minlength="6"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+
+          <label for="registerGrade">
+            Select Grade
+          </label>
+
+          <select id="registerGrade" required>
+
+            <option value="">
+              Select Grade
+            </option>
+
+            <option value="9">
+              Grade 9
+            </option>
+
+            <option value="10">
+              Grade 10
+            </option>
+
+            <option value="11">
+              Grade 11
+            </option>
+
+            <option value="12">
+              Grade 12
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label for="registerBoard">
+            Select Board
+          </label>
+
+          <select id="registerBoard" required>
+
+            <option value="">
+              Select Board
+            </option>
+
+            <option value="Khyber Pakhtunkhwa Boards">
+              Khyber Pakhtunkhwa Boards
+            </option>
+
+            <option value="Punjab Boards">
+              Punjab Boards
+            </option>
+
+            <option value="Sindh Boards">
+              Sindh Boards
+            </option>
+
+            <option value="Balochistan Boards">
+              Balochistan Boards
+            </option>
+
+            <option value="Federal Board (FBISE)">
+              Federal Board (FBISE)
+            </option>
+
+            <option value="AJK Boards">
+              AJK Boards
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <button type="submit" class="btn">
+          Create Account
+        </button>
+
+      </form>
+
+      <p id="registerMessage" class="auth-message"></p>
+
+      <p class="auth-switch">
+
+        Already have an account?
+
+        <button type="button" id="showLogin">
+          Login
+        </button>
+
       </p>
+
     </div>
 
   </div>
 
 </section>
+```
+
 
 
 <!-- FOOTER -->
