@@ -13,19 +13,27 @@
       padding: 0;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: Arial, sans-serif;
       background: #f5f8fc;
       color: #172033;
+      line-height: 1.6;
     }
 
     header {
       background: white;
-      padding: 20px 6%;
+      padding: 18px 6%;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid #e5e9ef;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
     .logo {
@@ -38,10 +46,20 @@
       color: #1597a5;
     }
 
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
     nav a {
-      margin-left: 20px;
       text-decoration: none;
       color: #4f5c70;
+      font-weight: 600;
+    }
+
+    nav a:hover {
+      color: #1597a5;
     }
 
     .hero {
@@ -53,10 +71,16 @@
       background: linear-gradient(135deg, #edf7ff, #f9fcff);
     }
 
+    .hero-label {
+      color: #1597a5;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
     .hero h1 {
       font-size: 52px;
       line-height: 1.1;
-      margin: 15px 0;
+      margin: 15px 0 20px;
     }
 
     .hero p {
@@ -74,6 +98,12 @@
       text-decoration: none;
       border-radius: 10px;
       font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      opacity: 0.9;
     }
 
     .dashboard-card {
@@ -86,10 +116,15 @@
     .stat {
       display: flex;
       justify-content: space-between;
+      gap: 20px;
       padding: 18px;
       margin-bottom: 12px;
       background: #f5f8fc;
       border-radius: 12px;
+    }
+
+    .stat strong {
+      color: #163b68;
     }
 
     .section {
@@ -149,6 +184,116 @@
       font-size: 32px;
       font-weight: bold;
       margin: 15px 0;
+      color: #163b68;
+    }
+
+    .selector-box {
+      max-width: 1000px;
+      margin: 0 auto 25px;
+    }
+
+    .selector-box h3 {
+      margin-bottom: 15px;
+    }
+
+    .button-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .select-button {
+      padding: 12px 16px;
+      border: 1px solid #d7dee8;
+      background: white;
+      color: #172033;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .select-button:hover,
+    .select-button.selected {
+      background: #163b68;
+      color: white;
+      border-color: #163b68;
+    }
+
+    .path-info {
+      background: #edf7ff;
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1100px;
+      margin: 40px auto 0;
+    }
+
+    .course-grid .card {
+      transition: transform 0.2s;
+    }
+
+    .course-grid .card:hover {
+      transform: translateY(-3px);
+    }
+
+    .course-grid span {
+      display: block;
+      margin-top: 12px;
+      color: #1597a5;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .quiz-question {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 18px;
+    }
+
+    .quiz-question p {
+      color: #172033;
+      margin-bottom: 12px;
+    }
+
+    .quiz-option {
+      display: block;
+      padding: 8px;
+      margin: 4px 0;
+      cursor: pointer;
+      color: #4f5c70;
+    }
+
+    .quiz-option:hover {
+      background: #eef5fb;
+      border-radius: 6px;
+    }
+
+    #test-result {
+      padding: 18px;
+      border-radius: 12px;
+      background: #edf7ff;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .success {
+      color: #157347;
+      font-weight: bold;
+    }
+
+    .failure {
+      color: #b42318;
+      font-weight: bold;
     }
 
     footer {
@@ -158,21 +303,54 @@
       text-align: center;
     }
 
-    @media (max-width: 800px) {
+    @media (max-width: 900px) {
       .hero {
         grid-template-columns: 1fr;
       }
 
-      .cards {
-        grid-template-columns: 1fr;
+      .cards,
+      .course-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 650px) {
+      header {
+        padding: 15px 5%;
       }
 
-      .hero h1 {
-        font-size: 40px;
+      .logo {
+        font-size: 19px;
       }
 
       nav {
         display: none;
+      }
+
+      .hero {
+        padding: 60px 5%;
+      }
+
+      .hero h1 {
+        font-size: 38px;
+      }
+
+      .section {
+        padding: 50px 5%;
+      }
+
+      .cards,
+      .course-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .button-grid {
+        flex-direction: column;
+      }
+
+      .select-button {
+        width: 100%;
+        text-align: left;
       }
     }
   </style>
@@ -190,17 +368,19 @@
     <a href="#features">Features</a>
     <a href="#courses">Courses</a>
     <a href="#pricing">Pricing</a>
-    <a href="#">Login</a>
+    <a href="#login">Login</a>
   </nav>
 
 </header>
 
 
+<!-- HERO -->
+
 <section class="hero">
 
   <div>
 
-    <p style="color:#1597a5;font-weight:bold;">
+    <p class="hero-label">
       LEARN • PRACTICE • PROGRESS
     </p>
 
@@ -210,12 +390,12 @@
 
     <p>
       A modern online learning platform for Grades 9–12,
-      with board-specific courses, video lessons,
-      assessments, progress tracking and parent monitoring.
+      with board-specific courses, lessons, assessments,
+      progress tracking and parent monitoring.
     </p>
 
-    <a class="button" href="#">
-      Start 2-Day Free Trial
+    <a class="button" href="#courses">
+      Explore Courses
     </a>
 
   </div>
@@ -224,17 +404,17 @@
   <div class="dashboard-card">
 
     <div class="stat">
-      <span>Active Course</span>
-      <strong>Biology</strong>
+      <span>Grades</span>
+      <strong>9–12</strong>
     </div>
 
     <div class="stat">
-      <span>Lesson Progress</span>
-      <strong>72%</strong>
+      <span>Subjects</span>
+      <strong>9+</strong>
     </div>
 
     <div class="stat">
-      <span>Next Assessment</span>
+      <span>Assessment</span>
       <strong>10 Questions</strong>
     </div>
 
@@ -248,6 +428,8 @@
 </section>
 
 
+<!-- FEATURES -->
+
 <section class="section" id="features">
 
   <h2>Everything in one learning platform</h2>
@@ -256,7 +438,6 @@
     A complete learning environment for students,
     teachers and parents.
   </p>
-
 
   <div class="cards">
 
@@ -269,46 +450,41 @@
       </p>
     </div>
 
-
     <div class="card">
       <div class="icon">02</div>
       <h3>Smart Assessments</h3>
       <p>
-        Randomized questions, 60% passing
-        requirement and repeat attempts.
+        Ten-question assessments with a
+        60% passing requirement.
       </p>
     </div>
-
 
     <div class="card">
       <div class="icon">03</div>
       <h3>Parent Portal</h3>
       <p>
-        Parents can monitor attendance,
-        progress, results and fee status.
+        Parents will be able to monitor
+        attendance, progress and results.
       </p>
     </div>
-
 
     <div class="card">
       <div class="icon">04</div>
       <h3>Teacher Review</h3>
       <p>
-        Teachers can review, edit and approve
+        Teachers can review and approve
         questions before publishing tests.
       </p>
     </div>
-
 
     <div class="card">
       <div class="icon">05</div>
       <h3>Attendance & Fees</h3>
       <p>
-        Manage student attendance and
-        subscription information.
+        Manage student attendance,
+        subscriptions and fee records.
       </p>
     </div>
-
 
     <div class="card">
       <div class="icon">06</div>
@@ -324,14 +500,15 @@
 </section>
 
 
+<!-- PRICING -->
+
 <section class="section pricing" id="pricing">
 
   <h2>Academy Pricing</h2>
 
   <p class="section-intro">
-    Simple monthly plans.
+    Simple monthly plans with a 2-day free trial.
   </p>
-
 
   <div class="cards">
 
@@ -344,10 +521,11 @@
       </div>
 
       <p>
-        Biology, Chemistry or Physics.
+        Individual access for Biology,
+        Chemistry or Physics.
       </p>
 
-      <a class="button" href="#">
+      <a class="button" href="#courses">
         Start Trial
       </a>
 
@@ -367,7 +545,7 @@
         for the student's grade.
       </p>
 
-      <a class="button" href="#">
+      <a class="button" href="#courses">
         Start Trial
       </a>
 
@@ -383,10 +561,11 @@
       </div>
 
       <p>
-        Explore the academy before subscribing.
+        Explore the academy before
+        subscribing to a monthly plan.
       </p>
 
-      <a class="button" href="#">
+      <a class="button" href="#courses">
         Try Free
       </a>
 
@@ -397,319 +576,747 @@
 </section>
 
 
+<!-- COURSES -->
+
 <section class="section" id="courses">
 
-  <h2>Courses</h2>
-<div class="grade-selector">
-  <h3>Select Your Grade</h3>
+  <h2>Find Your Course</h2>
 
-  <div class="grade-buttons">
-    <button>Grade 9</button>
-    <button>Grade 10</button>
-    <button>Grade 11</button>
-    <button>Grade 12</button>
-  </div>
-</div>
-  <div id="board-selection" class="card" style="display:none; margin-top:25px;">
-  <h3>Select Your Board</h3>
-
-  <p>
-    Selected Grade:
-    <strong id="selected-grade"></strong>
-  </p>
-
-  <div class="grade-buttons">
-    <button class="board-button">Khyber Pakhtunkhwa Boards</button>
-<button class="board-button">Punjab Boards</button>
-<button class="board-button">Sindh Boards</button>
-<button class="board-button">Balochistan Boards</button>
-<button class="board-button">Federal Board (FBISE)</button>
-<button class="board-button">AJK Boards</button>
-  </div>
-</div><div id="subject-selection" class="card" style="display:none; margin-top:25px;">
-  <h3>Select Your Subject</h3>
-
-  <p>
-    Selected Grade:
-    <strong id="subject-grade"></strong>
-  </p>
-
-  <p>
-    Selected Board:
-    <strong id="selected-board"></strong>
-  </p>
-
-  <div class="grade-buttons">
-    <button class="subject-button">Biology</button>
-    <button class="subject-button">Chemistry</button>
-    <button class="subject-button">Physics</button>
-    <button class="subject-button">Mathematics</button>
-    <button class="subject-button">English</button>
-    <button class="subject-button">Urdu</button>
-    <button class="subject-button">Islamiyat</button>
-    <button class="subject-button">Pakistan Studies</button>
-    <button class="subject-button">Computer Science</button>
-  </div>
-</div>
-  <div id="chapter-selection" class="card" style="display:none; margin-top:25px;">
-  <h3>Select Your Chapter</h3>
-
-  <p>
-    Grade:
-    <strong id="chapter-grade"></strong>
-  </p>
-
-  <p>
-    Board:
-    <strong id="chapter-board"></strong>
-  </p>
-
-  <p>
-    Subject:
-    <strong id="selected-subject"></strong>
-  </p>
-
-  <div class="grade-buttons">
-    <button class="chapter-button">
-      Chapter 1 - Introduction to Biology
-    </button>
-  </div>
-</div>
-  <div id="lesson-selection" class="card" style="display:none; margin-top:25px;">
-  <h3>Lesson 1</h3>
-
-  <p>
-    <strong>Introduction to Biology</strong>
-  </p>
-
-  <p>
-    Learn the basic concepts and fundamental ideas of Biology.
-  </p>
-
-  <button class="lesson-button">
-    Start Lesson
-  </button>
-</div>
-  <div id="test-section" class="card" style="display:none; margin-top:25px;">
-  <h3>Lesson Test</h3>
-
-  <p>
-    Test: Introduction to Biology - Test 1
-  </p>
-
-  <p>
-    Passing Percentage: <strong>60%</strong>
-  </p>
-
-  <button class="test-button">
-    Start Test
-    <div id="quiz-container" style="display:none; margin-top:25px;">
-
-  <h3>Introduction to Biology - Test 1</h3>
-
-  <div class="quiz-question">
-    <p><strong>1. What is Biology?</strong></p>
-
-    <label>
-      <input type="radio" name="q1" value="A">
-      A. The study of living organisms
-    </label><br>
-
-    <label>
-      <input type="radio" name="q1" value="B">
-      B. The study of planets
-    </label><br>
-
-    <label>
-      <input type="radio" name="q1" value="C">
-      C. The study of rocks
-    </label><br>
-
-    <label>
-      <input type="radio" name="q1" value="D">
-      D. The study of machines
-    </label>
-  </div>
-
-  <div class="quiz-question">
-    <p><strong>2. Which is a characteristic of living organisms?</strong></p>
-
-    <label>
-      <input type="radio" name="q2" value="A">
-      A. Growth
-    </label><br>
-
-    <label>
-      <input type="radio" name="q2" value="B">
-      B. Rusting
-    </label><br>
-
-    <label>
-      <input type="radio" name="q2" value="C">
-      C. Melting
-    </label><br>
-
-    <label>
-      <input type="radio" name="q2" value="D">
-      D. Burning
-    </label>
-  </div>
-
-  <div class="quiz-question">
-    <p><strong>3. Which level of organization is made up of similar cells?</strong></p>
-
-    <label>
-      <input type="radio" name="q3" value="A">
-      A. Tissue
-    </label><br>
-
-    <label>
-      <input type="radio" name="q3" value="B">
-      B. Organ
-    </label><br>
-
-    <label>
-      <input type="radio" name="q3" value="C">
-      C. Organ system
-    </label><br>
-
-    <label>
-      <input type="radio" name="q3" value="D">
-      D. Organism
-    </label>
-  </div>
-<div class="quiz-question">
-  <p><strong>4. Which branch of Biology deals with plants?</strong></p>
-  <label><input type="radio" name="q4" value="A"> A. Botany</label><br>
-  <label><input type="radio" name="q4" value="B"> B. Zoology</label><br>
-  <label><input type="radio" name="q4" value="C"> C. Anatomy</label><br>
-  <label><input type="radio" name="q4" value="D"> D. Genetics</label>
-</div>
-
-<div class="quiz-question">
-  <p><strong>5. Which branch of Biology deals with animals?</strong></p>
-  <label><input type="radio" name="q5" value="A"> A. Botany</label><br>
-  <label><input type="radio" name="q5" value="B"> B. Zoology</label><br>
-  <label><input type="radio" name="q5" value="C"> C. Ecology</label><br>
-  <label><input type="radio" name="q5" value="D"> D. Cytology</label>
-</div>
-
-<div class="quiz-question">
-  <p><strong>6. What is the basic unit of life?</strong></p>
-  <label><input type="radio" name="q6" value="A"> A. Tissue</label><br>
-  <label><input type="radio" name="q6" value="B"> B. Organ</label><br>
-  <label><input type="radio" name="q6" value="C"> C. Cell</label><br>
-  <label><input type="radio" name="q6" value="D"> D. Organ system</label>
-</div>
-
-<div class="quiz-question">
-  <p><strong>7. Which instrument is commonly used to observe very small objects?</strong></p>
-  <label><input type="radio" name="q7" value="A"> A. Telescope</label><br>
-  <label><input type="radio" name="q7" value="B"> B. Microscope</label><br>
-  <label><input type="radio" name="q7" value="C"> C. Thermometer</label><br>
-  <label><input type="radio" name="q7" value="D"> D. Balance</label>
-</div>
-
-<div class="quiz-question">
-  <p><strong>8. The study of heredity is called:</strong></p>
-  <label><input type="radio" name="q8" value="A"> A. Ecology</label><br>
-  <label><input type="radio" name="q8" value="B"> B. Genetics</label><br>
-  <label><input type="radio" name="q8" value="C"> C. Taxonomy</label><br>
-  <label><input type="radio" name="q8" value="D"> D. Anatomy</label>
-</div>
-
-<div class="quiz-question">
-  <p><strong>9. Which level comes directly after tissue?</strong></p>
-  <label><input type="radio" name="q9" value="A"> A. Cell</label><br>
-  <label><input type="radio" name="q9" value="B"> B. Organ</label><br>
-  <label><input type="radio" name="q9" value="C"> C. Organism</label><br>
-  <label><input type="radio" name="q9" value="D"> D. Organ system</label>
-</div>
-
-<div class="quiz-question">
-  <p><strong>10. The study of relationships between organisms and their environment is called:</strong></p>
-  <label><input type="radio" name="q10" value="A"> A. Ecology</label><br>
-  <label><input type="radio" name="q10" value="B"> B. Genetics</label><br>
-  <label><input type="radio" name="q10" value="C"> C. Anatomy</label><br>
-  <label><input type="radio" name="q10" value="D"> D. Histology</label>
-</div>
-  <button id="submit-test">
-    Submit Test
-  </button>
-
-  <div id="test-result" style="margin-top:20px;"></div>
-
-</div>
-  </button>
-</div>
   <p class="section-intro">
-  Explore subjects for Grades 9, 10, 11 and 12 across Pakistani boards.
-</p>
+    Select your grade, board and subject.
+  </p>
 
-<div class="course-grid">
 
-  <div class="card">
-    <h3>Biology</h3>
-    <p>Grades 9–12 • English + Urdu</p>
-    <span>KPK & Other Pakistani Boards</span>
+  <!-- GRADE -->
+
+  <div class="selector-box card">
+
+    <h3>1. Select Your Grade</h3>
+
+    <div class="button-grid">
+
+      <button class="select-button grade-button">
+        Grade 9
+      </button>
+
+      <button class="select-button grade-button">
+        Grade 10
+      </button>
+
+      <button class="select-button grade-button">
+        Grade 11
+      </button>
+
+      <button class="select-button grade-button">
+        Grade 12
+      </button>
+
+    </div>
+
   </div>
 
-  <div class="card">
-    <h3>Chemistry</h3>
-    <p>Grades 9–12 • English + Urdu</p>
-    <span>KPK & Other Pakistani Boards</span>
+
+  <!-- BOARD -->
+
+  <div
+    id="board-selection"
+    class="selector-box card hidden"
+  >
+
+    <h3>2. Select Your Board</h3>
+
+    <div class="path-info">
+      Selected Grade:
+      <strong id="selected-grade"></strong>
+    </div>
+
+    <div class="button-grid">
+
+      <button class="select-button board-button">
+        Khyber Pakhtunkhwa Boards
+      </button>
+
+      <button class="select-button board-button">
+        Punjab Boards
+      </button>
+
+      <button class="select-button board-button">
+        Sindh Boards
+      </button>
+
+      <button class="select-button board-button">
+        Balochistan Boards
+      </button>
+
+      <button class="select-button board-button">
+        Federal Board (FBISE)
+      </button>
+
+      <button class="select-button board-button">
+        AJK Boards
+      </button>
+
+    </div>
+
   </div>
 
-  <div class="card">
-    <h3>Physics</h3>
-    <p>Grades 9–12 • English + Urdu</p>
-    <span>KPK & Other Pakistani Boards</span>
+
+  <!-- SUBJECT -->
+
+  <div
+    id="subject-selection"
+    class="selector-box card hidden"
+  >
+
+    <h3>3. Select Your Subject</h3>
+
+    <div class="path-info">
+
+      Grade:
+      <strong id="subject-grade"></strong>
+
+      <br>
+
+      Board:
+      <strong id="selected-board"></strong>
+
+    </div>
+
+    <div class="button-grid">
+
+      <button class="select-button subject-button">
+        Biology
+      </button>
+
+      <button class="select-button subject-button">
+        Chemistry
+      </button>
+
+      <button class="select-button subject-button">
+        Physics
+      </button>
+
+      <button class="select-button subject-button">
+        Mathematics
+      </button>
+
+      <button class="select-button subject-button">
+        English
+      </button>
+
+      <button class="select-button subject-button">
+        Urdu
+      </button>
+
+      <button class="select-button subject-button">
+        Islamiyat
+      </button>
+
+      <button class="select-button subject-button">
+        Pakistan Studies
+      </button>
+
+      <button class="select-button subject-button">
+        Computer Science
+      </button>
+
+    </div>
+
   </div>
 
-  <div class="card">
-    <h3>Mathematics</h3>
-    <p>Grades 9–12 • English + Urdu</p>
-    <span>Pakistani Curriculum</span>
+
+  <!-- CHAPTER -->
+
+  <div
+    id="chapter-selection"
+    class="selector-box card hidden"
+  >
+
+    <h3>4. Select Your Chapter</h3>
+
+    <div class="path-info">
+
+      Grade:
+      <strong id="chapter-grade"></strong>
+
+      <br>
+
+      Board:
+      <strong id="chapter-board"></strong>
+
+      <br>
+
+      Subject:
+      <strong id="selected-subject"></strong>
+
+    </div>
+
+    <div class="button-grid">
+
+      <button class="select-button chapter-button">
+        Chapter 1 - Introduction to Biology
+      </button>
+
+    </div>
+
   </div>
 
-  <div class="card">
-    <h3>English</h3>
-    <p>Grades 9–12 • English + Urdu</p>
-    <span>Pakistani Curriculum</span>
+
+  <!-- LESSON -->
+
+  <div
+    id="lesson-selection"
+    class="selector-box card hidden"
+  >
+
+    <h3>5. Lesson</h3>
+
+    <h3>
+      Introduction to Biology
+    </h3>
+
+    <p>
+      Learn the basic concepts and fundamental
+      ideas of Biology.
+    </p>
+
+    <button class="button lesson-button">
+      Start Lesson
+    </button>
+
   </div>
 
-  <div class="card">
-    <h3>Urdu</h3>
-    <p>Grades 9–12 • Urdu + English</p>
-    <span>Pakistani Curriculum</span>
+
+  <!-- TEST -->
+
+  <div
+    id="test-section"
+    class="selector-box card hidden"
+  >
+
+    <h3>6. Lesson Assessment</h3>
+
+    <p>
+      Test:
+      <strong>
+        Introduction to Biology - Test 1
+      </strong>
+    </p>
+
+    <p>
+      Number of Questions:
+      <strong>10</strong>
+    </p>
+
+    <p>
+      Passing Percentage:
+      <strong>60%</strong>
+    </p>
+
+    <button
+      id="start-test"
+      class="button"
+    >
+      Start Test
+    </button>
+
   </div>
 
-  <div class="card">
-    <h3>Islamiyat</h3>
-    <p>Grades 9–12 • English + Urdu</p>
-    <span>Pakistani Curriculum</span>
-  </div>
 
-  <div class="card">
-    <h3>Pakistan Studies</h3>
-    <p>Grades 9–12 • English + Urdu</p>
-    <span>Pakistani Curriculum</span>
-  </div>
+  <!-- QUIZ -->
 
-  <div class="card">
-    <h3>Computer Science</h3>
-    <p>Grades 9–12 • English + Urdu</p>
-    <span>Pakistani Curriculum</span>
-  </div>
+  <div
+    id="quiz-container"
+    class="selector-box card hidden"
+  >
 
-</div>
+    <h3>
+      Introduction to Biology - Test 1
+    </h3>
+
+    <p style="margin:15px 0;">
+      Answer all 10 questions.
+      You need at least 6 correct answers to pass.
+    </p>
+
+
+    <!-- Q1 -->
+
+    <div class="quiz-question">
+
+      <p>
+        <strong>
+          1. What is Biology?
+        </strong>
+      </p>
+
+      <label class="quiz-option">
+        <input type="radio" name="q1" value="A">
+        A. The study of living organisms
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q1" value="B">
+        B. The study of planets
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q1" value="C">
+        C. The study of rocks
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q1" value="D">
+        D. The study of machines
+      </label>
+
+    </div>
+
+
+    <!-- Q2 -->
+
+    <div class="quiz-question">
+
+      <p>
+        <strong>
+          2. Which is a characteristic of living organisms?
+        </strong>
+      </p>
+
+      <label class="quiz-option">
+        <input type="radio" name="q2" value="A">
+        A. Growth
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q2" value="B">
+        B. Rusting
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q2" value="C">
+        C. Melting
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q2" value="D">
+        D. Burning
+      </label>
+
+    </div>
+
+
+    <!-- Q3 -->
+
+    <div class="quiz-question">
+
+      <p>
+        <strong>
+          3. Which level of organization is made up of similar cells?
+        </strong>
+      </p>
+
+      <label class="quiz-option">
+        <input type="radio" name="q3" value="A">
+        A. Tissue
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q3" value="B">
+        B. Organ
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q3" value="C">
+        C. Organ system
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q3" value="D">
+        D. Organism
+      </label>
+
+    </div>
+
+
+    <!-- Q4 -->
+
+    <div class="quiz-question">
+
+      <p>
+        <strong>
+          4. Which branch of Biology deals with plants?
+        </strong>
+      </p>
+
+      <label class="quiz-option">
+        <input type="radio" name="q4" value="A">
+        A. Botany
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q4" value="B">
+        B. Zoology
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q4" value="C">
+        C. Anatomy
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q4" value="D">
+        D. Genetics
+      </label>
+
+    </div>
+
+
+    <!-- Q5 -->
+
+    <div class="quiz-question">
+
+      <p>
+        <strong>
+          5. Which branch of Biology deals with animals?
+        </strong>
+      </p>
+
+      <label class="quiz-option">
+        <input type="radio" name="q5" value="A">
+        A. Botany
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q5" value="B">
+        B. Zoology
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q5" value="C">
+        C. Ecology
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q5" value="D">
+        D. Cytology
+      </label>
+
+    </div>
+
+
+    <!-- Q6 -->
+
+    <div class="quiz-question">
+
+      <p>
+        <strong>
+          6. What is the basic unit of life?
+        </strong>
+      </p>
+
+      <label class="quiz-option">
+        <input type="radio" name="q6" value="A">
+        A. Tissue
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q6" value="B">
+        B. Organ
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q6" value="C">
+        C. Cell
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q6" value="D">
+        D. Organ system
+      </label>
+
+    </div>
+
+
+    <!-- Q7 -->
+
+    <div class="quiz-question">
+
+      <p>
+        <strong>
+          7. Which instrument is commonly used to observe very small objects?
+        </strong>
+      </p>
+
+      <label class="quiz-option">
+        <input type="radio" name="q7" value="A">
+        A. Telescope
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q7" value="B">
+        B. Microscope
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q7" value="C">
+        C. Thermometer
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q7" value="D">
+        D. Balance
+      </label>
+
+    </div>
+
+
+    <!-- Q8 -->
+
+    <div class="quiz-question">
+
+      <p>
+        <strong>
+          8. The study of heredity is called:
+        </strong>
+      </p>
+
+      <label class="quiz-option">
+        <input type="radio" name="q8" value="A">
+        A. Ecology
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q8" value="B">
+        B. Genetics
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q8" value="C">
+        C. Taxonomy
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q8" value="D">
+        D. Anatomy
+      </label>
+
+    </div>
+
+
+    <!-- Q9 -->
+
+    <div class="quiz-question">
+
+      <p>
+        <strong>
+          9. Which level comes directly after tissue?
+        </strong>
+      </p>
+
+      <label class="quiz-option">
+        <input type="radio" name="q9" value="A">
+        A. Cell
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q9" value="B">
+        B. Organ
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q9" value="C">
+        C. Organism
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q9" value="D">
+        D. Organ system
+      </label>
+
+    </div>
+
+
+    <!-- Q10 -->
+
+    <div class="quiz-question">
+
+      <p>
+        <strong>
+          10. The study of relationships between organisms and their environment is called:
+        </strong>
+      </p>
+
+      <label class="quiz-option">
+        <input type="radio" name="q10" value="A">
+        A. Ecology
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q10" value="B">
+        B. Genetics
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q10" value="C">
+        C. Anatomy
+      </label>
+
+      <label class="quiz-option">
+        <input type="radio" name="q10" value="D">
+        D. Histology
+      </label>
+
+    </div>
+
+
+    <button
+      id="submit-test"
+      class="button"
+    >
+      Submit Test
+    </button>
+
+    <button
+      id="retry-test"
+      class="button hidden"
+      type="button"
+    >
+      Retry Test
+    </button>
+
+    <div
+      id="test-result"
+      class="hidden"
+      style="margin-top:20px;"
+    ></div>
+
+  </div>
 
 </section>
 
 
+<!-- SUBJECT OVERVIEW -->
+
+<section class="section">
+
+  <h2>Our Subjects</h2>
+
+  <p class="section-intro">
+    Explore subjects for Grades 9, 10, 11 and 12
+    across Pakistani boards.
+  </p>
+
+  <div class="course-grid">
+
+    <div class="card">
+      <h3>Biology</h3>
+      <p>Grades 9–12 • English + Urdu</p>
+      <span>Pakistani Curriculum</span>
+    </div>
+
+    <div class="card">
+      <h3>Chemistry</h3>
+      <p>Grades 9–12 • English + Urdu</p>
+      <span>Pakistani Curriculum</span>
+    </div>
+
+    <div class="card">
+      <h3>Physics</h3>
+      <p>Grades 9–12 • English + Urdu</p>
+      <span>Pakistani Curriculum</span>
+    </div>
+
+    <div class="card">
+      <h3>Mathematics</h3>
+      <p>Grades 9–12 • English + Urdu</p>
+      <span>Pakistani Curriculum</span>
+    </div>
+
+    <div class="card">
+      <h3>English</h3>
+      <p>Grades 9–12 • English + Urdu</p>
+      <span>Pakistani Curriculum</span>
+    </div>
+
+    <div class="card">
+      <h3>Urdu</h3>
+      <p>Grades 9–12 • Urdu + English</p>
+      <span>Pakistani Curriculum</span>
+    </div>
+
+    <div class="card">
+      <h3>Islamiyat</h3>
+      <p>Grades 9–12 • English + Urdu</p>
+      <span>Pakistani Curriculum</span>
+    </div>
+
+    <div class="card">
+      <h3>Pakistan Studies</h3>
+      <p>Grades 9–12 • English + Urdu</p>
+      <span>Pakistani Curriculum</span>
+    </div>
+
+    <div class="card">
+      <h3>Computer Science</h3>
+      <p>Grades 9–12 • English + Urdu</p>
+      <span>Pakistani Curriculum</span>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- LOGIN PLACEHOLDER -->
+
+<section class="section" id="login">
+
+  <h2>Student & Teacher Access</h2>
+
+  <p class="section-intro">
+    Secure login and separate dashboards will be connected
+    to the academy database in the next stage.
+  </p>
+
+  <div class="cards">
+
+    <div class="card">
+      <h3>Student Login</h3>
+      <p>
+        Students will use their own username and password
+        to access their courses and progress.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Teacher/Admin Login</h3>
+      <p>
+        Teachers and administrators will manage lessons,
+        questions, assignments and student records.
+      </p>
+    </div>
+
+    <div class="card">
+      <h3>Parent Portal</h3>
+      <p>
+        Parents will be able to monitor their child's
+        learning progress and performance.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- FOOTER -->
+
 <footer>
 
-  <strong>Aqalverse Learning Academy</strong>
+  <strong>
+    Aqalverse Learning Academy
+  </strong>
 
   <p style="margin-top:10px;">
     Online learning for Grades 9–12
@@ -719,60 +1326,267 @@
     English • اردو
   </p>
 
+  <p style="margin-top:10px;">
+    © 2026 Aqalverse Learning Academy
+  </p>
+
 </footer>
+
+
 <script>
-  const gradeButtons = document.querySelectorAll(
-    '.grade-selector .grade-buttons button'
-  );
 
-  const boardButtons = document.querySelectorAll(
-    '.board-button'
-  );
+  /* =========================
+     GRADE SELECTION
+  ========================= */
 
-  const subjectButtons = document.querySelectorAll(
-    '.subject-button'
-  );
-const chapterSection = document.getElementById(
-  'chapter-selection'
-);
+  const gradeButtons =
+    document.querySelectorAll('.grade-button');
 
-const chapterButtons = document.querySelectorAll(
-  '.chapter-button'
-);
-  const lessonSection = document.getElementById(
-  'lesson-selection'
-);
+  const boardButtons =
+    document.querySelectorAll('.board-button');
 
-const lessonButtons = document.querySelectorAll(
-  '.lesson-button'
-);
-  const testSection = document.getElementById(
-  'test-section'
-);
+  const subjectButtons =
+    document.querySelectorAll('.subject-button');
 
-const testButtons = document.querySelectorAll(
-  '.test-button'
-);
-  const quizContainer = document.getElementById(
-  'quiz-container'
-);
+  const chapterButtons =
+    document.querySelectorAll('.chapter-button');
 
-testButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    quizContainer.style.display = 'block';
-    quizContainer.scrollIntoView({
-      behavior: 'smooth'
+  const lessonButtons =
+    document.querySelectorAll('.lesson-button');
+
+
+  const boardSection =
+    document.getElementById('board-selection');
+
+  const subjectSection =
+    document.getElementById('subject-selection');
+
+  const chapterSection =
+    document.getElementById('chapter-selection');
+
+  const lessonSection =
+    document.getElementById('lesson-selection');
+
+  const testSection =
+    document.getElementById('test-section');
+
+  const quizContainer =
+    document.getElementById('quiz-container');
+
+
+  let selectedGrade = '';
+  let selectedBoard = '';
+  let selectedSubject = '';
+
+
+  gradeButtons.forEach(button => {
+
+    button.addEventListener('click', () => {
+
+      gradeButtons.forEach(btn => {
+        btn.classList.remove('selected');
+      });
+
+      button.classList.add('selected');
+
+      selectedGrade =
+        button.textContent.trim();
+
+      document.getElementById(
+        'selected-grade'
+      ).textContent = selectedGrade;
+
+      boardSection.classList.remove('hidden');
+
+      subjectSection.classList.add('hidden');
+      chapterSection.classList.add('hidden');
+      lessonSection.classList.add('hidden');
+      testSection.classList.add('hidden');
+      quizContainer.classList.add('hidden');
+
+      boardSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+
     });
+
   });
-});
-  const submitTest = document.getElementById('submit-test');
-const testResult = document.getElementById('test-result');
 
-submitTest.addEventListener('click', () => {
 
-  let score = 0;
+  /* =========================
+     BOARD SELECTION
+  ========================= */
+
+  boardButtons.forEach(button => {
+
+    button.addEventListener('click', () => {
+
+      boardButtons.forEach(btn => {
+        btn.classList.remove('selected');
+      });
+
+      button.classList.add('selected');
+
+      selectedBoard =
+        button.textContent.trim();
+
+      document.getElementById(
+        'selected-board'
+      ).textContent = selectedBoard;
+
+      document.getElementById(
+        'subject-grade'
+      ).textContent = selectedGrade;
+
+      subjectSection.classList.remove('hidden');
+
+      chapterSection.classList.add('hidden');
+      lessonSection.classList.add('hidden');
+      testSection.classList.add('hidden');
+      quizContainer.classList.add('hidden');
+
+      subjectSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+
+    });
+
+  });
+
+
+  /* =========================
+     SUBJECT SELECTION
+  ========================= */
+
+  subjectButtons.forEach(button => {
+
+    button.addEventListener('click', () => {
+
+      subjectButtons.forEach(btn => {
+        btn.classList.remove('selected');
+      });
+
+      button.classList.add('selected');
+
+      selectedSubject =
+        button.textContent.trim();
+
+      document.getElementById(
+        'selected-subject'
+      ).textContent = selectedSubject;
+
+      document.getElementById(
+        'chapter-grade'
+      ).textContent = selectedGrade;
+
+      document.getElementById(
+        'chapter-board'
+      ).textContent = selectedBoard;
+
+      chapterSection.classList.remove('hidden');
+
+      lessonSection.classList.add('hidden');
+      testSection.classList.add('hidden');
+      quizContainer.classList.add('hidden');
+
+      chapterSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+
+    });
+
+  });
+
+
+  /* =========================
+     CHAPTER SELECTION
+  ========================= */
+
+  chapterButtons.forEach(button => {
+
+    button.addEventListener('click', () => {
+
+      chapterButtons.forEach(btn => {
+        btn.classList.remove('selected');
+      });
+
+      button.classList.add('selected');
+
+      lessonSection.classList.remove('hidden');
+
+      testSection.classList.add('hidden');
+      quizContainer.classList.add('hidden');
+
+      lessonSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+
+    });
+
+  });
+
+
+  /* =========================
+     LESSON
+  ========================= */
+
+  lessonButtons.forEach(button => {
+
+    button.addEventListener('click', () => {
+
+      testSection.classList.remove('hidden');
+
+      quizContainer.classList.add('hidden');
+
+      testSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+
+    });
+
+  });
+
+
+  /* =========================
+     START TEST
+  ========================= */
+
+  const startTest =
+    document.getElementById('start-test');
+
+  startTest.addEventListener('click', () => {
+
+    quizContainer.classList.remove('hidden');
+
+    quizContainer.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+
+  });
+
+
+  /* =========================
+     TEST SCORING
+  ========================= */
+
+  const submitTest =
+    document.getElementById('submit-test');
+
+  const retryTest =
+    document.getElementById('retry-test');
+
+  const testResult =
+    document.getElementById('test-result');
+
 
   const correctAnswers = {
+
     q1: 'A',
     q2: 'A',
     q3: 'A',
@@ -783,139 +1597,160 @@ submitTest.addEventListener('click', () => {
     q8: 'B',
     q9: 'B',
     q10: 'A'
+
   };
 
-  for (const question in correctAnswers) {
 
-    const selectedAnswer = document.querySelector(
-      `input[name="${question}"]:checked`
-    );
+  submitTest.addEventListener('click', () => {
 
-    if (
-      selectedAnswer &&
-      selectedAnswer.value === correctAnswers[question]
+    let score = 0;
+
+    let unanswered = 0;
+
+
+    for (
+      const question in correctAnswers
     ) {
-      score++;
+
+      const selectedAnswer =
+        document.querySelector(
+          `input[name="${question}"]:checked`
+        );
+
+
+      if (!selectedAnswer) {
+
+        unanswered++;
+
+      } else if (
+        selectedAnswer.value ===
+        correctAnswers[question]
+      ) {
+
+        score++;
+
+      }
+
     }
-  }
 
-  const percentage = (score / 10) * 100;
 
-  if (percentage >= 60) {
-    testResult.innerHTML =
-      `<h3>Passed ✅</h3>
-       <p>Your score: ${score}/10</p>
-       <p>Percentage: ${percentage.toFixed(1)}%</p>`;
-  } else {
-    testResult.innerHTML =
-      `<h3>Failed ❌</h3>
-       <p>Your score: ${score}/10</p>
-       <p>Percentage: ${percentage.toFixed(1)}%</p>`;
-  }
+    if (unanswered > 0) {
 
-});
-  const boardSection = document.getElementById(
-    'board-selection'
-  );
+      testResult.classList.remove('hidden');
 
-  const subjectSection = document.getElementById(
-    'subject-selection'
-  );
+      testResult.innerHTML = `
+        <p class="failure">
+          Please answer all 10 questions.
+        </p>
 
-  gradeButtons.forEach(button => {
-    button.addEventListener('click', () => {
+        <p>
+          ${unanswered} question(s) are unanswered.
+        </p>
+      `;
 
-      gradeButtons.forEach(btn => {
-        btn.classList.remove('selected');
+      return;
+
+    }
+
+
+    const percentage =
+      (score / 10) * 100;
+
+
+    testResult.classList.remove('hidden');
+
+
+    if (percentage >= 60) {
+
+      testResult.innerHTML = `
+
+        <h3 class="success">
+          Passed ✅
+        </h3>
+
+        <p>
+          Your score:
+          <strong>${score}/10</strong>
+        </p>
+
+        <p>
+          Percentage:
+          <strong>${percentage.toFixed(1)}%</strong>
+        </p>
+
+        <p>
+          Congratulations! You passed the assessment.
+        </p>
+
+      `;
+
+    } else {
+
+      testResult.innerHTML = `
+
+        <h3 class="failure">
+          Failed ❌
+        </h3>
+
+        <p>
+          Your score:
+          <strong>${score}/10</strong>
+        </p>
+
+        <p>
+          Percentage:
+          <strong>${percentage.toFixed(1)}%</strong>
+        </p>
+
+        <p>
+          You need at least 60% to pass.
+        </p>
+
+      `;
+
+    }
+
+
+    submitTest.classList.add('hidden');
+
+    retryTest.classList.remove('hidden');
+
+  });
+
+
+  /* =========================
+     RETRY TEST
+  ========================= */
+
+  retryTest.addEventListener('click', () => {
+
+    document
+      .querySelectorAll(
+        'input[type="radio"]'
+      )
+      .forEach(input => {
+        input.checked = false;
       });
 
-      button.classList.add('selected');
 
-      const selectedGrade = button.textContent;
+    testResult.classList.add('hidden');
 
-      boardSection.style.display = 'block';
+    testResult.innerHTML = '';
 
-      document.getElementById(
-        'selected-grade'
-      ).textContent = selectedGrade;
 
-      subjectSection.style.display = 'none';
-    });
-  });
+    retryTest.classList.add('hidden');
 
-  boardButtons.forEach(button => {
-    button.addEventListener('click', () => {
+    submitTest.classList.remove('hidden');
 
-      boardButtons.forEach(btn => {
-        btn.classList.remove('selected');
-      });
 
-      button.classList.add('selected');
-
-      const selectedBoard = button.textContent;
-
-      subjectSection.style.display = 'block';
-
-      document.getElementById(
-        'selected-board'
-      ).textContent = selectedBoard;
-
-      document.getElementById(
-        'subject-grade'
-      ).textContent =
-        document.getElementById(
-          'selected-grade'
-        ).textContent;
-    });
-  });
-
-  subjectButtons.forEach(button => {
-    button.addEventListener('click', () => {
-
-      subjectButtons.forEach(btn => {
-        btn.classList.remove('selected');
-      });
-chapterButtons.forEach(button => {
-  button.addEventListener('click', () => {
-
-    chapterButtons.forEach(btn => {
-      btn.classList.remove('selected');
+    quizContainer.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
     });
 
-    button.classList.add('selected');
-
-    lessonSection.style.display = 'block';
   });
-});
-      lessonButtons.forEach(button => {
-  button.addEventListener('click', () => {
 
-    testSection.style.display = 'block';
-  });
-});
-      button.classList.add('selected');
-
-     chapterSection.style.display = 'block';
-
-document.getElementById(
-  'selected-subject'
-).textContent = button.textContent;
-
-document.getElementById(
-  'chapter-grade'
-).textContent =
-  document.getElementById(
-    'selected-grade'
-  ).textContent;
-
-document.getElementById(
-  'chapter-board'
-).textContent =
-  document.getElementById(
-    'selected-board'
-  ).textContent;
-    });
-  });
 </script>
+
 </body>
 </html>
