@@ -11,7 +11,6 @@
     content="Aqalverse Learning Academy - Smart learning for Pakistani students."
   />
 
-  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
@@ -101,7 +100,11 @@
     .hero {
       padding: 85px 0 70px;
       background:
-        radial-gradient(circle at top right, rgba(32, 164, 107, 0.12), transparent 35%),
+        radial-gradient(
+          circle at top right,
+          rgba(32, 164, 107, 0.12),
+          transparent 35%
+        ),
         linear-gradient(135deg, #eef6ff, #ffffff);
     }
 
@@ -193,7 +196,7 @@
       font-size: 14px;
     }
 
-    /* GENERAL SECTIONS */
+    /* GENERAL */
 
     section {
       padding: 75px 0;
@@ -237,6 +240,118 @@
 
     .feature-card p {
       color: #667085;
+    }
+
+    /* DASHBOARD */
+
+    #dashboard {
+      background: #f0f7ff;
+    }
+
+    .dashboard-box {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      border: 1px solid #e5e9f2;
+      box-shadow: 0 10px 35px rgba(23, 59, 108, 0.08);
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .dashboard-header h2 {
+      color: #173b6c;
+      margin-bottom: 5px;
+    }
+
+    .dashboard-header p {
+      color: #667085;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+
+    .dashboard-card {
+      background: #f8fafc;
+      border: 1px solid #e5e9f2;
+      border-radius: 14px;
+      padding: 20px;
+    }
+
+    .dashboard-card h4 {
+      color: #667085;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .dashboard-card strong {
+      color: #173b6c;
+      font-size: 20px;
+    }
+
+    .trial-box {
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 12px;
+      background: #eaf5ef;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .dashboard-subjects {
+      margin-top: 25px;
+    }
+
+    .dashboard-subjects h3 {
+      color: #173b6c;
+      margin-bottom: 15px;
+    }
+
+    .subject-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .subject-item {
+      padding: 15px;
+      background: white;
+      border: 1px solid #d8dfeb;
+      border-radius: 10px;
+      font-weight: 700;
+      color: #344054;
+    }
+
+    .progress-box {
+      margin-top: 25px;
+      padding: 20px;
+      background: #f8fafc;
+      border-radius: 14px;
+      border: 1px solid #e5e9f2;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 12px;
+      background: #e5e7eb;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: #20a46b;
+      transition: width 0.4s ease;
     }
 
     /* COURSES */
@@ -473,36 +588,6 @@
       color: #991b1b;
     }
 
-    /* USER AREA */
-
-    .user-area {
-      background: #fff;
-      border: 1px solid #e5e9f2;
-      border-radius: 16px;
-      padding: 25px;
-      margin-top: 25px;
-      display: none;
-    }
-
-    .user-area h3 {
-      color: #173b6c;
-      margin-bottom: 8px;
-    }
-
-    .user-info {
-      color: #667085;
-      margin-bottom: 15px;
-    }
-
-    .logout-btn {
-      border: none;
-      background: #dc2626;
-      color: white;
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-weight: 700;
-    }
-
     /* FOOTER */
 
     footer {
@@ -536,6 +621,14 @@
         grid-template-columns: 1fr 1fr;
       }
 
+      .dashboard-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .subject-list {
+        grid-template-columns: 1fr 1fr;
+      }
+
       .nav-links {
         gap: 12px;
         font-size: 14px;
@@ -554,7 +647,9 @@
       }
 
       .feature-grid,
-      .selection-grid {
+      .selection-grid,
+      .dashboard-grid,
+      .subject-list {
         grid-template-columns: 1fr;
       }
 
@@ -565,918 +660,192 @@
       section {
         padding: 55px 0;
       }
+
+      .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- HEADER -->
+<header>
+  <div class="container nav">
 
-  <header>
-    <div class="container nav">
+    <a href="#" class="logo">
+      Aqalverse <span>Learning Academy</span>
+    </a>
 
-      <a href="#" class="logo">
-        Aqalverse <span>Learning Academy</span>
+    <nav class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#courses">Courses</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#login">Login</a>
+    </nav>
+
+  </div>
+</header>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+  <div class="container hero-grid">
+
+    <div>
+
+      <div class="tagline">
+        LEARN • PRACTICE • PROGRESS
+      </div>
+
+      <h1>
+        Smart learning for Pakistani students.
+      </h1>
+
+      <p>
+        Learn according to your grade, board and subject with lessons,
+        practice assessments and progress tracking.
+      </p>
+
+      <a href="#courses" class="primary-btn">
+        Explore Courses
       </a>
 
-      <nav class="nav-links">
-        <a href="#features">Features</a>
-        <a href="#courses">Courses</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#login">Login</a>
-      </nav>
-
     </div>
-  </header>
 
+    <div class="hero-card">
 
-  <!-- HERO -->
+      <h3>
+        Aqalverse Learning Academy
+      </h3>
 
-  <section class="hero">
-    <div class="container hero-grid">
+      <div class="stats">
 
-      <div>
-        <div class="tagline">LEARN • PRACTICE • PROGRESS</div>
-
-        <h1>
-          Smart learning for Pakistani students.
-        </h1>
-
-        <p>
-          Learn according to your grade, board and subject with lessons,
-          practice assessments and progress tracking.
-        </p>
-
-        <a href="#courses" class="primary-btn">
-          Explore Courses
-        </a>
-      </div>
-
-      <div class="hero-card">
-
-        <h3>Aqalverse Learning Academy</h3>
-
-        <div class="stats">
-
-          <div class="stat">
-            <strong>9–12</strong>
-            <span>Grades</span>
-          </div>
-
-          <div class="stat">
-            <strong>9+</strong>
-            <span>Subjects</span>
-          </div>
-
-          <div class="stat">
-            <strong>10</strong>
-            <span>Assessment Questions</span>
-          </div>
-
-          <div class="stat">
-            <strong>60%</strong>
-            <span>Passing Requirement</span>
-          </div>
-
+        <div class="stat">
+          <strong>9–12</strong>
+          <span>Grades</span>
         </div>
 
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- FEATURES -->
-
-  <section id="features">
-
-    <div class="container">
-
-      <div class="section-title">
-        <h2>Everything Students Need</h2>
-        <p>
-          A learning platform designed for Pakistani students.
-        </p>
-      </div>
-
-      <div class="feature-grid">
-
-        <div class="feature-card">
-          <h3>Board-Specific Learning</h3>
-          <p>
-            Select your Pakistani education board and study according to your curriculum.
-          </p>
+        <div class="stat">
+          <strong>9+</strong>
+          <span>Subjects</span>
         </div>
 
-        <div class="feature-card">
-          <h3>Smart Assessments</h3>
-          <p>
-            Practice lessons with assessments and a 60% passing requirement.
-          </p>
+        <div class="stat">
+          <strong>10</strong>
+          <span>Assessment Questions</span>
         </div>
 
-        <div class="feature-card">
-          <h3>Parent Portal</h3>
-          <p>
-            Parents will be able to monitor student learning and performance.
-          </p>
-        </div>
-
-        <div class="feature-card">
-          <h3>Teacher Review</h3>
-          <p>
-            Teachers will be able to review student progress and assessments.
-          </p>
-        </div>
-
-        <div class="feature-card">
-          <h3>Attendance & Fees</h3>
-          <p>
-            Student attendance and fee records can be managed through the platform.
-          </p>
-        </div>
-
-        <div class="feature-card">
-          <h3>English + Urdu</h3>
-          <p>
-            The platform is designed to support both English and Urdu learning.
-          </p>
+        <div class="stat">
+          <strong>60%</strong>
+          <span>Passing Requirement</span>
         </div>
 
       </div>
 
     </div>
 
-  </section>
+  </div>
+
+</section>
 
 
-  <!-- COURSES -->
+<!-- FEATURES -->
 
-  <section id="courses">
+<section id="features">
 
-    <div class="container">
+  <div class="container">
 
-      <div class="section-title">
-        <h2>Explore Courses</h2>
+    <div class="section-title">
+
+      <h2>
+        Everything Students Need
+      </h2>
+
+      <p>
+        A learning platform designed for Pakistani students.
+      </p>
+
+    </div>
+
+    <div class="feature-grid">
+
+      <div class="feature-card">
+        <h3>Board-Specific Learning</h3>
         <p>
-          Select your grade, board and subject.
+          Select your Pakistani education board and study according to your curriculum.
         </p>
       </div>
 
-      <div class="course-box">
-
-        <h3 class="step-title">
-          1. Select Grade
-        </h3>
-
-        <div class="selection-grid" id="gradeSelection">
-
-          <button class="select-button" data-grade="9">
-            Grade 9
-          </button>
-
-          <button class="select-button" data-grade="10">
-            Grade 10
-          </button>
-
-          <button class="select-button" data-grade="11">
-            Grade 11
-          </button>
-
-          <button class="select-button" data-grade="12">
-            Grade 12
-          </button>
-
-        </div>
-
-
-        <div id="boardStage" class="course-stage hidden">
-
-          <h3>
-            2. Select Board
-          </h3>
-
-          <p>
-            Choose your education board.
-          </p>
-
-          <div
-            class="selection-grid"
-            id="courseBoardSelection"
-          ></div>
-
-        </div>
-
-
-        <div id="subjectStage" class="course-stage hidden">
-
-          <h3>
-            3. Select Subject
-          </h3>
-
-          <p>
-            Choose a subject to continue.
-          </p>
-
-          <div
-            class="selection-grid"
-            id="subjectSelection"
-          >
-
-            <button class="select-button" data-subject="Biology">
-              Biology
-            </button>
-
-            <button class="select-button" data-subject="Chemistry">
-              Chemistry
-            </button>
-
-            <button class="select-button" data-subject="Physics">
-              Physics
-            </button>
-
-            <button class="select-button" data-subject="Mathematics">
-              Mathematics
-            </button>
-
-            <button class="select-button" data-subject="English">
-              English
-            </button>
-
-            <button class="select-button" data-subject="Urdu">
-              Urdu
-            </button>
-
-            <button class="select-button" data-subject="Islamiyat">
-              Islamiyat
-            </button>
-
-            <button class="select-button" data-subject="Pakistan Studies">
-              Pakistan Studies
-            </button>
-
-            <button class="select-button" data-subject="Computer Science">
-              Computer Science
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <div id="chapterStage" class="course-stage hidden">
-
-          <h3>
-            4. Chapter
-          </h3>
-
-          <p>
-            Chapter 1 - Introduction to Biology
-          </p>
-
-          <button
-            class="select-button"
-            id="chapterButton"
-          >
-            Chapter 1 - Introduction to Biology
-          </button>
-
-        </div>
-
-
-        <div id="lessonStage" class="course-stage hidden">
-
-          <h3>
-            5. Lesson
-          </h3>
-
-          <p>
-            Introduction to Biology
-          </p>
-
-          <button
-            class="select-button"
-            id="lessonButton"
-          >
-            Introduction to Biology
-          </button>
-
-        </div>
-
-
-        <div id="testStage" class="course-stage hidden">
-
-          <h3>
-            6. Assessment
-          </h3>
-
-          <p>
-            Introduction to Biology - Test 1
-          </p>
-
-          <button
-            class="primary-btn"
-            id="startTestButton"
-          >
-            Start Assessment
-          </button>
-
-        </div>
-
-
-        <div
-          id="quizStage"
-          class="quiz-box hidden"
-        >
-
-          <h3>
-            Grade 9 Biology
-          </h3>
-
-          <p>
-            Introduction to Biology - Test 1
-          </p>
-
-          <p style="margin: 10px 0 20px;">
-            <strong>
-              10 Questions • Passing Requirement: 60%
-            </strong>
-          </p>
-
-
-          <form id="quizForm">
-
-            <div class="question">
-              <h4>1. What is Biology?</h4>
-
-              <label class="option">
-                <input type="radio" name="q1" value="A">
-                A. The study of life
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q1" value="B">
-                B. The study of rocks
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q1" value="C">
-                C. The study of stars
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q1" value="D">
-                D. The study of weather
-              </label>
-            </div>
-
-
-            <div class="question">
-              <h4>2. Which is a characteristic of living organisms?</h4>
-
-              <label class="option">
-                <input type="radio" name="q2" value="A">
-                A. Growth
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q2" value="B">
-                B. Rusting
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q2" value="C">
-                C. Melting
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q2" value="D">
-                D. Burning
-              </label>
-            </div>
-
-
-            <div class="question">
-              <h4>3. What is the basic structural and functional unit of life?</h4>
-
-              <label class="option">
-                <input type="radio" name="q3" value="A">
-                A. Cell
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q3" value="B">
-                B. Tissue
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q3" value="C">
-                C. Organ
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q3" value="D">
-                D. System
-              </label>
-            </div>
-
-
-            <div class="question">
-              <h4>4. Which branch of Biology deals with plants?</h4>
-
-              <label class="option">
-                <input type="radio" name="q4" value="A">
-                A. Botany
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q4" value="B">
-                B. Zoology
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q4" value="C">
-                C. Anatomy
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q4" value="D">
-                D. Ecology
-              </label>
-            </div>
-
-
-            <div class="question">
-              <h4>5. Which branch of Biology deals with animals?</h4>
-
-              <label class="option">
-                <input type="radio" name="q5" value="A">
-                A. Botany
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q5" value="B">
-                B. Zoology
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q5" value="C">
-                C. Genetics
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q5" value="D">
-                D. Cytology
-              </label>
-            </div>
-
-
-            <div class="question">
-              <h4>6. Which instrument is commonly used to observe cells?</h4>
-
-              <label class="option">
-                <input type="radio" name="q6" value="A">
-                A. Telescope
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q6" value="B">
-                B. Thermometer
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q6" value="C">
-                C. Microscope
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q6" value="D">
-                D. Barometer
-              </label>
-            </div>
-
-
-            <div class="question">
-              <h4>7. A group of similar cells performing a specific function is called:</h4>
-
-              <label class="option">
-                <input type="radio" name="q7" value="A">
-                A. Organ
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q7" value="B">
-                B. Tissue
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q7" value="C">
-                C. Organ system
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q7" value="D">
-                D. Organism
-              </label>
-            </div>
-
-
-            <div class="question">
-              <h4>8. Which level of organization comes after tissue?</h4>
-
-              <label class="option">
-                <input type="radio" name="q8" value="A">
-                A. Cell
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q8" value="B">
-                B. Organ
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q8" value="C">
-                C. Atom
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q8" value="D">
-                D. Molecule
-              </label>
-            </div>
-
-
-            <div class="question">
-              <h4>9. The study of cells is called:</h4>
-
-              <label class="option">
-                <input type="radio" name="q9" value="A">
-                A. Ecology
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q9" value="B">
-                B. Cytology
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q9" value="C">
-                C. Zoology
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q9" value="D">
-                D. Botany
-              </label>
-            </div>
-
-
-            <div class="question">
-              <h4>10. Which of the following is a living organism?</h4>
-
-              <label class="option">
-                <input type="radio" name="q10" value="A">
-                A. Plant
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q10" value="B">
-                B. Rock
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q10" value="C">
-                C. Water
-              </label>
-
-              <label class="option">
-                <input type="radio" name="q10" value="D">
-                D. Air
-              </label>
-            </div>
-
-
-            <button
-              type="submit"
-              class="primary-btn"
-            >
-              Submit Assessment
-            </button>
-
-          </form>
-
-          <div id="quizResult"></div>
-
-        </div>
-
+      <div class="feature-card">
+        <h3>Smart Assessments</h3>
+        <p>
+          Practice lessons with assessments and a 60% passing requirement.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <h3>Parent Portal</h3>
+        <p>
+          Parents will be able to monitor student learning and performance.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <h3>Teacher Review</h3>
+        <p>
+          Teachers will be able to review student progress and assessments.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <h3>Attendance & Fees</h3>
+        <p>
+          Student attendance and fee records can be managed through the platform.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <h3>English + Urdu</h3>
+        <p>
+          The platform is designed to support both English and Urdu learning.
+        </p>
       </div>
 
     </div>
 
-  </section>
+  </div>
+
+</section>
 
 
-  <!-- PRICING -->
+<!-- STUDENT DASHBOARD -->
 
-  <section id="pricing">
+<section id="dashboard" class="hidden">
 
-    <div class="container">
+  <div class="container">
 
-      <div class="section-title">
-        <h2>Simple Pricing</h2>
-        <p>
-          Start learning with a 2-day free trial.
-        </p>
-      </div>
+    <div class="dashboard-box">
 
-      <div class="pricing-grid">
+      <div class="dashboard-header">
 
-        <div class="price-card">
-          <h3>Individual Subject</h3>
+        <div>
 
-          <div class="price">
-            Rs. 500
-          </div>
+          <h2>
+            Student Dashboard
+          </h2>
 
-          <p>
-            Per subject / month
+          <p id="dashboardWelcome">
+            Welcome to Aqalverse Learning Academy.
           </p>
-        </div>
-
-
-        <div class="price-card">
-          <h3>All Subjects</h3>
-
-          <div class="price">
-            Rs. 2,000
-          </div>
-
-          <p>
-            All subjects / month
-          </p>
-        </div>
-
-
-        <div class="price-card">
-          <h3>Free Trial</h3>
-
-          <div class="price">
-            2 Days
-          </div>
-
-          <p>
-            Try the platform before subscribing.
-          </p>
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- LOGIN / REGISTER -->
-
-  <section id="login">
-
-    <div class="container">
-
-      <div class="section-title">
-
-        <h2>Student Account</h2>
-
-        <p>
-          Create an account or log in to continue.
-        </p>
-
-      </div>
-
-
-      <div class="auth-wrapper">
-
-
-        <!-- LOGIN -->
-
-        <div class="auth-card">
-
-          <h3>Student Login</h3>
-
-          <form id="loginForm">
-
-            <div class="form-group">
-              <label for="loginEmail">
-                Email
-              </label>
-
-              <input
-                type="email"
-                id="loginEmail"
-                placeholder="Enter your email"
-                required
-              />
-            </div>
-
-
-            <div class="form-group">
-              <label for="loginPassword">
-                Password
-              </label>
-
-              <input
-                type="password"
-                id="loginPassword"
-                placeholder="Enter your password"
-                required
-              />
-            </div>
-
-
-            <button
-              type="submit"
-              class="auth-btn"
-            >
-              Login
-            </button>
-
-          </form>
-
-          <div
-            id="loginMessage"
-            class="auth-message"
-          ></div>
 
         </div>
-
-
-        <!-- REGISTER -->
-
-        <div class="auth-card">
-
-          <h3>Create Student Account</h3>
-
-          <form id="registerForm">
-
-            <div class="form-group">
-
-              <label for="registerName">
-                Full Name
-              </label>
-
-              <input
-                type="text"
-                id="registerName"
-                placeholder="Enter full name"
-                required
-              />
-
-            </div>
-
-
-            <div class="form-group">
-
-              <label for="registerUsername">
-                Username
-              </label>
-
-              <input
-                type="text"
-                id="registerUsername"
-                placeholder="Choose username"
-                required
-              />
-
-            </div>
-
-
-            <div class="form-group">
-
-              <label for="registerEmail">
-                Email
-              </label>
-
-              <input
-                type="email"
-                id="registerEmail"
-                placeholder="Enter email"
-                required
-              />
-
-            </div>
-
-
-            <div class="form-group">
-
-              <label for="registerPassword">
-                Password
-              </label>
-
-              <input
-                type="password"
-                id="registerPassword"
-                placeholder="Create password"
-                minlength="6"
-                required
-              />
-
-            </div>
-
-
-            <div class="form-group">
-
-              <label for="registerGrade">
-                Grade
-              </label>
-
-              <select
-                id="registerGrade"
-                required
-              >
-
-                <option value="">
-                  Select Grade
-                </option>
-
-                <option value="9">
-                  Grade 9
-                </option>
-
-                <option value="10">
-                  Grade 10
-                </option>
-
-                <option value="11">
-                  Grade 11
-                </option>
-
-                <option value="12">
-                  Grade 12
-                </option>
-
-              </select>
-
-            </div>
-
-
-            <div class="form-group">
-
-              <label for="registerBoard">
-                Board
-              </label>
-
-              <select
-                id="registerBoard"
-                required
-              >
-
-                <option value="">
-                  Loading boards...
-                </option>
-
-              </select>
-
-            </div>
-
-
-            <button
-              type="submit"
-              class="auth-btn"
-            >
-              Create Account
-            </button>
-
-          </form>
-
-
-          <div
-            id="registerMessage"
-            class="auth-message"
-          ></div>
-
-        </div>
-
-      </div>
-
-
-      <!-- LOGGED IN AREA -->
-
-      <div
-        id="userArea"
-        class="user-area"
-      >
-
-        <h3>
-          Welcome to Aqalverse Learning Academy
-        </h3>
-
-        <div
-          id="userInfo"
-          class="user-info"
-        ></div>
 
         <button
-          id="logoutButton"
+          id="dashboardLogoutButton"
           class="logout-btn"
         >
           Logout
@@ -1484,949 +853,2082 @@
 
       </div>
 
+
+      <div class="dashboard-grid">
+
+        <div class="dashboard-card">
+          <h4>Student Name</h4>
+          <strong id="dashboardName">Loading...</strong>
+        </div>
+
+        <div class="dashboard-card">
+          <h4>Username</h4>
+          <strong id="dashboardUsername">Loading...</strong>
+        </div>
+
+        <div class="dashboard-card">
+          <h4>Grade</h4>
+          <strong id="dashboardGrade">Loading...</strong>
+        </div>
+
+        <div class="dashboard-card">
+          <h4>Board</h4>
+          <strong id="dashboardBoard">Loading...</strong>
+        </div>
+
+      </div>
+
+
+      <div
+        id="trialStatus"
+        class="trial-box"
+      >
+        Checking trial status...
+      </div>
+
+
+      <div class="dashboard-subjects">
+
+        <h3>
+          Your Subjects
+        </h3>
+
+        <div class="subject-list">
+
+          <div class="subject-item">
+            Biology
+          </div>
+
+          <div class="subject-item">
+            Chemistry
+          </div>
+
+          <div class="subject-item">
+            Physics
+          </div>
+
+          <div class="subject-item">
+            Mathematics
+          </div>
+
+          <div class="subject-item">
+            English
+          </div>
+
+          <div class="subject-item">
+            Urdu
+          </div>
+
+          <div class="subject-item">
+            Islamiyat
+          </div>
+
+          <div class="subject-item">
+            Pakistan Studies
+          </div>
+
+          <div class="subject-item">
+            Computer Science
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="progress-box">
+
+        <h3>
+          Learning Progress
+        </h3>
+
+        <p>
+          Your course progress will appear here as you complete lessons.
+        </p>
+
+        <div class="progress-bar">
+
+          <div
+            id="dashboardProgress"
+            class="progress-fill"
+          ></div>
+
+        </div>
+
+        <p style="margin-top:8px;">
+          <strong id="progressText">
+            0% completed
+          </strong>
+        </p>
+
+      </div>
+
     </div>
 
-  </section>
+  </div>
+
+</section>
 
 
-  <!-- FOOTER -->
+<!-- COURSES -->
 
-  <footer>
+<section id="courses">
 
-    <div class="container">
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>
+        Explore Courses
+      </h2>
 
       <p>
-        © 2026 Aqalverse Learning Academy. All rights reserved.
+        Select your grade, board and subject.
       </p>
 
     </div>
 
-  </footer>
+
+    <div class="course-box">
+
+      <h3 class="step-title">
+        1. Select Grade
+      </h3>
+
+      <div
+        class="selection-grid"
+        id="gradeSelection"
+      >
+
+        <button
+          class="select-button"
+          data-grade="9"
+        >
+          Grade 9
+        </button>
+
+        <button
+          class="select-button"
+          data-grade="10"
+        >
+          Grade 10
+        </button>
+
+        <button
+          class="select-button"
+          data-grade="11"
+        >
+          Grade 11
+        </button>
+
+        <button
+          class="select-button"
+          data-grade="12"
+        >
+          Grade 12
+        </button>
+
+      </div>
 
 
-  <!-- JAVASCRIPT -->
+      <div
+        id="boardStage"
+        class="course-stage hidden"
+      >
 
-  <script>
+        <h3>
+          2. Select Board
+        </h3>
 
-    /* =========================================================
-       SUPABASE CONFIGURATION
-       ========================================================= */
+        <p>
+          Choose your education board.
+        </p>
 
-    const SUPABASE_URL =
-      "https://lmfkrykuxspddjfcwpuf.supabase.co";
+        <div
+          class="selection-grid"
+          id="courseBoardSelection"
+        ></div>
 
-    /*
-      IMPORTANT:
-      Replace ONLY the text below with your existing
-      Supabase PUBLISHABLE / ANON key.
-
-      NEVER put a service-role/secret key here.
-    */
-
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_4mtcQW0b7WZzuCAnfrBpcA_KCp-F7Oc";
+      </div>
 
 
-    const aqalverseSupabase =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-      );
+      <div
+        id="subjectStage"
+        class="course-stage hidden"
+      >
+
+        <h3>
+          3. Select Subject
+        </h3>
+
+        <p>
+          Choose a subject to continue.
+        </p>
+
+        <div
+          class="selection-grid"
+          id="subjectSelection"
+        >
+
+          <button
+            class="select-button"
+            data-subject="Biology"
+          >
+            Biology
+          </button>
+
+          <button
+            class="select-button"
+            data-subject="Chemistry"
+          >
+            Chemistry
+          </button>
+
+          <button
+            class="select-button"
+            data-subject="Physics"
+          >
+            Physics
+          </button>
+
+          <button
+            class="select-button"
+            data-subject="Mathematics"
+          >
+            Mathematics
+          </button>
+
+          <button
+            class="select-button"
+            data-subject="English"
+          >
+            English
+          </button>
+
+          <button
+            class="select-button"
+            data-subject="Urdu"
+          >
+            Urdu
+          </button>
+
+          <button
+            class="select-button"
+            data-subject="Islamiyat"
+          >
+            Islamiyat
+          </button>
+
+          <button
+            class="select-button"
+            data-subject="Pakistan Studies"
+          >
+            Pakistan Studies
+          </button>
+
+          <button
+            class="select-button"
+            data-subject="Computer Science"
+          >
+            Computer Science
+          </button>
+
+        </div>
+
+      </div>
 
 
-    /* =========================================================
-       ELEMENTS
-       ========================================================= */
+      <div
+        id="chapterStage"
+        class="course-stage hidden"
+      >
 
-    const registerForm =
-      document.getElementById("registerForm");
+        <h3>
+          4. Chapter
+        </h3>
 
-    const loginForm =
-      document.getElementById("loginForm");
+        <p>
+          Chapter 1 - Introduction to Biology
+        </p>
 
-    const registerMessage =
-      document.getElementById("registerMessage");
+        <button
+          class="select-button"
+          id="chapterButton"
+        >
+          Chapter 1 - Introduction to Biology
+        </button>
 
-    const loginMessage =
-      document.getElementById("loginMessage");
-
-    const userArea =
-      document.getElementById("userArea");
-
-    const userInfo =
-      document.getElementById("userInfo");
-
-    const logoutButton =
-      document.getElementById("logoutButton");
-
-    const registerBoard =
-      document.getElementById("registerBoard");
+      </div>
 
 
-    /* =========================================================
-       MESSAGE HELPERS
-       ========================================================= */
+      <div
+        id="lessonStage"
+        class="course-stage hidden"
+      >
 
-    function showMessage(element, message, type) {
+        <h3>
+          5. Lesson
+        </h3>
 
-      element.textContent = message;
+        <p>
+          Introduction to Biology
+        </p>
 
-      element.className =
-        "auth-message " +
-        (type === "success"
-          ? "success-message"
-          : "error-message");
+        <button
+          class="select-button"
+          id="lessonButton"
+        >
+          Introduction to Biology
+        </button>
 
+      </div>
+
+
+      <div
+        id="testStage"
+        class="course-stage hidden"
+      >
+
+        <h3>
+          6. Assessment
+        </h3>
+
+        <p>
+          Introduction to Biology - Test 1
+        </p>
+
+        <button
+          class="primary-btn"
+          id="startTestButton"
+        >
+          Start Assessment
+        </button>
+
+      </div>
+
+
+      <!-- QUIZ -->
+
+      <div
+        id="quizStage"
+        class="quiz-box hidden"
+      >
+
+        <h3>
+          Grade 9 Biology
+        </h3>
+
+        <p>
+          Introduction to Biology - Test 1
+        </p>
+
+        <p style="margin: 10px 0 20px;">
+          <strong>
+            10 Questions • Passing Requirement: 60%
+          </strong>
+        </p>
+
+
+        <form id="quizForm">
+
+          <div class="question">
+
+            <h4>
+              1. What is Biology?
+            </h4>
+
+            <label class="option">
+              <input type="radio" name="q1" value="A">
+              A. The study of life
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q1" value="B">
+              B. The study of rocks
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q1" value="C">
+              C. The study of stars
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q1" value="D">
+              D. The study of weather
+            </label>
+
+          </div>
+
+
+          <div class="question">
+
+            <h4>
+              2. Which is a characteristic of living organisms?
+            </h4>
+
+            <label class="option">
+              <input type="radio" name="q2" value="A">
+              A. Growth
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q2" value="B">
+              B. Rusting
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q2" value="C">
+              C. Melting
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q2" value="D">
+              D. Burning
+            </label>
+
+          </div>
+
+
+          <div class="question">
+
+            <h4>
+              3. What is the basic structural and functional unit of life?
+            </h4>
+
+            <label class="option">
+              <input type="radio" name="q3" value="A">
+              A. Cell
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q3" value="B">
+              B. Tissue
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q3" value="C">
+              C. Organ
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q3" value="D">
+              D. System
+            </label>
+
+          </div>
+
+
+          <div class="question">
+
+            <h4>
+              4. Which branch of Biology deals with plants?
+            </h4>
+
+            <label class="option">
+              <input type="radio" name="q4" value="A">
+              A. Botany
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q4" value="B">
+              B. Zoology
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q4" value="C">
+              C. Anatomy
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q4" value="D">
+              D. Ecology
+            </label>
+
+          </div>
+
+
+          <div class="question">
+
+            <h4>
+              5. Which branch of Biology deals with animals?
+            </h4>
+
+            <label class="option">
+              <input type="radio" name="q5" value="A">
+              A. Botany
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q5" value="B">
+              B. Zoology
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q5" value="C">
+              C. Genetics
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q5" value="D">
+              D. Cytology
+            </label>
+
+          </div>
+
+
+          <div class="question">
+
+            <h4>
+              6. Which instrument is commonly used to observe cells?
+            </h4>
+
+            <label class="option">
+              <input type="radio" name="q6" value="A">
+              A. Telescope
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q6" value="B">
+              B. Thermometer
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q6" value="C">
+              C. Microscope
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q6" value="D">
+              D. Barometer
+            </label>
+
+          </div>
+
+
+          <div class="question">
+
+            <h4>
+              7. A group of similar cells performing a specific function is called:
+            </h4>
+
+            <label class="option">
+              <input type="radio" name="q7" value="A">
+              A. Organ
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q7" value="B">
+              B. Tissue
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q7" value="C">
+              C. Organ system
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q7" value="D">
+              D. Organism
+            </label>
+
+          </div>
+
+
+          <div class="question">
+
+            <h4>
+              8. Which level of organization comes after tissue?
+            </h4>
+
+            <label class="option">
+              <input type="radio" name="q8" value="A">
+              A. Cell
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q8" value="B">
+              B. Organ
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q8" value="C">
+              C. Atom
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q8" value="D">
+              D. Molecule
+            </label>
+
+          </div>
+
+
+          <div class="question">
+
+            <h4>
+              9. The study of cells is called:
+            </h4>
+
+            <label class="option">
+              <input type="radio" name="q9" value="A">
+              A. Ecology
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q9" value="B">
+              B. Cytology
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q9" value="C">
+              C. Zoology
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q9" value="D">
+              D. Botany
+            </label>
+
+          </div>
+
+
+          <div class="question">
+
+            <h4>
+              10. Which of the following is a living organism?
+            </h4>
+
+            <label class="option">
+              <input type="radio" name="q10" value="A">
+              A. Plant
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q10" value="B">
+              B. Rock
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q10" value="C">
+              C. Water
+            </label>
+
+            <label class="option">
+              <input type="radio" name="q10" value="D">
+              D. Air
+            </label>
+
+          </div>
+
+
+          <button
+            type="submit"
+            class="primary-btn"
+          >
+            Submit Assessment
+          </button>
+
+        </form>
+
+
+        <div id="quizResult"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- PRICING -->
+
+<section id="pricing">
+
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>
+        Simple Pricing
+      </h2>
+
+      <p>
+        Start learning with a 2-day free trial.
+      </p>
+
+    </div>
+
+
+    <div class="pricing-grid">
+
+      <div class="price-card">
+
+        <h3>
+          Individual Subject
+        </h3>
+
+        <div class="price">
+          Rs. 500
+        </div>
+
+        <p>
+          Per subject / month
+        </p>
+
+      </div>
+
+
+      <div class="price-card">
+
+        <h3>
+          All Subjects
+        </h3>
+
+        <div class="price">
+          Rs. 2,000
+        </div>
+
+        <p>
+          All subjects / month
+        </p>
+
+      </div>
+
+
+      <div class="price-card">
+
+        <h3>
+          Free Trial
+        </h3>
+
+        <div class="price">
+          2 Days
+        </div>
+
+        <p>
+          Try the platform before subscribing.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- LOGIN / REGISTER -->
+
+<section id="login">
+
+  <div class="container">
+
+    <div class="section-title">
+
+      <h2>
+        Student Account
+      </h2>
+
+      <p>
+        Create an account or log in to continue.
+      </p>
+
+    </div>
+
+
+    <div class="auth-wrapper">
+
+      <!-- LOGIN -->
+
+      <div class="auth-card">
+
+        <h3>
+          Student Login
+        </h3>
+
+        <form id="loginForm">
+
+          <div class="form-group">
+
+            <label for="loginEmail">
+              Email
+            </label>
+
+            <input
+              type="email"
+              id="loginEmail"
+              placeholder="Enter your email"
+              required
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="loginPassword">
+              Password
+            </label>
+
+            <input
+              type="password"
+              id="loginPassword"
+              placeholder="Enter your password"
+              required
+            />
+
+          </div>
+
+
+          <button
+            type="submit"
+            class="auth-btn"
+          >
+            Login
+          </button>
+
+        </form>
+
+
+        <div
+          id="loginMessage"
+          class="auth-message"
+        ></div>
+
+      </div>
+
+
+      <!-- REGISTER -->
+
+      <div class="auth-card">
+
+        <h3>
+          Create Student Account
+        </h3>
+
+        <form id="registerForm">
+
+          <div class="form-group">
+
+            <label for="registerName">
+              Full Name
+            </label>
+
+            <input
+              type="text"
+              id="registerName"
+              placeholder="Enter full name"
+              required
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="registerUsername">
+              Username
+            </label>
+
+            <input
+              type="text"
+              id="registerUsername"
+              placeholder="Choose username"
+              required
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="registerEmail">
+              Email
+            </label>
+
+            <input
+              type="email"
+              id="registerEmail"
+              placeholder="Enter email"
+              required
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="registerPassword">
+              Password
+            </label>
+
+            <input
+              type="password"
+              id="registerPassword"
+              placeholder="Create password"
+              minlength="6"
+              required
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="registerGrade">
+              Grade
+            </label>
+
+            <select
+              id="registerGrade"
+              required
+            >
+
+              <option value="">
+                Select Grade
+              </option>
+
+              <option value="9">
+                Grade 9
+              </option>
+
+              <option value="10">
+                Grade 10
+              </option>
+
+              <option value="11">
+                Grade 11
+              </option>
+
+              <option value="12">
+                Grade 12
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="registerBoard">
+              Board
+            </label>
+
+            <select
+              id="registerBoard"
+              required
+            >
+
+              <option value="">
+                Loading boards...
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <button
+            type="submit"
+            class="auth-btn"
+          >
+            Create Account
+          </button>
+
+        </form>
+
+
+        <div
+          id="registerMessage"
+          class="auth-message"
+        ></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<footer>
+
+  <div class="container">
+
+    <p>
+      © 2026 Aqalverse Learning Academy. All rights reserved.
+    </p>
+
+  </div>
+
+</footer>
+
+
+<script>
+
+/* =========================================================
+   SUPABASE
+   ========================================================= */
+
+const SUPABASE_URL =
+  "https://lmfkrykuxspddjfcwpuf.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_4mtcQW0b7WZzuCAnfrBpcA_KCp-F7Oc";
+
+const aqalverseSupabase =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
+
+const registerForm =
+  document.getElementById("registerForm");
+
+const loginForm =
+  document.getElementById("loginForm");
+
+const registerMessage =
+  document.getElementById("registerMessage");
+
+const loginMessage =
+  document.getElementById("loginMessage");
+
+const registerBoard =
+  document.getElementById("registerBoard");
+
+const dashboard =
+  document.getElementById("dashboard");
+
+const dashboardLogoutButton =
+  document.getElementById("dashboardLogoutButton");
+
+
+/* =========================================================
+   MESSAGES
+   ========================================================= */
+
+function showMessage(element, message, type) {
+
+  element.textContent = message;
+
+  element.className =
+    "auth-message " +
+    (
+      type === "success"
+        ? "success-message"
+        : "error-message"
+    );
+}
+
+
+function clearMessage(element) {
+
+  element.textContent = "";
+
+  element.className =
+    "auth-message";
+}
+
+
+/* =========================================================
+   LOAD BOARDS
+   ========================================================= */
+
+async function loadRegistrationBoards() {
+
+  registerBoard.innerHTML =
+    '<option value="">Loading boards...</option>';
+
+  try {
+
+    const {
+      data: boards,
+      error
+    } =
+      await aqalverseSupabase
+        .from("boards")
+        .select("id, name, code")
+        .eq("is_active", true)
+        .order("name");
+
+    if (error) {
+      throw error;
     }
 
+    registerBoard.innerHTML =
+      '<option value="">Select Board</option>';
 
-    function clearMessage(element) {
-
-      element.textContent = "";
-
-      element.className =
-        "auth-message";
-
-    }
-
-
-    /* =========================================================
-       LOAD BOARDS FROM SUPABASE
-       ========================================================= */
-
-    async function loadRegistrationBoards() {
+    if (!boards || boards.length === 0) {
 
       registerBoard.innerHTML =
-        '<option value="">Loading boards...</option>';
+        '<option value="">No boards found</option>';
 
-      try {
-
-        const {
-          data: boards,
-          error
-        } = await aqalverseSupabase
-
-          .from("boards")
-
-          .select("id, name, code")
-
-          .eq("is_active", true)
-
-          .order("name");
-
-
-        if (error) {
-          throw error;
-        }
-
-
-        registerBoard.innerHTML =
-          '<option value="">Select Board</option>';
-
-
-        if (!boards || boards.length === 0) {
-
-          registerBoard.innerHTML =
-            '<option value="">No boards found</option>';
-
-          return;
-        }
-
-
-        boards.forEach(function(board) {
-
-          const option =
-            document.createElement("option");
-
-          /*
-            IMPORTANT:
-            The VALUE is the actual Supabase ID.
-
-            For your current board:
-            id = 1
-            name = Khyber Pakhtunkhwa Boards
-          */
-
-          option.value =
-            String(board.id);
-
-          option.textContent =
-            board.name;
-
-          registerBoard.appendChild(option);
-
-        });
-
-
-      } catch (error) {
-
-        console.error(
-          "Board loading error:",
-          error
-        );
-
-        registerBoard.innerHTML =
-          '<option value="">Could not load boards</option>';
-
-      }
-
+      return;
     }
 
+    boards.forEach(function(board) {
 
-    /* =========================================================
-       LOAD BOARDS FOR COURSE SECTION
-       ========================================================= */
+      const option =
+        document.createElement("option");
 
-    async function loadCourseBoards() {
+      option.value =
+        String(board.id);
 
-      const boardContainer =
-        document.getElementById(
-          "courseBoardSelection"
-        );
+      option.textContent =
+        board.name;
+
+      registerBoard.appendChild(option);
+
+    });
+
+  } catch (error) {
+
+    console.error(
+      "Board loading error:",
+      error
+    );
+
+    registerBoard.innerHTML =
+      '<option value="">Could not load boards</option>';
+
+  }
+
+}
+
+
+/* =========================================================
+   COURSE BOARDS
+   ========================================================= */
+
+async function loadCourseBoards() {
+
+  const boardContainer =
+    document.getElementById(
+      "courseBoardSelection"
+    );
+
+  boardContainer.innerHTML =
+    "<p>Loading boards...</p>";
+
+  try {
+
+    const {
+      data: boards,
+      error
+    } =
+      await aqalverseSupabase
+        .from("boards")
+        .select("id, name, code")
+        .eq("is_active", true)
+        .order("name");
+
+    if (error) {
+      throw error;
+    }
+
+    boardContainer.innerHTML = "";
+
+    if (!boards || boards.length === 0) {
 
       boardContainer.innerHTML =
-        "<p>Loading boards...</p>";
+        "<p>No boards available.</p>";
 
-      try {
+      return;
+    }
 
-        const {
-          data: boards,
-          error
-        } = await aqalverseSupabase
+    boards.forEach(function(board) {
 
-          .from("boards")
+      const button =
+        document.createElement("button");
 
-          .select("id, name, code")
+      button.type =
+        "button";
 
-          .eq("is_active", true)
+      button.className =
+        "select-button";
 
-          .order("name");
+      button.textContent =
+        board.name;
 
+      button.dataset.boardId =
+        board.id;
 
-        if (error) {
-          throw error;
-        }
+      button.addEventListener(
+        "click",
+        function() {
 
+          document
+            .querySelectorAll(
+              "#courseBoardSelection .select-button"
+            )
+            .forEach(function(btn) {
 
-        boardContainer.innerHTML = "";
-
-
-        if (!boards || boards.length === 0) {
-
-          boardContainer.innerHTML =
-            "<p>No boards available.</p>";
-
-          return;
-
-        }
-
-
-        boards.forEach(function(board) {
-
-          const button =
-            document.createElement("button");
-
-          button.type = "button";
-
-          button.className =
-            "select-button";
-
-          button.textContent =
-            board.name;
-
-          button.dataset.boardId =
-            board.id;
-
-          button.dataset.boardName =
-            board.name;
-
-          button.addEventListener(
-            "click",
-            function() {
-
-              document
-                .querySelectorAll(
-                  "#courseBoardSelection .select-button"
-                )
-                .forEach(function(btn) {
-
-                  btn.classList.remove(
-                    "active"
-                  );
-
-                });
-
-
-              button.classList.add(
+              btn.classList.remove(
                 "active"
               );
 
+            });
 
-              document
-                .getElementById(
-                  "subjectStage"
-                )
-                .classList.remove(
-                  "hidden"
-                );
-
-            }
+          button.classList.add(
+            "active"
           );
 
+          document
+            .getElementById(
+              "subjectStage"
+            )
+            .classList.remove(
+              "hidden"
+            );
 
-          boardContainer.appendChild(
-            button
-          );
+        }
+      );
 
-        });
+      boardContainer.appendChild(
+        button
+      );
+
+    });
+
+  } catch (error) {
+
+    console.error(
+      "Course board loading error:",
+      error
+    );
+
+    boardContainer.innerHTML =
+      "<p>Could not load boards.</p>";
+
+  }
+
+}
 
 
-      } catch (error) {
+/* =========================================================
+   REGISTRATION
+   ========================================================= */
 
-        console.error(
-          "Course board loading error:",
-          error
-        );
+registerForm.addEventListener(
+  "submit",
+  async function(event) {
 
-        boardContainer.innerHTML =
-          "<p>Could not load boards.</p>";
+    event.preventDefault();
 
-      }
+    clearMessage(registerMessage);
 
+    const fullName =
+      document
+        .getElementById("registerName")
+        .value
+        .trim();
+
+    const username =
+      document
+        .getElementById("registerUsername")
+        .value
+        .trim();
+
+    const email =
+      document
+        .getElementById("registerEmail")
+        .value
+        .trim();
+
+    const password =
+      document
+        .getElementById("registerPassword")
+        .value;
+
+    const gradeValue =
+      document
+        .getElementById("registerGrade")
+        .value;
+
+    const boardId =
+      document
+        .getElementById("registerBoard")
+        .value;
+
+
+    if (!gradeValue) {
+
+      showMessage(
+        registerMessage,
+        "Please select your grade.",
+        "error"
+      );
+
+      return;
     }
 
 
-    /* =========================================================
-       REGISTRATION
-       ========================================================= */
-
-    registerForm.addEventListener(
-      "submit",
-      async function(event) {
-
-        event.preventDefault();
-
-        clearMessage(registerMessage);
-
-
-        const fullName =
-          document
-            .getElementById(
-              "registerName"
-            )
-            .value
-            .trim();
-
-
-        const username =
-          document
-            .getElementById(
-              "registerUsername"
-            )
-            .value
-            .trim();
-
-
-        const email =
-          document
-            .getElementById(
-              "registerEmail"
-            )
-            .value
-            .trim();
-
-
-        const password =
-          document
-            .getElementById(
-              "registerPassword"
-            )
-            .value;
-
-
-        const gradeValue =
-          document
-            .getElementById(
-              "registerGrade"
-            )
-            .value;
-
-
-        /*
-          IMPORTANT:
-          We now get the BOARD ID directly from
-          the selected option.
-
-          We do NOT search for:
-          "KPK Board"
-          or any other hard-coded name.
-        */
-
-        const boardId =
-          document
-            .getElementById(
-              "registerBoard"
-            )
-            .value;
-
-
-        if (!boardId) {
-
-          showMessage(
-            registerMessage,
-            "Please select your board.",
-            "error"
-          );
-
-          return;
-
-        }
-
-
-        if (!gradeValue) {
-
-          showMessage(
-            registerMessage,
-            "Please select your grade.",
-            "error"
-          );
-
-          return;
-
-        }
-
-
-        try {
-
-          /*
-            Find the selected grade in Supabase.
-          */
-
-          const {
-            data: gradeData,
-            error: gradeError
-          } = await aqalverseSupabase
-
-            .from("grades")
-
-            .select(
-              "id, name, grade_number"
-            )
-
-            .eq(
-              "grade_number",
-              Number(gradeValue)
-            )
-
-            .maybeSingle();
-
-
-          if (gradeError) {
-            throw gradeError;
-          }
-
-
-          if (!gradeData) {
-
-            throw new Error(
-              "Selected grade was not found in Supabase."
-            );
-
-          }
-
-
-          /*
-            IMPORTANT:
-            We DO NOT insert into students here.
-
-            Supabase's handle_new_student trigger
-            automatically creates the student record.
-          */
-
-          const {
-            data,
-            error
-          } = await aqalverseSupabase.auth.signUp({
-
-            email: email,
-
-            password: password,
-
-            options: {
-
-              data: {
-
-                full_name:
-                  fullName,
-
-                username:
-                  username,
-
-                grade_id:
-                  String(gradeData.id),
-
-                board_id:
-                  String(boardId)
-
-              }
-
-            }
-
-          });
-
-
-          if (error) {
-            throw error;
-          }
-
-
-          /*
-            Supabase may require email confirmation.
-          */
-
-          if (
-            data.user &&
-            !data.session
-          ) {
-
-            showMessage(
-              registerMessage,
-              "Account created successfully. Please check your email and confirm your account before logging in.",
-              "success"
-            );
-
-          } else {
-
-            showMessage(
-              registerMessage,
-              "Account created successfully. Your 2-day trial has started.",
-              "success"
-            );
-
-          }
-
-
-          registerForm.reset();
-
-          /*
-            Reload boards after reset so the
-            dropdown remains available.
-          */
-
-          await loadRegistrationBoards();
-
-
-        } catch (error) {
-
-          console.error(
-            "Registration error:",
-            error
-          );
-
-
-          let message =
-            error.message ||
-            "Registration failed. Please try again.";
-
-
-          /*
-            Friendly duplicate username message.
-          */
-
-          if (
-            message
-              .toLowerCase()
-              .includes("duplicate")
-          ) {
-
-            message =
-              "This username or account already exists. Please use another username or email.";
-
-          }
-
-
-          showMessage(
-            registerMessage,
-            message,
-            "error"
-          );
-
-        }
-
-      }
-    );
-
-
-    /* =========================================================
-       LOGIN
-       ========================================================= */
-
-    loginForm.addEventListener(
-      "submit",
-      async function(event) {
-
-        event.preventDefault();
-
-        clearMessage(loginMessage);
-
-
-        const email =
-          document
-            .getElementById(
-              "loginEmail"
-            )
-            .value
-            .trim();
-
-
-        const password =
-          document
-            .getElementById(
-              "loginPassword"
-            )
-            .value;
-
-
-        try {
-
-          const {
-            data,
-            error
-          } =
-            await aqalverseSupabase.auth
-              .signInWithPassword({
-
-                email:
-                  email,
-
-                password:
-                  password
-
-              });
-
-
-          if (error) {
-            throw error;
-          }
-
-
-          showMessage(
-            loginMessage,
-            "Login successful.",
-            "success"
-          );
-
-
-          loginForm.reset();
-
-
-          await updateUserArea(
-            data.user
-          );
-
-
-        } catch (error) {
-
-          console.error(
-            "Login error:",
-            error
-          );
-
-
-          let message =
-            error.message ||
-            "Login failed.";
-
-
-          if (
-            message
-              .toLowerCase()
-              .includes("email not confirmed")
-          ) {
-
-            message =
-              "Please confirm your email address before logging in.";
-
-          }
-
-
-          showMessage(
-            loginMessage,
-            message,
-            "error"
-          );
-
-        }
-
-      }
-    );
-
-
-    /* =========================================================
-       DISPLAY LOGGED-IN USER
-       ========================================================= */
-
-    async function updateUserArea(user) {
-
-      if (!user) {
-
-        userArea.style.display =
-          "none";
-
-        return;
-
-      }
-
-
-      try {
-
-        const {
-          data: profile,
-          error
-        } = await aqalverseSupabase
-
-          .from("profiles")
-
-          .select(
-            "full_name, username, role, preferred_language"
-          )
-
+    if (!boardId) {
+
+      showMessage(
+        registerMessage,
+        "Please select your board.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    try {
+
+      const {
+        data: gradeData,
+        error: gradeError
+      } =
+        await aqalverseSupabase
+          .from("grades")
+          .select("id, name, grade_number")
           .eq(
-            "id",
-            user.id
+            "grade_number",
+            Number(gradeValue)
           )
-
           .maybeSingle();
 
 
-        if (error) {
-          throw error;
-        }
+      if (gradeError) {
+        throw gradeError;
+      }
 
 
-        if (profile) {
+      if (!gradeData) {
 
-          userInfo.innerHTML = `
-            <strong>Name:</strong>
-            ${escapeHtml(profile.full_name || "Student")}
-            <br>
-
-            <strong>Username:</strong>
-            ${escapeHtml(profile.username || "Not set")}
-            <br>
-
-            <strong>Role:</strong>
-            ${escapeHtml(profile.role || "student")}
-            <br>
-
-            <strong>Email:</strong>
-            ${escapeHtml(user.email || "")}
-          `;
-
-        } else {
-
-          userInfo.textContent =
-            "Logged in as " +
-            (user.email || "student");
-
-        }
-
-
-        userArea.style.display =
-          "block";
-
-
-        userArea.scrollIntoView({
-          behavior: "smooth",
-          block: "center"
-        });
-
-
-      } catch (error) {
-
-        console.error(
-          "Profile loading error:",
-          error
+        throw new Error(
+          "Selected grade was not found in Supabase."
         );
-
-        userInfo.textContent =
-          "Logged in successfully.";
-
-        userArea.style.display =
-          "block";
 
       }
 
-    }
+
+      const {
+        data,
+        error
+      } =
+        await aqalverseSupabase.auth.signUp({
+
+          email: email,
+
+          password: password,
+
+          options: {
+
+            data: {
+
+              full_name:
+                fullName,
+
+              username:
+                username,
+
+              grade_id:
+                String(gradeData.id),
+
+              board_id:
+                String(boardId)
+
+            }
+
+          }
+
+        });
 
 
-    /* =========================================================
-       SAFE TEXT HELPER
-       ========================================================= */
-
-    function escapeHtml(value) {
-
-      return String(value)
-
-        .replace(
-          /&/g,
-          "&amp;"
-        )
-
-        .replace(
-          /</g,
-          "&lt;"
-        )
-
-        .replace(
-          />/g,
-          "&gt;"
-        )
-
-        .replace(
-          /"/g,
-          "&quot;"
-        )
-
-        .replace(
-          /'/g,
-          "&#039;"
-        );
-
-    }
+      if (error) {
+        throw error;
+      }
 
 
-    /* =========================================================
-       LOGOUT
-       ========================================================= */
-
-    logoutButton.addEventListener(
-      "click",
-      async function() {
-
-        const {
-          error
-        } =
-          await aqalverseSupabase.auth
-            .signOut();
-
-
-        if (error) {
-
-          console.error(
-            "Logout error:",
-            error
-          );
-
-          return;
-
-        }
-
-
-        userArea.style.display =
-          "none";
-
+      if (
+        data.user &&
+        !data.session
+      ) {
 
         showMessage(
-          loginMessage,
-          "You have been logged out.",
+          registerMessage,
+          "Account created successfully. Please check your email if confirmation is required.",
+          "success"
+        );
+
+      } else {
+
+        showMessage(
+          registerMessage,
+          "Account created successfully. Your 2-day trial has started.",
           "success"
         );
 
       }
-    );
 
 
-    /* =========================================================
-       CHECK EXISTING SESSION
-       ========================================================= */
+      registerForm.reset();
 
-    async function checkCurrentSession() {
-
-      try {
-
-        const {
-          data,
-          error
-        } =
-          await aqalverseSupabase.auth
-            .getSession();
+      await loadRegistrationBoards();
 
 
-        if (error) {
-          throw error;
-        }
+    } catch (error) {
+
+      console.error(
+        "Registration error:",
+        error
+      );
+
+      let message =
+        error.message ||
+        "Registration failed. Please try again.";
 
 
-        if (
-          data &&
-          data.session &&
-          data.session.user
-        ) {
+      if (
+        message
+          .toLowerCase()
+          .includes("duplicate")
+      ) {
 
-          await updateUserArea(
-            data.session.user
-          );
+        message =
+          "This username or account already exists. Please use another username or email.";
 
-        }
+      }
 
-      } catch (error) {
 
-        console.error(
-          "Session check error:",
-          error
-        );
+      showMessage(
+        registerMessage,
+        message,
+        "error"
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
+
+loginForm.addEventListener(
+  "submit",
+  async function(event) {
+
+    event.preventDefault();
+
+    clearMessage(loginMessage);
+
+    const email =
+      document
+        .getElementById("loginEmail")
+        .value
+        .trim();
+
+    const password =
+      document
+        .getElementById("loginPassword")
+        .value;
+
+
+    try {
+
+      const {
+        data,
+        error
+      } =
+        await aqalverseSupabase.auth
+          .signInWithPassword({
+
+            email:
+              email,
+
+            password:
+              password
+
+          });
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      showMessage(
+        loginMessage,
+        "Login successful.",
+        "success"
+      );
+
+
+      loginForm.reset();
+
+
+      await loadStudentDashboard(
+        data.user
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        "Login error:",
+        error
+      );
+
+      let message =
+        error.message ||
+        "Login failed.";
+
+
+      if (
+        message
+          .toLowerCase()
+          .includes("email not confirmed")
+      ) {
+
+        message =
+          "Please confirm your email address before logging in.";
+
+      }
+
+
+      showMessage(
+        loginMessage,
+        message,
+        "error"
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   STUDENT DASHBOARD
+   ========================================================= */
+
+async function loadStudentDashboard(user) {
+
+  if (!user) {
+    return;
+  }
+
+
+  try {
+
+    /* -----------------------------------------
+       PROFILE
+       ----------------------------------------- */
+
+    const {
+      data: profile,
+      error: profileError
+    } =
+      await aqalverseSupabase
+        .from("profiles")
+        .select(
+          "full_name, username, role, preferred_language"
+        )
+        .eq(
+          "id",
+          user.id
+        )
+        .maybeSingle();
+
+
+    if (profileError) {
+      throw profileError;
+    }
+
+
+    /* -----------------------------------------
+       STUDENT RECORD
+       ----------------------------------------- */
+
+    const {
+      data: student,
+      error: studentError
+    } =
+      await aqalverseSupabase
+        .from("students")
+        .select(
+          "board_id, grade_id, trial_started_at, trial_ends_at, account_status"
+        )
+        .eq(
+          "id",
+          user.id
+        )
+        .maybeSingle();
+
+
+    if (studentError) {
+      throw studentError;
+    }
+
+
+    if (!student) {
+
+      throw new Error(
+        "Student record was not found. Please contact the academy administrator."
+      );
+
+    }
+
+
+    /* -----------------------------------------
+       GET GRADE
+       ----------------------------------------- */
+
+    let gradeName =
+      "Not available";
+
+
+    if (student.grade_id) {
+
+      const {
+        data: grade
+      } =
+        await aqalverseSupabase
+          .from("grades")
+          .select(
+            "name, grade_number"
+          )
+          .eq(
+            "id",
+            student.grade_id
+          )
+          .maybeSingle();
+
+
+      if (grade) {
+
+        gradeName =
+          grade.name ||
+          "Grade " +
+          grade.grade_number;
 
       }
 
     }
 
 
-    /* =========================================================
-       AUTH STATE CHANGES
-       ========================================================= */
+    /* -----------------------------------------
+       GET BOARD
+       ----------------------------------------- */
 
-    aqalverseSupabase.auth.onAuthStateChange(
-      async function(event, session) {
+    let boardName =
+      "Not available";
 
-        if (
-          session &&
-          session.user
-        ) {
 
-          await updateUserArea(
-            session.user
+    if (student.board_id) {
+
+      const {
+        data: board
+      } =
+        await aqalverseSupabase
+          .from("boards")
+          .select(
+            "name, code"
+          )
+          .eq(
+            "id",
+            student.board_id
+          )
+          .maybeSingle();
+
+
+      if (board) {
+
+        boardName =
+          board.name;
+
+      }
+
+    }
+
+
+    /* -----------------------------------------
+       DISPLAY BASIC INFORMATION
+       ----------------------------------------- */
+
+    document.getElementById(
+      "dashboardName"
+    ).textContent =
+      profile?.full_name ||
+      "Student";
+
+
+    document.getElementById(
+      "dashboardUsername"
+    ).textContent =
+      profile?.username ||
+      "Not set";
+
+
+    document.getElementById(
+      "dashboardGrade"
+    ).textContent =
+      gradeName;
+
+
+    document.getElementById(
+      "dashboardBoard"
+    ).textContent =
+      boardName;
+
+
+    document.getElementById(
+      "dashboardWelcome"
+    ).textContent =
+      "Welcome, " +
+      (
+        profile?.full_name ||
+        "Student"
+      ) +
+      "!";
+
+
+    /* -----------------------------------------
+       TRIAL STATUS
+       ----------------------------------------- */
+
+    updateTrialStatus(
+      student
+    );
+
+
+    /* -----------------------------------------
+       SHOW DASHBOARD
+       ----------------------------------------- */
+
+    dashboard.classList.remove(
+      "hidden"
+    );
+
+
+    dashboard.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+
+  } catch (error) {
+
+    console.error(
+      "Dashboard loading error:",
+      error
+    );
+
+    showMessage(
+      loginMessage,
+      "Login successful, but the student dashboard could not be loaded: " +
+      error.message,
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   TRIAL STATUS
+   ========================================================= */
+
+function updateTrialStatus(student) {
+
+  const trialStatus =
+    document.getElementById(
+      "trialStatus"
+    );
+
+
+  if (
+    !student ||
+    !student.trial_ends_at
+  ) {
+
+    trialStatus.textContent =
+      "Trial information is not available.";
+
+    return;
+
+  }
+
+
+  const now =
+    new Date();
+
+  const trialEnd =
+    new Date(
+      student.trial_ends_at
+    );
+
+
+  const difference =
+    trialEnd.getTime() -
+    now.getTime();
+
+
+  if (
+    difference <= 0
+  ) {
+
+    trialStatus.innerHTML =
+      "<strong>Your 2-day free trial has ended.</strong><br>" +
+      "Please subscribe to continue learning.";
+
+    trialStatus.style.background =
+      "#fee2e2";
+
+    trialStatus.style.color =
+      "#991b1b";
+
+    trialStatus.style.borderColor =
+      "#fecaca";
+
+    return;
+
+  }
+
+
+  const totalHours =
+    Math.ceil(
+      difference /
+      (1000 * 60 * 60)
+    );
+
+
+  const days =
+    Math.floor(
+      totalHours / 24
+    );
+
+
+  const hours =
+    totalHours % 24;
+
+
+  let remainingText = "";
+
+
+  if (days > 0) {
+
+    remainingText +=
+      days +
+      (
+        days === 1
+          ? " day"
+          : " days"
+      );
+
+  }
+
+
+  if (hours > 0) {
+
+    if (remainingText) {
+      remainingText += " and ";
+    }
+
+    remainingText +=
+      hours +
+      (
+        hours === 1
+          ? " hour"
+          : " hours"
+      );
+
+  }
+
+
+  trialStatus.innerHTML =
+    "<strong>Your free trial is active.</strong><br>" +
+    "Remaining time: " +
+    remainingText;
+
+}
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+async function logoutStudent() {
+
+  try {
+
+    const {
+      error
+    } =
+      await aqalverseSupabase.auth
+        .signOut();
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    dashboard.classList.add(
+      "hidden"
+    );
+
+
+    showMessage(
+      loginMessage,
+      "You have been logged out.",
+      "success"
+    );
+
+
+    window.location.hash =
+      "login";
+
+
+  } catch (error) {
+
+    console.error(
+      "Logout error:",
+      error
+    );
+
+  }
+
+}
+
+
+dashboardLogoutButton.addEventListener(
+  "click",
+  logoutStudent
+);
+
+
+/* =========================================================
+   COURSE SELECTION
+   ========================================================= */
+
+const gradeButtons =
+  document.querySelectorAll(
+    "#gradeSelection .select-button"
+  );
+
+
+gradeButtons.forEach(
+  function(button) {
+
+    button.addEventListener(
+      "click",
+      function() {
+
+        gradeButtons.forEach(
+          function(btn) {
+
+            btn.classList.remove(
+              "active"
+            );
+
+          }
+        );
+
+
+        button.classList.add(
+          "active"
+        );
+
+
+        document
+          .getElementById(
+            "boardStage"
+          )
+          .classList.remove(
+            "hidden"
           );
 
-        } else {
 
-          userArea.style.display =
-            "none";
+        document
+          .getElementById(
+            "subjectStage"
+          )
+          .classList.add(
+            "hidden"
+          );
 
-        }
+
+        document
+          .getElementById(
+            "chapterStage"
+          )
+          .classList.add(
+            "hidden"
+          );
+
+
+        document
+          .getElementById(
+            "lessonStage"
+          )
+          .classList.add(
+            "hidden"
+          );
+
+
+        document
+          .getElementById(
+            "testStage"
+          )
+          .classList.add(
+            "hidden"
+          );
+
+
+        document
+          .getElementById(
+            "quizStage"
+          )
+          .classList.add(
+            "hidden"
+          );
 
       }
     );
 
-
-    /* =========================================================
-       COURSE SELECTION
-       ========================================================= */
-
-    const gradeButtons =
-      document.querySelectorAll(
-        "#gradeSelection .select-button"
-      );
+  }
+);
 
 
-    gradeButtons.forEach(
-      function(button) {
+/* =========================================================
+   SUBJECT
+   ========================================================= */
 
-        button.addEventListener(
-          "click",
-          function() {
+document
+  .querySelectorAll(
+    "#subjectSelection .select-button"
+  )
+  .forEach(
+    function(button) {
 
-            gradeButtons.forEach(
+      button.addEventListener(
+        "click",
+        function() {
+
+          document
+            .querySelectorAll(
+              "#subjectSelection .select-button"
+            )
+            .forEach(
               function(btn) {
 
                 btn.classList.remove(
@@ -2437,213 +2939,34 @@
             );
 
 
-            button.classList.add(
-              "active"
-            );
-
-
-            document
-              .getElementById(
-                "boardStage"
-              )
-              .classList.remove(
-                "hidden"
-              );
-
-
-            document
-              .getElementById(
-                "subjectStage"
-              )
-              .classList.add(
-                "hidden"
-              );
-
-
-            document
-              .getElementById(
-                "chapterStage"
-              )
-              .classList.add(
-                "hidden"
-              );
-
-
-            document
-              .getElementById(
-                "lessonStage"
-              )
-              .classList.add(
-                "hidden"
-              );
-
-
-            document
-              .getElementById(
-                "testStage"
-              )
-              .classList.add(
-                "hidden"
-              );
-
-
-            document
-              .getElementById(
-                "quizStage"
-              )
-              .classList.add(
-                "hidden"
-              );
-
-          }
-        );
-
-      }
-    );
-
-
-    /* =========================================================
-       SUBJECT SELECTION
-       ========================================================= */
-
-    document
-      .querySelectorAll(
-        "#subjectSelection .select-button"
-      )
-      .forEach(
-        function(button) {
-
-          button.addEventListener(
-            "click",
-            function() {
-
-              document
-                .querySelectorAll(
-                  "#subjectSelection .select-button"
-                )
-                .forEach(
-                  function(btn) {
-
-                    btn.classList.remove(
-                      "active"
-                    );
-
-                  }
-                );
-
-
-              button.classList.add(
-                "active"
-              );
-
-
-              document
-                .getElementById(
-                  "chapterStage"
-                )
-                .classList.remove(
-                  "hidden"
-                );
-
-
-              document
-                .getElementById(
-                  "lessonStage"
-                )
-                .classList.add(
-                  "hidden"
-                );
-
-
-              document
-                .getElementById(
-                  "testStage"
-                )
-                .classList.add(
-                  "hidden"
-                );
-
-
-              document
-                .getElementById(
-                  "quizStage"
-                )
-                .classList.add(
-                  "hidden"
-                );
-
-            }
+          button.classList.add(
+            "active"
           );
 
-        }
-      );
 
+          document
+            .getElementById(
+              "chapterStage"
+            )
+            .classList.remove(
+              "hidden"
+            );
 
-    /* =========================================================
-       CHAPTER BUTTON
-       ========================================================= */
-
-    document
-      .getElementById(
-        "chapterButton"
-      )
-      .addEventListener(
-        "click",
-        function() {
 
           document
             .getElementById(
               "lessonStage"
             )
-            .classList.remove(
+            .classList.add(
               "hidden"
             );
 
-        }
-      );
-
-
-    /* =========================================================
-       LESSON BUTTON
-       ========================================================= */
-
-    document
-      .getElementById(
-        "lessonButton"
-      )
-      .addEventListener(
-        "click",
-        function() {
 
           document
             .getElementById(
               "testStage"
             )
-            .classList.remove(
-              "hidden"
-            );
-
-        }
-      );
-
-
-    /* =========================================================
-       START TEST
-       ========================================================= */
-
-    document
-      .getElementById(
-        "startTestButton"
-      )
-      .addEventListener(
-        "click",
-        function() {
-
-          document
-            .getElementById(
-              "quizStage"
-            )
-            .classList.remove(
+            .classList.add(
               "hidden"
             );
 
@@ -2652,159 +2975,318 @@
             .getElementById(
               "quizStage"
             )
-            .scrollIntoView({
-              behavior: "smooth",
-              block: "start"
-            });
+            .classList.add(
+              "hidden"
+            );
 
         }
       );
 
-
-    /* =========================================================
-       QUIZ
-       ========================================================= */
-
-    document
-      .getElementById(
-        "quizForm"
-      )
-      .addEventListener(
-        "submit",
-        function(event) {
-
-          event.preventDefault();
+    }
+  );
 
 
-          const correctAnswers = {
+/* =========================================================
+   CHAPTER
+   ========================================================= */
 
-            q1: "A",
-            q2: "A",
-            q3: "A",
-            q4: "A",
-            q5: "B",
-            q6: "C",
-            q7: "B",
-            q8: "B",
-            q9: "B",
-            q10: "A"
+document
+  .getElementById(
+    "chapterButton"
+  )
+  .addEventListener(
+    "click",
+    function() {
 
-          };
+      document
+        .getElementById(
+          "lessonStage"
+        )
+        .classList.remove(
+          "hidden"
+        );
 
-
-          let score = 0;
-
-
-          Object.keys(
-            correctAnswers
-          ).forEach(
-            function(question) {
-
-              const selected =
-                document.querySelector(
-                  `input[name="${question}"]:checked`
-                );
+    }
+  );
 
 
-              if (
-                selected &&
-                selected.value ===
-                  correctAnswers[question]
-              ) {
+/* =========================================================
+   LESSON
+   ========================================================= */
 
-                score++;
+document
+  .getElementById(
+    "lessonButton"
+  )
+  .addEventListener(
+    "click",
+    function() {
 
-              }
+      document
+        .getElementById(
+          "testStage"
+        )
+        .classList.remove(
+          "hidden"
+        );
 
-            }
-          );
-
-
-          const total =
-            Object.keys(
-              correctAnswers
-            ).length;
-
-
-          const percentage =
-            (score / total) * 100;
+    }
+  );
 
 
-          const result =
-            document.getElementById(
-              "quizResult"
+/* =========================================================
+   START TEST
+   ========================================================= */
+
+document
+  .getElementById(
+    "startTestButton"
+  )
+  .addEventListener(
+    "click",
+    function() {
+
+      document
+        .getElementById(
+          "quizStage"
+        )
+        .classList.remove(
+          "hidden"
+        );
+
+
+      document
+        .getElementById(
+          "quizStage"
+        )
+        .scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+    }
+  );
+
+
+/* =========================================================
+   QUIZ
+   ========================================================= */
+
+document
+  .getElementById(
+    "quizForm"
+  )
+  .addEventListener(
+    "submit",
+    function(event) {
+
+      event.preventDefault();
+
+
+      const correctAnswers = {
+
+        q1: "A",
+        q2: "A",
+        q3: "A",
+        q4: "A",
+        q5: "B",
+        q6: "C",
+        q7: "B",
+        q8: "B",
+        q9: "B",
+        q10: "A"
+
+      };
+
+
+      let score = 0;
+
+
+      Object.keys(
+        correctAnswers
+      ).forEach(
+        function(question) {
+
+          const selected =
+            document.querySelector(
+              `input[name="${question}"]:checked`
             );
 
 
-          if (percentage >= 60) {
+          if (
+            selected &&
+            selected.value ===
+              correctAnswers[question]
+          ) {
 
-            result.className =
-              "result success";
-
-            result.innerHTML =
-              `
-              You passed!<br>
-              Score: ${score}/${total}<br>
-              Percentage: ${percentage}%
-              `;
-
-          } else {
-
-            result.className =
-              "result failure";
-
-            result.innerHTML =
-              `
-              You did not pass this time.<br>
-              Score: ${score}/${total}<br>
-              Percentage: ${percentage}%<br>
-              You need at least 60% to pass.
-              `;
+            score++;
 
           }
 
-
-          result.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-          });
-
         }
       );
 
 
-    /* =========================================================
-       INITIALIZE
-       ========================================================= */
-
-    async function initializeApp() {
-
-      /*
-        Load Supabase boards for registration.
-      */
-
-      await loadRegistrationBoards();
+      const total =
+        Object.keys(
+          correctAnswers
+        ).length;
 
 
-      /*
-        Load Supabase boards for courses.
-      */
-
-      await loadCourseBoards();
+      const percentage =
+        (score / total) * 100;
 
 
-      /*
-        Check whether a student is already logged in.
-      */
+      const result =
+        document.getElementById(
+          "quizResult"
+        );
 
-      await checkCurrentSession();
 
+      if (
+        percentage >= 60
+      ) {
+
+        result.className =
+          "result success";
+
+        result.innerHTML =
+          `
+          You passed!<br>
+          Score: ${score}/${total}<br>
+          Percentage: ${percentage}%
+          `;
+
+
+        document.getElementById(
+          "dashboardProgress"
+        ).style.width =
+          "10%";
+
+
+        document.getElementById(
+          "progressText"
+        ).textContent =
+          "10% completed";
+
+
+      } else {
+
+        result.className =
+          "result failure";
+
+        result.innerHTML =
+          `
+          You did not pass this time.<br>
+          Score: ${score}/${total}<br>
+          Percentage: ${percentage}%<br>
+          You need at least 60% to pass.
+          `;
+
+      }
+
+
+      result.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+
+    }
+  );
+
+
+/* =========================================================
+   EXISTING SESSION
+   ========================================================= */
+
+async function checkCurrentSession() {
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await aqalverseSupabase.auth
+        .getSession();
+
+
+    if (error) {
+      throw error;
     }
 
 
-    initializeApp();
+    if (
+      data &&
+      data.session &&
+      data.session.user
+    ) {
 
-  </script>
+      await loadStudentDashboard(
+        data.session.user
+      );
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Session check error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   AUTH STATE
+   ========================================================= */
+
+aqalverseSupabase.auth.onAuthStateChange(
+  function(event, session) {
+
+    if (
+      session &&
+      session.user
+    ) {
+
+      /*
+        Dashboard loading is handled by
+        login and initial session check.
+      */
+
+    } else {
+
+      dashboard.classList.add(
+        "hidden"
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+async function initializeApp() {
+
+  await loadRegistrationBoards();
+
+  await loadCourseBoards();
+
+  await checkCurrentSession();
+
+}
+
+
+initializeApp();
+
+</script>
 
 </body>
 </html>
