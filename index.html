@@ -2,9 +2,7 @@
 <html lang="en">
  
 <head>
-  <html lang="en">
-
-<head>
+ 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -1477,7 +1475,6 @@
   </div>
 
 </section>
-```
 
 
 
@@ -2111,7 +2108,6 @@ if (registerForm) {
       /* -----------------------------------------
          Give the new student a 2-day trial
          ----------------------------------------- */
-
 const trialStartedAt = new Date();
 
 const trialEndsAt = new Date(
@@ -2131,20 +2127,12 @@ const { error: studentError } =
     });
 
 if (studentError) {
-
-  console.error(
-    "Student record error:",
-    studentError
-  );
-
+  console.error("Student record error:", studentError);
   throw new Error(
-    "Account was created, but the student record could not be created: " +
+    "Student record could not be created: " +
     studentError.message
   );
-
 }
-     
-
 
       /* -----------------------------------------
          Success
