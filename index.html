@@ -2112,6 +2112,37 @@ if (registerForm) {
          Give the new student a 2-day trial
          ----------------------------------------- */
 
+const trialStartedAt = new Date();
+
+const trialEndsAt = new Date(
+  trialStartedAt.getTime() + (2 * 24 * 60 * 60 * 1000)
+);
+
+const { error: studentError } =
+  await aqalverseSupabase
+    .from("students")
+    .insert({
+      id: userId,
+      board_id: boardData.id,
+      grade_id: gradeData.id,
+      trial_started_at: trialStartedAt.toISOString(),
+      trial_ends_at: trialEndsAt.toISOString(),
+      account_status: "trial"
+    });
+
+if (studentError) {
+
+  console.error(
+    "Student record error:",
+    studentError
+  );
+
+  throw new Error(
+    "Account was created, but the student record could not be created: " +
+    studentError.message
+  );
+
+}
      
 
 
