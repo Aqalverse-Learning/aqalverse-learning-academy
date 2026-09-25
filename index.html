@@ -2078,16 +2078,13 @@ if (registerForm) {
           password: password,
 
           options: {
-
-            data: {
-
-              full_name: fullName,
-
-              username: username
-
-            }
-
-          }
+  data: {
+    full_name: fullName,
+    username: username,
+    grade_id: gradeData.id.toString(),
+    board_id: boardData.id.toString()
+  }
+}
 
         });
 
@@ -2115,53 +2112,7 @@ if (registerForm) {
          Give the new student a 2-day trial
          ----------------------------------------- */
 
-      const trialStart = new Date();
-
-      const trialEnd = new Date();
-
-      trialEnd.setDate(
-        trialEnd.getDate() + 2
-      );
-
-
-      /* -----------------------------------------
-         Create student record
-         ----------------------------------------- */
-
-      const { error: studentError } =
-        await aqalverseSupabase
-          .from("students")
-          .insert({
-
-            id: userId,
-
-            board_id: boardData.id,
-
-            grade_id: gradeData.id,
-
-            trial_started_at:
-              trialStart.toISOString(),
-
-            trial_ends_at:
-              trialEnd.toISOString(),
-
-            account_status: "trial"
-
-          });
-
-
-      if (studentError) {
-
-        console.error(
-          "Student record error:",
-          studentError
-        );
-
-        throw new Error(
-          "Account was created, but the student profile could not be completed. Please contact the academy."
-        );
-
-      }
+     
 
 
       /* -----------------------------------------
