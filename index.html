@@ -45,6 +45,11 @@
       cursor: pointer;
     }
 
+    button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
     .hidden {
       display: none !important;
     }
@@ -393,6 +398,10 @@
       color: #b45309 !important;
     }
 
+    .status-pending {
+      color: #b45309 !important;
+    }
+
     .progress-bar {
       width: 100%;
       height: 15px;
@@ -574,6 +583,121 @@
       border: 1px solid #fed7aa;
     }
 
+    /* PAYMENT / RENEWAL */
+
+    .renewal-panel {
+      margin-top: 25px;
+    }
+
+    .renewal-header {
+      margin-bottom: 20px;
+    }
+
+    .renewal-header h3 {
+      margin-bottom: 6px;
+      color: #102a43;
+    }
+
+    .renewal-header p {
+      color: #64748b;
+    }
+
+    .payment-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 15px;
+      padding: 20px;
+    }
+
+    .payment-card h4 {
+      margin-top: 0;
+      color: #0f766e;
+    }
+
+    .payment-price {
+      font-size: 28px;
+      font-weight: 800;
+      color: #102a43;
+      margin: 10px 0;
+    }
+
+    .payment-select-button {
+      width: 100%;
+      border: none;
+      background: #0f766e;
+      color: white;
+      padding: 12px;
+      border-radius: 9px;
+      font-weight: 800;
+      margin-top: 10px;
+    }
+
+    .payment-select-button:hover {
+      background: #115e59;
+    }
+
+    .payment-form-box {
+      margin-top: 25px;
+      padding: 20px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 15px;
+    }
+
+    .payment-history {
+      margin-top: 25px;
+    }
+
+    .payment-history-item {
+      padding: 15px;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      margin-top: 10px;
+      background: #f8fafc;
+    }
+
+    .payment-pending {
+      color: #b45309;
+      font-weight: 800;
+    }
+
+    .payment-verified {
+      color: #15803d;
+      font-weight: 800;
+    }
+
+    .payment-rejected {
+      color: #dc2626;
+      font-weight: 800;
+    }
+
+    .payment-info-box {
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 10px;
+      background: #eff6ff;
+      color: #1e40af;
+      border: 1px solid #bfdbfe;
+    }
+
+    .payment-success-box {
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 10px;
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .payment-warning-box {
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 10px;
+      background: #fff7ed;
+      color: #9a3412;
+      border: 1px solid #fed7aa;
+    }
+
     footer {
       background: #102a43;
       color: white;
@@ -620,6 +744,11 @@
       .panel {
         padding: 20px;
       }
+
+      .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
@@ -641,7 +770,9 @@
 </header>
 
 
-<!-- HERO -->
+<!-- =====================================================
+     HERO
+===================================================== -->
 
 <section class="hero">
   <div class="hero-container">
@@ -693,7 +824,9 @@
 </section>
 
 
-<!-- FEATURES -->
+<!-- =====================================================
+     FEATURES
+===================================================== -->
 
 <section id="features">
 
@@ -757,7 +890,9 @@
 </section>
 
 
-<!-- COURSES -->
+<!-- =====================================================
+     COURSES
+===================================================== -->
 
 <section id="courses">
 
@@ -900,7 +1035,9 @@
 </section>
 
 
-<!-- PRICING -->
+<!-- =====================================================
+     PRICING
+===================================================== -->
 
 <section id="pricing">
 
@@ -960,7 +1097,9 @@
 </section>
 
 
-<!-- LOGIN / REGISTER -->
+<!-- =====================================================
+     LOGIN / REGISTER
+===================================================== -->
 
 <section id="login">
 
@@ -1052,7 +1191,6 @@
 
           </div>
 
-
           <div class="form-group">
 
             <label for="registerEmail">
@@ -1067,7 +1205,6 @@
             />
 
           </div>
-
 
           <div class="form-group">
 
@@ -1085,7 +1222,6 @@
 
           </div>
 
-
           <div class="form-group">
 
             <label for="registerGrade">
@@ -1102,7 +1238,6 @@
 
           </div>
 
-
           <div class="form-group">
 
             <label for="registerBoard">
@@ -1118,7 +1253,6 @@
             </select>
 
           </div>
-
 
           <div class="form-group">
 
@@ -1144,7 +1278,6 @@
 
           </div>
 
-
           <button type="submit" class="form-button">
             Create Account
           </button>
@@ -1162,7 +1295,9 @@
 </section>
 
 
-<!-- DASHBOARD -->
+<!-- =====================================================
+     DASHBOARD
+===================================================== -->
 
 <section id="dashboard" class="dashboard">
 
@@ -1315,6 +1450,142 @@
 
       <div id="accessBox" class="access-box hidden"></div>
 
+
+      <!-- =================================================
+           RENEWAL / PAYMENT
+      ================================================= -->
+
+      <div
+        id="renewalPanel"
+        class="panel renewal-panel hidden"
+      >
+
+        <div class="renewal-header">
+
+          <h3>Renew Learning Access</h3>
+
+          <p>
+            Choose a monthly plan and submit your JazzCash
+            transaction reference for verification.
+          </p>
+
+        </div>
+
+
+        <div
+          id="renewalMessage"
+          class="message hidden"
+        ></div>
+
+
+        <div class="payment-info-box">
+
+          <strong>JazzCash Payment</strong>
+
+          <p>
+            Select a plan below. After making the payment
+            through the academy's JazzCash account, enter
+            your transaction/reference number.
+          </p>
+
+          <p>
+            Your payment will remain <strong>Pending</strong>
+            until it is verified by the academy administrator.
+          </p>
+
+        </div>
+
+
+        <div
+          id="renewalPlans"
+          class="pricing-grid"
+          style="margin-top:20px;"
+        >
+          <p>Loading subscription plans...</p>
+        </div>
+
+
+        <div
+          id="paymentFormBox"
+          class="payment-form-box hidden"
+        >
+
+          <h3>Submit JazzCash Payment</h3>
+
+
+          <div class="form-group">
+
+            <label for="selectedPaymentPlan">
+              Selected Plan
+            </label>
+
+            <input
+              id="selectedPaymentPlan"
+              type="text"
+              readonly
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="selectedPaymentAmount">
+              Amount
+            </label>
+
+            <input
+              id="selectedPaymentAmount"
+              type="text"
+              readonly
+            />
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="jazzCashReference">
+              JazzCash Transaction / Reference Number
+            </label>
+
+            <input
+              id="jazzCashReference"
+              type="text"
+              placeholder="Enter transaction/reference number"
+            />
+
+          </div>
+
+
+          <button
+            id="submitPaymentButton"
+            type="button"
+            class="form-button"
+          >
+            Submit Payment for Verification
+          </button>
+
+
+          <div class="payment-warning-box">
+
+            <strong>Important:</strong>
+
+            Enter the reference number exactly as shown
+            in your JazzCash transaction record.
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="paymentHistoryBox"
+          class="payment-history"
+        ></div>
+
+      </div>
+
     </div>
 
   </div>
@@ -1336,7 +1607,7 @@
 
 /* =========================================================
    SUPABASE
-   ========================================================= */
+========================================================= */
 
 const SUPABASE_URL =
   "https://lmfkrykuxspddjfcwpuf.supabase.co";
@@ -1353,7 +1624,7 @@ const aqalverseSupabase =
 
 /* =========================================================
    STORAGE
-   ========================================================= */
+========================================================= */
 
 const STORAGE_BUCKET =
   "academt videos";
@@ -1389,7 +1660,7 @@ function getStorageUrl(fileValue) {
 
 /* =========================================================
    GLOBAL STATE
-   ========================================================= */
+========================================================= */
 
 let selectedGrade = null;
 let selectedBoard = null;
@@ -1407,10 +1678,14 @@ let studentProgressRows = [];
 
 let accessAllowed = false;
 
+let activeSubscription = null;
+
+let selectedPaymentPlan = null;
+
 
 /* =========================================================
    DOM
-   ========================================================= */
+========================================================= */
 
 const gradesContainer =
   document.getElementById("gradesContainer");
@@ -1448,10 +1723,37 @@ const courseMessage =
 const accessLockMessage =
   document.getElementById("accessLockMessage");
 
+const renewalPanel =
+  document.getElementById("renewalPanel");
+
+const renewalPlans =
+  document.getElementById("renewalPlans");
+
+const renewalMessage =
+  document.getElementById("renewalMessage");
+
+const paymentFormBox =
+  document.getElementById("paymentFormBox");
+
+const selectedPaymentPlanInput =
+  document.getElementById("selectedPaymentPlan");
+
+const selectedPaymentAmountInput =
+  document.getElementById("selectedPaymentAmount");
+
+const jazzCashReference =
+  document.getElementById("jazzCashReference");
+
+const submitPaymentButton =
+  document.getElementById("submitPaymentButton");
+
+const paymentHistoryBox =
+  document.getElementById("paymentHistoryBox");
+
 
 /* =========================================================
    HELPERS
-   ========================================================= */
+========================================================= */
 
 function showStage(id) {
 
@@ -1461,6 +1763,7 @@ function showStage(id) {
   if (element) {
     element.classList.remove("hidden");
   }
+
 }
 
 
@@ -1472,6 +1775,7 @@ function hideStage(id) {
   if (element) {
     element.classList.add("hidden");
   }
+
 }
 
 
@@ -1484,6 +1788,7 @@ function hideQuiz() {
   quizResult.className = "hidden";
 
   quizResult.textContent = "";
+
 }
 
 
@@ -1493,6 +1798,7 @@ function showCourseMessage(message) {
     message;
 
   courseMessage.classList.remove("hidden");
+
 }
 
 
@@ -1501,6 +1807,7 @@ function hideCourseMessage() {
   courseMessage.classList.add("hidden");
 
   courseMessage.textContent = "";
+
 }
 
 
@@ -1528,9 +1835,11 @@ function randomizeArray(array) {
       result[j],
       result[i]
     ];
+
   }
 
   return result;
+
 }
 
 
@@ -1555,6 +1864,7 @@ function formatDate(dateValue) {
       day: "numeric"
     }
   );
+
 }
 
 
@@ -1565,12 +1875,13 @@ function isDateActive(dateValue) {
   }
 
   return new Date(dateValue) > new Date();
+
 }
 
 
 /* =========================================================
    ACCESS CONTROL
-   ========================================================= */
+========================================================= */
 
 function calculateAccessStatus() {
 
@@ -1581,40 +1892,15 @@ function calculateAccessStatus() {
   }
 
 
-  /*
-     Suspended accounts are always locked.
-  */
-
   if (
     currentStudent.account_status ===
     "suspended"
   ) {
-    return;
-  }
-
-
-  /*
-     Active subscription.
-  */
-
-  if (
-    currentStudent.account_status ===
-    "active"
-  ) {
-
-    /*
-       Subscription is checked below.
-       If no subscription information is available,
-       do not automatically grant access forever.
-    */
 
     return;
+
   }
 
-
-  /*
-     Trial.
-  */
 
   if (
     currentStudent.account_status ===
@@ -1627,12 +1913,9 @@ function calculateAccessStatus() {
     accessAllowed = true;
 
     return;
+
   }
 
-
-  /*
-     Expired.
-  */
 
   if (
     currentStudent.account_status ===
@@ -1642,13 +1925,9 @@ function calculateAccessStatus() {
     accessAllowed = false;
 
     return;
+
   }
 
-
-  /*
-     Fallback:
-     trial dates are still checked.
-  */
 
   if (
     isDateActive(
@@ -1665,9 +1944,20 @@ function calculateAccessStatus() {
 
 async function refreshAccessStatus() {
 
-  if (!currentStudent) {
+  accessAllowed = false;
 
-    accessAllowed = false;
+  activeSubscription = null;
+
+
+  if (!currentStudent) {
+    return;
+  }
+
+
+  if (
+    currentStudent.account_status ===
+    "suspended"
+  ) {
 
     return;
 
@@ -1675,7 +1965,7 @@ async function refreshAccessStatus() {
 
 
   /*
-     Trial is active.
+     Check active trial first.
   */
 
   if (
@@ -1704,7 +1994,7 @@ async function refreshAccessStatus() {
     await aqalverseSupabase
       .from("student_subscriptions")
       .select(
-        "id, start_date, end_date, status"
+        "id, student_id, fee_plan_id, start_date, end_date, status"
       )
       .eq(
         "student_id",
@@ -1754,15 +2044,15 @@ async function refreshAccessStatus() {
         "T23:59:59"
       );
 
+
     if (
       endDate >= today
     ) {
 
-      accessAllowed = true;
+      activeSubscription =
+        subscription;
 
-      /*
-         Keep the student marked active.
-      */
+      accessAllowed = true;
 
       if (
         currentStudent.account_status !==
@@ -1792,10 +2082,6 @@ async function refreshAccessStatus() {
     "trial"
   ) {
 
-    /*
-       Trial has ended.
-    */
-
     currentStudent.account_status =
       "expired";
 
@@ -1812,6 +2098,7 @@ function showAccessLock(message) {
   accessLockMessage.classList.remove(
     "hidden"
   );
+
 }
 
 
@@ -1822,12 +2109,13 @@ function hideAccessLock() {
   );
 
   accessLockMessage.textContent = "";
+
 }
 
 
 /* =========================================================
-   LESSON PROGRESS HELPERS
-   ========================================================= */
+   LESSON PROGRESS
+========================================================= */
 
 function getProgressForLesson(
   lessonId
@@ -1871,11 +2159,6 @@ function isLessonUnlocked(
   }
 
 
-  /*
-     First lesson is always unlocked
-     while the student has access.
-  */
-
   if (
     Number(
       lesson.lesson_number
@@ -1886,10 +2169,6 @@ function isLessonUnlocked(
 
   }
 
-
-  /*
-     Find previous lesson.
-  */
 
   const previousLesson =
     lessons.find(
@@ -1917,7 +2196,7 @@ function isLessonUnlocked(
 
 /* =========================================================
    LESSON CONTENT
-   ========================================================= */
+========================================================= */
 
 function hideLessonContent() {
 
@@ -1944,7 +2223,7 @@ async function showLessonContent(
   if (!accessAllowed) {
 
     showAccessLock(
-      "Your learning access has expired. Please subscribe to continue."
+      "Your learning access has expired. Please renew your subscription to continue."
     );
 
     return;
@@ -2092,7 +2371,7 @@ async function showLessonContent(
 
 
   /*
-     STATUS
+     CONTENT STATUS
   */
 
   if (
@@ -2152,7 +2431,7 @@ async function showLessonContent(
 
 /* =========================================================
    LOAD GRADES
-   ========================================================= */
+========================================================= */
 
 async function loadGrades() {
 
@@ -2208,10 +2487,6 @@ async function loadGrades() {
   data.forEach(
     grade => {
 
-      /*
-         Course selector button
-      */
-
       const button =
         document.createElement(
           "button"
@@ -2254,8 +2529,16 @@ async function loadGrades() {
           if (!accessAllowed) {
 
             showAccessLock(
-              "Your learning access is not active. Please subscribe or renew your access."
+              "Your learning access is not active. Please renew your subscription."
             );
+
+            document
+              .getElementById(
+                "dashboard"
+              )
+              .scrollIntoView({
+                behavior: "smooth"
+              });
 
             return;
 
@@ -2301,10 +2584,6 @@ async function loadGrades() {
       );
 
 
-      /*
-         Registration dropdown
-      */
-
       const option =
         document.createElement(
           "option"
@@ -2330,7 +2609,7 @@ async function loadGrades() {
 
 /* =========================================================
    LOAD BOARDS
-   ========================================================= */
+========================================================= */
 
 async function loadBoards() {
 
@@ -2452,10 +2731,6 @@ async function loadBoards() {
       );
 
 
-      /*
-         Registration dropdown
-      */
-
       const option =
         document.createElement(
           "option"
@@ -2479,7 +2754,7 @@ async function loadBoards() {
 
 /* =========================================================
    LOAD SUBJECTS
-   ========================================================= */
+========================================================= */
 
 async function loadSubjects() {
 
@@ -2597,7 +2872,7 @@ async function loadSubjects() {
 
 /* =========================================================
    LOAD COURSE
-   ========================================================= */
+========================================================= */
 
 async function loadCourse() {
 
@@ -2680,7 +2955,7 @@ async function loadCourse() {
 
 /* =========================================================
    LOAD CHAPTERS
-   ========================================================= */
+========================================================= */
 
 async function loadChapters() {
 
@@ -2814,8 +3089,8 @@ async function loadChapters() {
 
 
 /* =========================================================
-   LOAD LESSONS WITH LOCK SYSTEM
-   ========================================================= */
+   LOAD LESSONS
+========================================================= */
 
 async function loadLessons() {
 
@@ -2826,7 +3101,6 @@ async function loadLessons() {
 
   lessonsContainer.innerHTML =
     "<p>Loading lessons...</p>";
-
 
   showStage("lessonStage");
 
@@ -2839,10 +3113,10 @@ async function loadLessons() {
   if (!accessAllowed) {
 
     lessonsContainer.innerHTML =
-      "<p>Your learning access has expired. Please subscribe to continue.</p>";
+      "<p>Your learning access has expired. Please renew your subscription.</p>";
 
     showAccessLock(
-      "Your learning access is not active."
+      "Your learning access is not active. Please renew your subscription from the Dashboard."
     );
 
     return;
@@ -2925,7 +3199,6 @@ async function loadLessons() {
 
 
       button.type = "button";
-
 
       button.className =
         "select-button lesson-button";
@@ -3048,7 +3321,7 @@ async function loadLessons() {
 
 /* =========================================================
    LOAD TESTS
-   ========================================================= */
+========================================================= */
 
 async function loadTests() {
 
@@ -3059,7 +3332,6 @@ async function loadTests() {
 
   testsContainer.innerHTML =
     "<p>Loading assessments...</p>";
-
 
   showStage("testStage");
 
@@ -3135,12 +3407,10 @@ async function loadTests() {
           "button"
         );
 
-
       button.type = "button";
 
       button.className =
         "select-button";
-
 
       button.textContent =
         test.title +
@@ -3192,7 +3462,7 @@ async function loadTests() {
 
 /* =========================================================
    START DATABASE TEST
-   ========================================================= */
+========================================================= */
 
 async function startDatabaseTest() {
 
@@ -3224,7 +3494,7 @@ async function startDatabaseTest() {
   if (!accessAllowed) {
 
     showAccessLock(
-      "Your learning access has expired."
+      "Your learning access has expired. Please renew your subscription."
     );
 
     return;
@@ -3367,10 +3637,6 @@ async function startDatabaseTest() {
       .filter(Boolean);
 
 
-  /*
-     Remove duplicate IDs.
-  */
-
   const seenIds =
     new Set();
 
@@ -3399,10 +3665,6 @@ async function startDatabaseTest() {
       }
     );
 
-
-  /*
-     Remove duplicate question text.
-  */
 
   const seenTexts =
     new Set();
@@ -3441,10 +3703,6 @@ async function startDatabaseTest() {
     );
 
 
-  /*
-     Randomize questions.
-  */
-
   if (
     selectedTest.randomize_questions
   ) {
@@ -3456,10 +3714,6 @@ async function startDatabaseTest() {
 
   }
 
-
-  /*
-     Limit requested number.
-  */
 
   finalQuestions =
     finalQuestions.slice(
@@ -3543,15 +3797,12 @@ async function startDatabaseTest() {
           radio.type =
             "radio";
 
-
           radio.name =
             "question_" +
             question.id;
 
-
           radio.value =
             letter;
-
 
           radio.dataset.questionId =
             question.id;
@@ -3598,7 +3849,7 @@ async function startDatabaseTest() {
 
 /* =========================================================
    SUBMIT QUIZ
-   ========================================================= */
+========================================================= */
 
 document
   .getElementById("submitQuiz")
@@ -3618,15 +3869,12 @@ async function submitQuiz() {
     quizResult.className =
       "result failure";
 
-
     quizResult.textContent =
       "Please login before submitting the assessment.";
-
 
     quizResult.classList.remove(
       "hidden"
     );
-
 
     return;
 
@@ -3638,15 +3886,12 @@ async function submitQuiz() {
     quizResult.className =
       "result failure";
 
-
     quizResult.textContent =
       "Your learning access has expired.";
-
 
     quizResult.classList.remove(
       "hidden"
     );
-
 
     return;
 
@@ -3680,15 +3925,12 @@ async function submitQuiz() {
     quizResult.className =
       "result failure";
 
-
     quizResult.textContent =
       "No questions are available.";
-
 
     quizResult.classList.remove(
       "hidden"
     );
-
 
     return;
 
@@ -3771,19 +4013,15 @@ async function submitQuiz() {
       attemptError
     );
 
-
     quizResult.className =
       "result failure";
-
 
     quizResult.textContent =
       "Your result was calculated, but it could not be saved. Please try again.";
 
-
     quizResult.classList.remove(
       "hidden"
     );
-
 
     return;
 
@@ -3854,7 +4092,7 @@ async function submitQuiz() {
 
 /* =========================================================
    COMPLETE LESSON PROGRESS
-   ========================================================= */
+========================================================= */
 
 async function completeLessonProgress() {
 
@@ -3922,7 +4160,7 @@ async function completeLessonProgress() {
 
 /* =========================================================
    LOAD STUDENT PROGRESS
-   ========================================================= */
+========================================================= */
 
 async function reloadStudentProgress() {
 
@@ -3970,7 +4208,7 @@ async function reloadStudentProgress() {
 
 /* =========================================================
    REGISTER
-   ========================================================= */
+========================================================= */
 
 document
   .getElementById("registerForm")
@@ -4212,6 +4450,9 @@ async function registerStudent(event) {
     message.textContent =
       "Account created successfully. Your 2-day free trial has started.";
 
+    currentUser =
+      data.user;
+
     await initializeUser();
 
   } else {
@@ -4226,7 +4467,7 @@ async function registerStudent(event) {
 
 /* =========================================================
    LOGIN
-   ========================================================= */
+========================================================= */
 
 document
   .getElementById("loginForm")
@@ -4314,7 +4555,7 @@ async function loginStudent(event) {
 
 /* =========================================================
    AUTH STATE
-   ========================================================= */
+========================================================= */
 
 aqalverseSupabase.auth.onAuthStateChange(
   async (
@@ -4341,6 +4582,8 @@ aqalverseSupabase.auth.onAuthStateChange(
 
       accessAllowed = false;
 
+      activeSubscription = null;
+
       resetDashboard();
 
     }
@@ -4351,7 +4594,7 @@ aqalverseSupabase.auth.onAuthStateChange(
 
 /* =========================================================
    INITIALIZE USER
-   ========================================================= */
+========================================================= */
 
 async function initializeUser() {
 
@@ -4447,7 +4690,7 @@ async function initializeUser() {
 
 /* =========================================================
    DASHBOARD
-   ========================================================= */
+========================================================= */
 
 async function loadDashboard() {
 
@@ -4507,7 +4750,7 @@ async function loadDashboard() {
 
   /*
      Count lessons belonging to
-     student's selected grade and board.
+     student's grade and board.
   */
 
   let totalLessons = 0;
@@ -4523,21 +4766,21 @@ async function loadDashboard() {
       data: courses,
       error: coursesError
     } =
-      await aqalverseSupabase
-        .from("courses")
-        .select("id")
-        .eq(
-          "grade_id",
-          currentStudent.grade_id
-        )
-        .eq(
-          "board_id",
-          currentStudent.board_id
-        )
-        .eq(
-          "is_active",
-          true
-        );
+    await aqalverseSupabase
+      .from("courses")
+      .select("id")
+      .eq(
+        "grade_id",
+        currentStudent.grade_id
+      )
+      .eq(
+        "board_id",
+        currentStudent.board_id
+      )
+      .eq(
+        "is_active",
+        true
+      );
 
 
     if (
@@ -4557,17 +4800,17 @@ async function loadDashboard() {
         data: chapters,
         error: chaptersError
       } =
-        await aqalverseSupabase
-          .from("chapters")
-          .select("id")
-          .in(
-            "course_id",
-            courseIds
-          )
-          .eq(
-            "is_active",
-            true
-          );
+      await aqalverseSupabase
+        .from("chapters")
+        .select("id")
+        .in(
+          "course_id",
+          courseIds
+        )
+        .eq(
+          "is_active",
+          true
+        );
 
 
       if (
@@ -4587,17 +4830,17 @@ async function loadDashboard() {
           data: lessons,
           error: lessonsError
         } =
-          await aqalverseSupabase
-            .from("lessons")
-            .select("id")
-            .in(
-              "chapter_id",
-              chapterIds
-            )
-            .eq(
-              "is_active",
-              true
-            );
+        await aqalverseSupabase
+          .from("lessons")
+          .select("id")
+          .in(
+            "chapter_id",
+            chapterIds
+          )
+          .eq(
+            "is_active",
+            true
+          );
 
 
         if (
@@ -4690,12 +4933,14 @@ async function loadDashboard() {
 
   updateAccessBox();
 
+  updateRenewalVisibility();
+
 }
 
 
 /* =========================================================
    DASHBOARD HEADER
-   ========================================================= */
+========================================================= */
 
 function updateDashboardHeader() {
 
@@ -4783,7 +5028,7 @@ function updateDashboardHeader() {
 
 /* =========================================================
    DASHBOARD GRADE
-   ========================================================= */
+========================================================= */
 
 async function loadDashboardGrade(
   gradeId
@@ -4836,7 +5081,7 @@ async function loadDashboardGrade(
 
 /* =========================================================
    DASHBOARD BOARD
-   ========================================================= */
+========================================================= */
 
 async function loadDashboardBoard(
   boardId
@@ -4887,7 +5132,7 @@ async function loadDashboardBoard(
 
 /* =========================================================
    TRIAL BOX
-   ========================================================= */
+========================================================= */
 
 function updateTrialBox() {
 
@@ -5009,7 +5254,7 @@ function updateTrialBox() {
 
 /* =========================================================
    ACCESS BOX
-   ========================================================= */
+========================================================= */
 
 function updateAccessBox() {
 
@@ -5065,7 +5310,18 @@ function updateAccessBox() {
       "status-active";
 
 
-    loadSubscriptionEndDate();
+    if (activeSubscription) {
+
+      accessEnd.textContent =
+        formatDate(
+          activeSubscription.end_date
+        );
+
+    } else {
+
+      loadSubscriptionEndDate();
+
+    }
 
 
     box.className =
@@ -5160,7 +5416,7 @@ async function loadSubscriptionEndDate() {
     await aqalverseSupabase
       .from("student_subscriptions")
       .select(
-        "end_date"
+        "id, end_date"
       )
       .eq(
         "student_id",
@@ -5210,8 +5466,700 @@ async function loadSubscriptionEndDate() {
 
 
 /* =========================================================
+   RENEWAL SYSTEM
+========================================================= */
+
+function showRenewalMessage(message) {
+
+  if (!renewalMessage) {
+    return;
+  }
+
+  renewalMessage.textContent =
+    message;
+
+  renewalMessage.classList.remove(
+    "hidden"
+  );
+
+}
+
+
+function hideRenewalMessage() {
+
+  if (!renewalMessage) {
+    return;
+  }
+
+  renewalMessage.textContent =
+    "";
+
+  renewalMessage.classList.add(
+    "hidden"
+  );
+
+}
+
+
+/* ---------------------------------------------------------
+   LOAD PLANS
+--------------------------------------------------------- */
+
+async function loadRenewalPlans() {
+
+  if (!renewalPlans) {
+    return;
+  }
+
+
+  renewalPlans.innerHTML =
+    "<p>Loading subscription plans...</p>";
+
+
+  const {
+    data,
+    error
+  } =
+    await aqalverseSupabase
+      .from("fee_plans")
+      .select(
+        "id, name, price, duration_days, plan_type, description"
+      )
+      .eq(
+        "is_active",
+        true
+      )
+      .order(
+        "price"
+      );
+
+
+  if (error) {
+
+    console.error(
+      "Fee plans error:",
+      error
+    );
+
+    renewalPlans.innerHTML =
+      "<p>Unable to load subscription plans.</p>";
+
+    return;
+
+  }
+
+
+  renewalPlans.innerHTML =
+    "";
+
+
+  if (
+    !data ||
+    data.length === 0
+  ) {
+
+    renewalPlans.innerHTML =
+      "<p>No subscription plans are available.</p>";
+
+    return;
+
+  }
+
+
+  data.forEach(
+    plan => {
+
+      const card =
+        document.createElement(
+          "div"
+        );
+
+      card.className =
+        "payment-card";
+
+
+      const title =
+        document.createElement(
+          "h4"
+        );
+
+      title.textContent =
+        plan.name;
+
+
+      const price =
+        document.createElement(
+          "div"
+        );
+
+      price.className =
+        "payment-price";
+
+      price.textContent =
+        "Rs. " +
+        Number(
+          plan.price
+        ).toLocaleString();
+
+
+      const duration =
+        document.createElement(
+          "p"
+        );
+
+      duration.textContent =
+        plan.duration_days +
+        " days access";
+
+
+      const description =
+        document.createElement(
+          "p"
+        );
+
+      description.textContent =
+        plan.description ||
+        "";
+
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+      button.type =
+        "button";
+
+      button.className =
+        "payment-select-button";
+
+      button.textContent =
+        "Select Plan";
+
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          selectPaymentPlan(
+            plan
+          );
+
+        }
+      );
+
+
+      card.appendChild(
+        title
+      );
+
+      card.appendChild(
+        price
+      );
+
+      card.appendChild(
+        duration
+      );
+
+      card.appendChild(
+        description
+      );
+
+      card.appendChild(
+        button
+      );
+
+
+      renewalPlans.appendChild(
+        card
+      );
+
+    }
+  );
+
+}
+
+
+/* ---------------------------------------------------------
+   SELECT PLAN
+--------------------------------------------------------- */
+
+function selectPaymentPlan(plan) {
+
+  selectedPaymentPlan =
+    plan;
+
+
+  selectedPaymentPlanInput.value =
+    plan.name;
+
+
+  selectedPaymentAmountInput.value =
+    "Rs. " +
+    Number(
+      plan.price
+    ).toLocaleString();
+
+
+  jazzCashReference.value =
+    "";
+
+
+  paymentFormBox.classList.remove(
+    "hidden"
+  );
+
+
+  hideRenewalMessage();
+
+
+  paymentFormBox.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+
+}
+
+
+/* ---------------------------------------------------------
+   PAYMENT SUBMISSION
+--------------------------------------------------------- */
+
+submitPaymentButton.addEventListener(
+  "click",
+  submitJazzCashPayment
+);
+
+
+async function submitJazzCashPayment() {
+
+  if (!currentUser) {
+
+    showRenewalMessage(
+      "Please login before submitting a payment."
+    );
+
+    return;
+
+  }
+
+
+  if (!selectedPaymentPlan) {
+
+    showRenewalMessage(
+      "Please select a subscription plan first."
+    );
+
+    return;
+
+  }
+
+
+  const reference =
+    jazzCashReference.value.trim();
+
+
+  if (!reference) {
+
+    showRenewalMessage(
+      "Please enter your JazzCash transaction/reference number."
+    );
+
+    return;
+
+  }
+
+
+  submitPaymentButton.disabled =
+    true;
+
+  submitPaymentButton.textContent =
+    "Submitting...";
+
+
+  /*
+     Save payment request.
+
+     subscription_id is intentionally null
+     because the administrator will verify
+     the payment first and create/activate
+     the subscription.
+  */
+
+  const {
+    error
+  } =
+    await aqalverseSupabase
+      .from("payments")
+      .insert({
+        student_id:
+          currentUser.id,
+
+        subscription_id:
+          null,
+
+        amount:
+          Number(
+            selectedPaymentPlan.price
+          ),
+
+        payment_method:
+          "JazzCash",
+
+        transaction_reference:
+          reference,
+
+        status:
+          "pending",
+
+        notes:
+          selectedPaymentPlan.name +
+          " renewal request"
+      });
+
+
+  if (error) {
+
+    console.error(
+      "Payment submission error:",
+      error
+    );
+
+
+    showRenewalMessage(
+      "Payment could not be submitted. Please try again."
+    );
+
+
+    submitPaymentButton.disabled =
+      false;
+
+    submitPaymentButton.textContent =
+      "Submit Payment for Verification";
+
+    return;
+
+  }
+
+
+  showRenewalMessage(
+    "Payment submitted successfully. Your payment is now pending administrator verification."
+  );
+
+
+  paymentFormBox.classList.add(
+    "hidden"
+  );
+
+
+  jazzCashReference.value =
+    "";
+
+
+  selectedPaymentPlan =
+    null;
+
+
+  await loadPaymentHistory();
+
+
+  submitPaymentButton.disabled =
+    false;
+
+  submitPaymentButton.textContent =
+    "Submit Payment for Verification";
+
+}
+
+
+/* ---------------------------------------------------------
+   PAYMENT HISTORY
+--------------------------------------------------------- */
+
+async function loadPaymentHistory() {
+
+  if (
+    !currentUser ||
+    !paymentHistoryBox
+  ) {
+    return;
+  }
+
+
+  paymentHistoryBox.innerHTML =
+    "<p>Loading payment history...</p>";
+
+
+  const {
+    data,
+    error
+  } =
+    await aqalverseSupabase
+      .from("payments")
+      .select(
+        "id, amount, payment_method, transaction_reference, payment_date, status, notes"
+      )
+      .eq(
+        "student_id",
+        currentUser.id
+      )
+      .order(
+        "payment_date",
+        {
+          ascending: false
+        }
+      );
+
+
+  if (error) {
+
+    console.error(
+      "Payment history error:",
+      error
+    );
+
+    paymentHistoryBox.innerHTML =
+      "<p>Unable to load payment history.</p>";
+
+    return;
+
+  }
+
+
+  paymentHistoryBox.innerHTML =
+    "<h3>Payment History</h3>";
+
+
+  if (
+    !data ||
+    data.length === 0
+  ) {
+
+    paymentHistoryBox.innerHTML +=
+      "<p>No payment requests submitted yet.</p>";
+
+    return;
+
+  }
+
+
+  data.forEach(
+    payment => {
+
+      const item =
+        document.createElement(
+          "div"
+        );
+
+      item.className =
+        "payment-history-item";
+
+
+      const amount =
+        document.createElement(
+          "div"
+        );
+
+      amount.innerHTML =
+        "<strong>Amount:</strong> Rs. " +
+        Number(
+          payment.amount
+        ).toLocaleString();
+
+
+      const method =
+        document.createElement(
+          "div"
+        );
+
+      method.innerHTML =
+        "<strong>Method:</strong> " +
+        (
+          payment.payment_method ||
+          "JazzCash"
+        );
+
+
+      const reference =
+        document.createElement(
+          "div"
+        );
+
+      reference.innerHTML =
+        "<strong>Reference:</strong> " +
+        (
+          payment.transaction_reference ||
+          "—"
+        );
+
+
+      const date =
+        document.createElement(
+          "div"
+        );
+
+      date.innerHTML =
+        "<strong>Date:</strong> " +
+        formatDate(
+          payment.payment_date
+        );
+
+
+      const status =
+        document.createElement(
+          "div"
+        );
+
+
+      const statusValue =
+        String(
+          payment.status ||
+          "pending"
+        ).toLowerCase();
+
+
+      status.innerHTML =
+        "<strong>Status:</strong> ";
+
+
+      const statusSpan =
+        document.createElement(
+          "span"
+        );
+
+
+      statusSpan.textContent =
+        statusValue
+          .charAt(0)
+          .toUpperCase() +
+        statusValue.slice(1);
+
+
+      if (
+        statusValue ===
+        "pending"
+      ) {
+
+        statusSpan.className =
+          "payment-pending";
+
+      } else if (
+        statusValue ===
+        "verified"
+      ) {
+
+        statusSpan.className =
+          "payment-verified";
+
+      } else if (
+        statusValue ===
+        "rejected"
+      ) {
+
+        statusSpan.className =
+          "payment-rejected";
+
+      }
+
+
+      status.appendChild(
+        statusSpan
+      );
+
+
+      item.appendChild(
+        amount
+      );
+
+      item.appendChild(
+        method
+      );
+
+      item.appendChild(
+        reference
+      );
+
+      item.appendChild(
+        date
+      );
+
+      item.appendChild(
+        status
+      );
+
+
+      if (payment.notes) {
+
+        const notes =
+          document.createElement(
+            "div"
+          );
+
+        notes.innerHTML =
+          "<strong>Notes:</strong> " +
+          payment.notes;
+
+        item.appendChild(
+          notes
+        );
+
+      }
+
+
+      paymentHistoryBox.appendChild(
+        item
+      );
+
+    }
+  );
+
+}
+
+
+/* ---------------------------------------------------------
+   RENEWAL VISIBILITY
+--------------------------------------------------------- */
+
+function updateRenewalVisibility() {
+
+  if (
+    !currentUser ||
+    !currentStudent
+  ) {
+
+    renewalPanel.classList.add(
+      "hidden"
+    );
+
+    return;
+
+  }
+
+
+  /*
+     Show renewal area to every
+     logged-in student.
+
+     Expired students need it
+     immediately, while active
+     students can also renew early.
+  */
+
+  renewalPanel.classList.remove(
+    "hidden"
+  );
+
+
+  loadRenewalPlans();
+
+  loadPaymentHistory();
+
+}
+
+
+/* =========================================================
    LOGOUT
-   ========================================================= */
+========================================================= */
 
 document
   .getElementById(
@@ -5249,6 +6197,10 @@ document
 
       accessAllowed = false;
 
+      activeSubscription = null;
+
+      selectedPaymentPlan = null;
+
 
       resetDashboard();
 
@@ -5267,7 +6219,7 @@ document
 
 /* =========================================================
    RESET DASHBOARD
-   ========================================================= */
+========================================================= */
 
 function resetDashboard() {
 
@@ -5363,21 +6315,39 @@ function resetDashboard() {
 
 
   document
-    getElementById(
+    .getElementById(
       "trialBox"
     )
-    ?.classList.add(
+    .classList.add(
       "hidden"
     );
 
 
   document
-    getElementById(
+    .getElementById(
       "accessBox"
     )
-    ?.classList.add(
+    .classList.add(
       "hidden"
     );
+
+
+  renewalPanel.classList.add(
+    "hidden"
+  );
+
+
+  paymentFormBox.classList.add(
+    "hidden"
+  );
+
+
+  renewalPlans.innerHTML =
+    "<p>Loading subscription plans...</p>";
+
+
+  paymentHistoryBox.innerHTML =
+    "";
 
 
   hideAccessLock();
@@ -5386,19 +6356,8 @@ function resetDashboard() {
 
 
 /* =========================================================
-   SAFE ELEMENT HELPER
-   ========================================================= */
-
-function getElementByIdSafe(id) {
-
-  return document.getElementById(id);
-
-}
-
-
-/* =========================================================
    INITIAL LOAD
-   ========================================================= */
+========================================================= */
 
 async function initializeApplication() {
 
@@ -5433,7 +6392,7 @@ async function initializeApplication() {
 
 /* =========================================================
    REGISTRATION BOARD LOADER
-   ========================================================= */
+========================================================= */
 
 async function loadBoardsForRegistration() {
 
@@ -5508,6 +6467,10 @@ async function loadBoardsForRegistration() {
 
 }
 
+
+/* =========================================================
+   START APPLICATION
+========================================================= */
 
 initializeApplication();
 
