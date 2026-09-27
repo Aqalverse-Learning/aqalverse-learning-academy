@@ -55,9 +55,9 @@
       position: sticky;
       top: 0;
       z-index: 1000;
-      background: #ffffff;
+      background: #fff;
       border-bottom: 1px solid #e5e7eb;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 2px 12px rgba(0,0,0,.04);
     }
 
     .nav {
@@ -87,7 +87,6 @@
     nav a {
       color: #374151;
       font-weight: 600;
-      transition: 0.2s;
     }
 
     nav a:hover {
@@ -96,18 +95,17 @@
 
     .hero {
       padding: 85px 0;
-      background:
-        linear-gradient(
-          135deg,
-          #ecfeff 0%,
-          #f0fdfa 50%,
-          #ffffff 100%
-        );
+      background: linear-gradient(
+        135deg,
+        #ecfeff 0%,
+        #f0fdfa 50%,
+        #fff 100%
+      );
     }
 
     .hero-grid {
       display: grid;
-      grid-template-columns: 1.3fr 0.7fr;
+      grid-template-columns: 1.3fr .7fr;
       gap: 45px;
       align-items: center;
     }
@@ -137,11 +135,11 @@
     .primary-button {
       border: none;
       background: #0f766e;
-      color: white;
+      color: #fff;
       padding: 14px 23px;
       border-radius: 10px;
       font-weight: 700;
-      transition: 0.2s;
+      transition: .2s;
     }
 
     .primary-button:hover {
@@ -151,7 +149,7 @@
 
     .secondary-button {
       border: 1px solid #0f766e;
-      background: white;
+      background: #fff;
       color: #0f766e;
       padding: 13px 22px;
       border-radius: 10px;
@@ -165,10 +163,10 @@
     }
 
     .stats-card {
-      background: white;
+      background: #fff;
       padding: 25px;
       border-radius: 18px;
-      box-shadow: 0 15px 45px rgba(15, 118, 110, 0.12);
+      box-shadow: 0 15px 45px rgba(15,118,110,.12);
     }
 
     .stat {
@@ -211,12 +209,12 @@
 
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3,1fr);
       gap: 20px;
     }
 
     .feature-card {
-      background: white;
+      background: #fff;
       padding: 28px;
       border-radius: 15px;
       border: 1px solid #e5e7eb;
@@ -232,7 +230,7 @@
     }
 
     #courses {
-      background: #ffffff;
+      background: #fff;
     }
 
     .course-box {
@@ -253,18 +251,18 @@
 
     .selection-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      grid-template-columns: repeat(auto-fit,minmax(160px,1fr));
       gap: 12px;
     }
 
     .select-button {
       border: 1px solid #cbd5e1;
-      background: white;
+      background: #fff;
       padding: 14px;
       border-radius: 10px;
       color: #334155;
       font-weight: 600;
-      transition: 0.2s;
+      transition: .2s;
     }
 
     .select-button:hover {
@@ -275,8 +273,13 @@
 
     .select-button.selected {
       background: #0f766e;
-      color: white;
+      color: #fff;
       border-color: #0f766e;
+    }
+
+    .select-button:disabled {
+      opacity: .6;
+      cursor: wait;
     }
 
     .hidden {
@@ -293,7 +296,7 @@
 
     .quiz-container {
       margin-top: 30px;
-      background: white;
+      background: #fff;
       border: 1px solid #e5e7eb;
       border-radius: 18px;
       padding: 30px;
@@ -333,6 +336,10 @@
       border-color: #0f766e;
     }
 
+    .option input {
+      margin-right: 7px;
+    }
+
     .result {
       margin-top: 20px;
       padding: 15px;
@@ -352,12 +359,12 @@
 
     .pricing-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3,1fr);
       gap: 20px;
     }
 
     .price-card {
-      background: white;
+      background: #fff;
       border: 1px solid #e5e7eb;
       border-radius: 18px;
       padding: 30px;
@@ -386,14 +393,14 @@
 
     .auth-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2,1fr);
       gap: 25px;
       max-width: 950px;
       margin: auto;
     }
 
     .auth-card {
-      background: white;
+      background: #fff;
       padding: 30px;
       border-radius: 18px;
       border: 1px solid #e5e7eb;
@@ -420,7 +427,7 @@
       padding: 12px;
       border: 1px solid #cbd5e1;
       border-radius: 8px;
-      background: white;
+      background: #fff;
     }
 
     .form-group input:focus,
@@ -455,7 +462,7 @@
     }
 
     .dashboard-card {
-      background: white;
+      background: #fff;
       border-radius: 18px;
       padding: 30px;
       border: 1px solid #e5e7eb;
@@ -475,7 +482,7 @@
 
     .student-info {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3,1fr);
       gap: 15px;
       margin-bottom: 25px;
     }
@@ -507,7 +514,7 @@
 
     .dashboard-subjects {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3,1fr);
       gap: 12px;
     }
 
@@ -538,12 +545,12 @@
       height: 100%;
       width: 0%;
       background: #0f766e;
-      transition: width 0.4s;
+      transition: width .4s;
     }
 
     footer {
       background: #102a43;
-      color: white;
+      color: #fff;
       padding: 35px 0;
       text-align: center;
     }
@@ -552,7 +559,7 @@
       color: #cbd5e1;
     }
 
-    @media (max-width: 850px) {
+    @media (max-width:850px) {
       .hero-grid,
       .auth-grid {
         grid-template-columns: 1fr;
@@ -572,7 +579,7 @@
       }
     }
 
-    @media (max-width: 600px) {
+    @media (max-width:600px) {
       .nav {
         flex-direction: column;
         padding: 15px 0;
@@ -627,18 +634,13 @@
   </div>
 </header>
 
-
 <section class="hero">
   <div class="container hero-grid">
 
     <div>
-      <div class="tagline">
-        LEARN • PRACTICE • PROGRESS
-      </div>
+      <div class="tagline">LEARN • PRACTICE • PROGRESS</div>
 
-      <h1>
-        Smart learning for Pakistani students.
-      </h1>
+      <h1>Smart learning for Pakistani students.</h1>
 
       <p>
         Aqalverse Learning Academy provides structured online learning
@@ -683,7 +685,6 @@
 
   </div>
 </section>
-
 
 <section id="features">
 
@@ -747,11 +748,8 @@
       </div>
 
     </div>
-
   </div>
-
 </section>
-
 
 <section id="courses">
 
@@ -760,133 +758,60 @@
     <div class="section-title">
       <h2>Explore Courses</h2>
       <p>
-        Select your grade, board and subject.
+        Select your grade, board, subject, chapter and lesson.
       </p>
     </div>
 
     <div class="course-box">
 
-      <!-- GRADE -->
-
       <div class="course-stage" id="gradeStage">
-
         <h3>1. Select Grade</h3>
-
         <div class="selection-grid" id="gradesContainer"></div>
-
       </div>
-
-
-      <!-- BOARD -->
 
       <div class="course-stage hidden" id="boardStage">
-
         <h3>2. Select Board</h3>
-
-        <div
-          class="selection-grid"
-          id="courseBoardsContainer"
-        ></div>
-
+        <div class="selection-grid" id="courseBoardsContainer"></div>
       </div>
-
-
-      <!-- SUBJECT -->
 
       <div class="course-stage hidden" id="subjectStage">
-
         <h3>3. Select Subject</h3>
-
-        <div
-          class="selection-grid"
-          id="subjectsContainer"
-        ></div>
-
+        <div class="selection-grid" id="subjectsContainer"></div>
       </div>
-
-
-      <!-- CHAPTER -->
 
       <div class="course-stage hidden" id="chapterStage">
-
         <h3>4. Select Chapter</h3>
-
-        <div
-          class="selection-grid"
-          id="chaptersContainer"
-        ></div>
-
+        <div class="selection-grid" id="chaptersContainer"></div>
       </div>
-
-
-      <!-- LESSON -->
 
       <div class="course-stage hidden" id="lessonStage">
-
         <h3>5. Select Lesson</h3>
-
-        <div
-          class="selection-grid"
-          id="lessonsContainer"
-        ></div>
-
+        <div class="selection-grid" id="lessonsContainer"></div>
       </div>
-
-
-      <!-- TEST -->
 
       <div class="course-stage hidden" id="testStage">
-
         <h3>6. Assessment</h3>
-
-        <div
-          class="selection-grid"
-          id="testsContainer"
-        ></div>
-
+        <div class="selection-grid" id="testsContainer"></div>
       </div>
 
+      <div id="courseMessage" class="course-message hidden"></div>
 
-      <div
-        id="courseMessage"
-        class="course-message hidden"
-      ></div>
-
-
-      <!-- QUIZ -->
-
-      <div
-        id="quizContainer"
-        class="quiz-container hidden"
-      >
+      <div id="quizContainer" class="quiz-container hidden">
 
         <div class="quiz-header">
-
-          <h3 id="quizTitle">
-            Assessment
-          </h3>
-
-          <p id="quizInfo">
-            Loading assessment...
-          </p>
-
+          <h3 id="quizTitle">Assessment</h3>
+          <p id="quizInfo">Loading assessment...</p>
         </div>
 
         <form id="quizForm"></form>
 
-        <div
-          id="quizResult"
-          class="result hidden"
-        ></div>
+        <div id="quizResult" class="result hidden"></div>
 
       </div>
 
     </div>
-
   </div>
-
 </section>
-
 
 <section id="pricing">
 
@@ -894,73 +819,43 @@
 
     <div class="section-title">
       <h2>Simple Pricing</h2>
-      <p>
-        Start learning with a 2-day free trial.
-      </p>
+      <p>Start learning with a 2-day free trial.</p>
     </div>
 
     <div class="pricing-grid">
 
       <div class="price-card">
         <h3>Individual Subject</h3>
-
-        <div class="price">
-          Rs. 500
-        </div>
-
-        <p>
-          Per subject / month
-        </p>
+        <div class="price">Rs. 500</div>
+        <p>Per subject / month</p>
       </div>
 
       <div class="price-card">
         <h3>All Subjects</h3>
-
-        <div class="price">
-          Rs. 2,000
-        </div>
-
-        <p>
-          All available subjects / month
-        </p>
+        <div class="price">Rs. 2,000</div>
+        <p>All available subjects / month</p>
       </div>
 
       <div class="price-card">
         <h3>Free Trial</h3>
-
-        <div class="price">
-          2 Days
-        </div>
-
-        <p>
-          Explore the platform before subscribing.
-        </p>
+        <div class="price">2 Days</div>
+        <p>Explore the platform before subscribing.</p>
       </div>
 
     </div>
-
   </div>
-
 </section>
-
 
 <section id="login" class="auth-section">
 
   <div class="container">
 
     <div class="section-title">
-
       <h2>Student Account</h2>
-
-      <p>
-        Login or create your learning account.
-      </p>
-
+      <p>Login or create your learning account.</p>
     </div>
 
     <div class="auth-grid">
-
-      <!-- LOGIN -->
 
       <div class="auth-card">
 
@@ -969,53 +864,34 @@
         <form id="loginForm">
 
           <div class="form-group">
-
-            <label for="loginEmail">
-              Email
-            </label>
-
+            <label for="loginEmail">Email</label>
             <input
               id="loginEmail"
               type="email"
               required
               placeholder="Enter your email"
             />
-
           </div>
 
           <div class="form-group">
-
-            <label for="loginPassword">
-              Password
-            </label>
-
+            <label for="loginPassword">Password</label>
             <input
               id="loginPassword"
               type="password"
               required
               placeholder="Enter your password"
             />
-
           </div>
 
-          <button
-            type="submit"
-            class="primary-button"
-          >
+          <button type="submit" class="primary-button">
             Login
           </button>
 
         </form>
 
-        <div
-          id="loginMessage"
-          class="message"
-        ></div>
+        <div id="loginMessage" class="message"></div>
 
       </div>
-
-
-      <!-- REGISTER -->
 
       <div class="auth-card">
 
@@ -1024,56 +900,37 @@
         <form id="registerForm">
 
           <div class="form-group">
-
-            <label for="registerFullName">
-              Full Name
-            </label>
-
+            <label for="registerFullName">Full Name</label>
             <input
               id="registerFullName"
               type="text"
               required
               placeholder="Enter full name"
             />
-
           </div>
 
           <div class="form-group">
-
-            <label for="registerUsername">
-              Username
-            </label>
-
+            <label for="registerUsername">Username</label>
             <input
               id="registerUsername"
               type="text"
               required
               placeholder="Choose username"
             />
-
           </div>
 
           <div class="form-group">
-
-            <label for="registerEmail">
-              Email
-            </label>
-
+            <label for="registerEmail">Email</label>
             <input
               id="registerEmail"
               type="email"
               required
               placeholder="Enter email"
             />
-
           </div>
 
           <div class="form-group">
-
-            <label for="registerPassword">
-              Password
-            </label>
-
+            <label for="registerPassword">Password</label>
             <input
               id="registerPassword"
               type="password"
@@ -1081,69 +938,35 @@
               required
               placeholder="Create password"
             />
-
           </div>
 
           <div class="form-group">
-
-            <label for="registerGrade">
-              Grade
-            </label>
-
-            <select
-              id="registerGrade"
-              required
-            >
-
-              <option value="">
-                Loading grades...
-              </option>
-
+            <label for="registerGrade">Grade</label>
+            <select id="registerGrade" required>
+              <option value="">Loading grades...</option>
             </select>
-
           </div>
 
           <div class="form-group">
-
-            <label for="registerBoard">
-              Board
-            </label>
-
-            <select
-              id="registerBoard"
-              required
-            >
-
-              <option value="">
-                Loading boards...
-              </option>
-
+            <label for="registerBoard">Board</label>
+            <select id="registerBoard" required>
+              <option value="">Loading boards...</option>
             </select>
-
           </div>
 
-          <button
-            type="submit"
-            class="primary-button"
-          >
+          <button type="submit" class="primary-button">
             Create Account
           </button>
 
         </form>
 
-        <div
-          id="registerMessage"
-          class="message"
-        ></div>
+        <div id="registerMessage" class="message"></div>
 
       </div>
 
     </div>
-
   </div>
-
 </section>
-
 
 <section id="dashboard" class="hidden">
 
@@ -1154,15 +977,8 @@
       <div class="dashboard-header">
 
         <div>
-
-          <h2>
-            Student Dashboard
-          </h2>
-
-          <p>
-            Welcome to Aqalverse Learning Academy.
-          </p>
-
+          <h2>Student Dashboard</h2>
+          <p>Welcome to Aqalverse Learning Academy.</p>
         </div>
 
         <button
@@ -1174,7 +990,6 @@
         </button>
 
       </div>
-
 
       <div class="student-info">
 
@@ -1210,40 +1025,25 @@
 
       </div>
 
-
-      <div
-        id="trialStatus"
-        class="trial-box"
-      >
+      <div id="trialStatus" class="trial-box">
         Checking trial status...
       </div>
 
-
-      <h3>
-        My Subjects
-      </h3>
+      <h3>My Subjects</h3>
 
       <br />
 
-      <div
-        id="dashboardSubjects"
-        class="dashboard-subjects"
-      ></div>
-
+      <div id="dashboardSubjects" class="dashboard-subjects"></div>
 
       <div class="progress-wrapper">
 
-        <strong>
-          Overall Course Progress
-        </strong>
+        <strong>Overall Course Progress</strong>
 
         <div class="progress-bar">
-
           <div
             id="dashboardProgressFill"
             class="progress-fill"
           ></div>
-
         </div>
 
         <p id="dashboardProgressText">
@@ -1253,11 +1053,8 @@
       </div>
 
     </div>
-
   </div>
-
 </section>
-
 
 <footer>
 
@@ -1271,7 +1068,6 @@
   </div>
 
 </footer>
-
 
 <script>
 
@@ -1337,7 +1133,7 @@
 
 
   /* =========================================================
-     CURRENT COURSE SELECTION
+     COURSE STATE
      ========================================================= */
 
   let selectedGrade = null;
@@ -1347,13 +1143,13 @@
   let selectedChapter = null;
   let selectedLesson = null;
   let selectedTest = null;
-  let currentQuizQuestions = [];
 
+  let currentQuizQuestions = [];
   let currentUser = null;
 
 
   /* =========================================================
-     MESSAGE
+     MESSAGES
      ========================================================= */
 
   function showMessage(element, message, type = "success") {
@@ -1373,8 +1169,8 @@
   function clearMessage(element) {
 
     element.textContent = "";
-
     element.className = "message";
+
   }
 
 
@@ -1384,8 +1180,8 @@
       document.getElementById("courseMessage");
 
     element.textContent = message;
-
     element.classList.remove("hidden");
+
   }
 
 
@@ -1399,30 +1195,43 @@
 
 
   /* =========================================================
-     RESET COURSE STAGES
+     RESET FUNCTIONS
      ========================================================= */
 
-  function resetAfterGrade() {
+  function hideStage(id) {
 
     document
-      .getElementById("subjectStage")
+      .getElementById(id)
       .classList.add("hidden");
 
-    document
-      .getElementById("chapterStage")
-      .classList.add("hidden");
+  }
+
+
+  function showStage(id) {
 
     document
-      .getElementById("lessonStage")
-      .classList.add("hidden");
+      .getElementById(id)
+      .classList.remove("hidden");
 
-    document
-      .getElementById("testStage")
-      .classList.add("hidden");
+  }
+
+
+  function hideQuiz() {
 
     document
       .getElementById("quizContainer")
       .classList.add("hidden");
+
+  }
+
+
+  function resetAfterGrade() {
+
+    hideStage("subjectStage");
+    hideStage("chapterStage");
+    hideStage("lessonStage");
+    hideStage("testStage");
+    hideQuiz();
 
     subjectsContainer.innerHTML = "";
     chaptersContainer.innerHTML = "";
@@ -1436,26 +1245,17 @@
     selectedLesson = null;
     selectedTest = null;
 
+    currentQuizQuestions = [];
+
   }
 
 
   function resetAfterBoard() {
 
-    document
-      .getElementById("chapterStage")
-      .classList.add("hidden");
-
-    document
-      .getElementById("lessonStage")
-      .classList.add("hidden");
-
-    document
-      .getElementById("testStage")
-      .classList.add("hidden");
-
-    document
-      .getElementById("quizContainer")
-      .classList.add("hidden");
+    hideStage("chapterStage");
+    hideStage("lessonStage");
+    hideStage("testStage");
+    hideQuiz();
 
     chaptersContainer.innerHTML = "";
     lessonsContainer.innerHTML = "";
@@ -1467,23 +1267,18 @@
     selectedLesson = null;
     selectedTest = null;
 
+    currentQuizQuestions = [];
+
   }
 
 
   function resetAfterSubject() {
 
-    document
-      .getElementById("lessonStage")
-      .classList.add("hidden");
+    hideStage("lessonStage");
+    hideStage("testStage");
+    hideQuiz();
 
-    document
-      .getElementById("testStage")
-      .classList.add("hidden");
-
-    document
-      .getElementById("quizContainer")
-      .classList.add("hidden");
-
+    chaptersContainer.innerHTML = "";
     lessonsContainer.innerHTML = "";
     testsContainer.innerHTML = "";
 
@@ -1491,23 +1286,22 @@
     selectedLesson = null;
     selectedTest = null;
 
+    currentQuizQuestions = [];
+
   }
 
 
   function resetAfterChapter() {
 
-    document
-      .getElementById("testStage")
-      .classList.add("hidden");
-
-    document
-      .getElementById("quizContainer")
-      .classList.add("hidden");
+    hideStage("testStage");
+    hideQuiz();
 
     testsContainer.innerHTML = "";
 
     selectedLesson = null;
     selectedTest = null;
+
+    currentQuizQuestions = [];
 
   }
 
@@ -1530,23 +1324,13 @@
     } =
       await aqalverseSupabase
         .from("grades")
-        .select(
-          "id, name, grade_number"
-        )
-        .eq(
-          "is_active",
-          true
-        )
-        .order(
-          "grade_number"
-        );
+        .select("id, name, grade_number")
+        .eq("is_active", true)
+        .order("grade_number");
 
     if (error) {
 
-      console.error(
-        "Grades error:",
-        error
-      );
+      console.error("Grades error:", error);
 
       gradesContainer.innerHTML =
         "<p>Unable to load grades.</p>";
@@ -1558,12 +1342,10 @@
 
     }
 
-
     gradesContainer.innerHTML = "";
 
     registerGrade.innerHTML =
       '<option value="">Select Grade</option>';
-
 
     data.forEach(grade => {
 
@@ -1571,19 +1353,12 @@
         document.createElement("button");
 
       button.type = "button";
-
       button.className =
         "select-button grade-button";
 
       button.textContent =
         grade.name ||
         "Grade " + grade.grade_number;
-
-      button.dataset.gradeId =
-        grade.id;
-
-      button.dataset.gradeNumber =
-        grade.grade_number;
 
       button.addEventListener(
         "click",
@@ -1601,9 +1376,7 @@
 
           resetAfterGrade();
 
-          document
-            .getElementById("boardStage")
-            .classList.remove("hidden");
+          showStage("boardStage");
 
           showCourseMessage(
             "Grade " +
@@ -1622,8 +1395,7 @@
       const option =
         document.createElement("option");
 
-      option.value =
-        grade.id;
+      option.value = String(grade.id);
 
       option.textContent =
         grade.name ||
@@ -1637,163 +1409,152 @@
 
 
   /* =========================================================
-     LOAD REGISTRATION BOARDS
+     LOAD BOARDS
      ========================================================= */
+
+  async function getActiveBoards() {
+
+    const {
+      data,
+      error
+    } =
+      await aqalverseSupabase
+        .from("boards")
+        .select("id, name, code")
+        .eq("is_active", true)
+        .order("name");
+
+    if (error) {
+      throw error;
+    }
+
+    return data || [];
+
+  }
+
 
   async function loadRegistrationBoards() {
 
     registerBoard.innerHTML =
       '<option value="">Loading boards...</option>';
 
-    const {
-      data,
-      error
-    } =
-      await aqalverseSupabase
-        .from("boards")
-        .select(
-          "id, name, code"
-        )
-        .eq(
-          "is_active",
-          true
-        )
-        .order(
-          "name"
-        );
+    try {
 
-    if (error) {
+      const boards =
+        await getActiveBoards();
+
+      registerBoard.innerHTML =
+        '<option value="">Select Board</option>';
+
+      boards.forEach(board => {
+
+        const option =
+          document.createElement("option");
+
+        option.value = String(board.id);
+        option.textContent = board.name;
+
+        registerBoard.appendChild(option);
+
+      });
+
+    } catch (error) {
 
       console.error(
-        "Registration board error:",
+        "Registration boards error:",
         error
       );
 
       registerBoard.innerHTML =
         '<option value="">Unable to load boards</option>';
 
-      return;
-
     }
-
-
-    registerBoard.innerHTML =
-      '<option value="">Select Board</option>';
-
-
-    data.forEach(board => {
-
-      const option =
-        document.createElement("option");
-
-      option.value =
-        board.id;
-
-      option.textContent =
-        board.name;
-
-      registerBoard.appendChild(option);
-
-    });
 
   }
 
-
-  /* =========================================================
-     LOAD COURSE BOARDS
-     ========================================================= */
 
   async function loadCourseBoards() {
 
     courseBoardsContainer.innerHTML =
       "<p>Loading boards...</p>";
 
-    const {
-      data,
-      error
-    } =
-      await aqalverseSupabase
-        .from("boards")
-        .select(
-          "id, name, code"
-        )
-        .eq(
-          "is_active",
-          true
-        )
-        .order(
-          "name"
+    try {
+
+      const boards =
+        await getActiveBoards();
+
+      courseBoardsContainer.innerHTML = "";
+
+      boards.forEach(board => {
+
+        const button =
+          document.createElement("button");
+
+        button.type = "button";
+
+        button.className =
+          "select-button course-board-button";
+
+        button.textContent =
+          board.name;
+
+        button.addEventListener(
+          "click",
+          async () => {
+
+            document
+              .querySelectorAll(
+                ".course-board-button"
+              )
+              .forEach(item =>
+                item.classList.remove("selected")
+              );
+
+            button.classList.add("selected");
+
+            selectedBoard = board;
+
+            resetAfterBoard();
+
+            showCourseMessage(
+              "Board selected: " +
+              board.name +
+              ". Loading subjects..."
+            );
+
+            await loadSubjectsForCourse();
+
+          }
         );
 
-    if (error) {
+        courseBoardsContainer.appendChild(button);
+
+      });
+
+      if (!boards.length) {
+
+        courseBoardsContainer.innerHTML =
+          "<p>No active boards are available.</p>";
+
+      }
+
+    } catch (error) {
 
       console.error(
-        "Course board error:",
+        "Course boards error:",
         error
       );
 
       courseBoardsContainer.innerHTML =
         "<p>Unable to load boards.</p>";
 
-      return;
-
     }
-
-
-    courseBoardsContainer.innerHTML = "";
-
-
-    data.forEach(board => {
-
-      const button =
-        document.createElement("button");
-
-      button.type = "button";
-
-      button.className =
-        "select-button course-board-button";
-
-      button.textContent =
-        board.name;
-
-      button.addEventListener(
-        "click",
-        async () => {
-
-          document
-            .querySelectorAll(
-              ".course-board-button"
-            )
-            .forEach(item =>
-              item.classList.remove(
-                "selected"
-              )
-            );
-
-          button.classList.add(
-            "selected"
-          );
-
-          selectedBoard = board;
-
-          resetAfterBoard();
-
-          await loadSubjectsForCourse();
-
-        }
-      );
-
-      courseBoardsContainer.appendChild(
-        button
-      );
-
-    });
 
   }
 
 
   /* =========================================================
-     LOAD SUBJECTS
+     LOAD SUBJECTS AND COURSE
      ========================================================= */
 
   async function loadSubjectsForCourse() {
@@ -1801,9 +1562,16 @@
     subjectsContainer.innerHTML =
       "<p>Loading subjects...</p>";
 
-    document
-      .getElementById("subjectStage")
-      .classList.remove("hidden");
+    showStage("subjectStage");
+
+    if (!selectedGrade || !selectedBoard) {
+
+      subjectsContainer.innerHTML =
+        "<p>Please select grade and board first.</p>";
+
+      return;
+
+    }
 
     const {
       data: subjects,
@@ -1811,16 +1579,9 @@
     } =
       await aqalverseSupabase
         .from("subjects")
-        .select(
-          "id, name, code"
-        )
-        .eq(
-          "is_active",
-          true
-        )
-        .order(
-          "name"
-        );
+        .select("id, name, code")
+        .eq("is_active", true)
+        .order("name");
 
     if (error) {
 
@@ -1836,62 +1597,67 @@
 
     }
 
-
     subjectsContainer.innerHTML = "";
 
+    /*
+      We load all courses for the selected
+      Grade + Board in ONE query.
+      This is more reliable than making
+      nine separate database requests.
+    */
 
-    for (const subject of subjects) {
+    const {
+      data: courses,
+      error: courseError
+    } =
+      await aqalverseSupabase
+        .from("courses")
+        .select(
+          "id, title, description, monthly_price, board_id, grade_id, subject_id"
+        )
+        .eq("board_id", selectedBoard.id)
+        .eq("grade_id", selectedGrade.id)
+        .eq("is_active", true);
 
-      const {
-        data: course,
-        error: courseError
-      } =
-        await aqalverseSupabase
-          .from("courses")
-          .select(
-            "id, title, description, monthly_price, board_id, grade_id, subject_id"
-          )
-          .eq(
-            "board_id",
-            selectedBoard.id
-          )
-          .eq(
-            "grade_id",
-            selectedGrade.id
-          )
-          .eq(
-            "subject_id",
-            subject.id
-          )
-          .eq(
-            "is_active",
-            true
-          )
-          .maybeSingle();
+    if (courseError) {
 
+      console.error(
+        "Courses error:",
+        courseError
+      );
 
-      if (courseError) {
+      subjectsContainer.innerHTML =
+        "<p>Unable to load courses.</p>";
 
-        console.error(
-          "Course lookup error:",
-          courseError
+      return;
+
+    }
+
+    const courseMap =
+      new Map(
+        (courses || []).map(
+          course => [
+            String(course.subject_id),
+            course
+          ]
+        )
+      );
+
+    subjects.forEach(subject => {
+
+      const course =
+        courseMap.get(
+          String(subject.id)
         );
 
-        continue;
-
-      }
-
-
       if (!course) {
-        continue;
+        return;
       }
-
 
       const button =
         document.createElement("button");
 
       button.type = "button";
-
       button.className =
         "select-button subject-button";
 
@@ -1903,24 +1669,15 @@
         async () => {
 
           document
-            .querySelectorAll(
-              ".subject-button"
-            )
+            .querySelectorAll(".subject-button")
             .forEach(item =>
-              item.classList.remove(
-                "selected"
-              )
+              item.classList.remove("selected")
             );
 
-          button.classList.add(
-            "selected"
-          );
+          button.classList.add("selected");
 
-          selectedSubject =
-            subject;
-
-          selectedCourse =
-            course;
+          selectedSubject = subject;
+          selectedCourse = course;
 
           resetAfterSubject();
 
@@ -1934,19 +1691,16 @@
         }
       );
 
-      subjectsContainer.appendChild(
-        button
-      );
+      subjectsContainer.appendChild(button);
 
-    }
-
+    });
 
     if (
       subjectsContainer.children.length === 0
     ) {
 
       subjectsContainer.innerHTML =
-        "<p>No courses are currently available for this selection.</p>";
+        "<p>No courses are currently available for this grade and board.</p>";
 
     }
 
@@ -1959,12 +1713,14 @@
 
   async function loadChapters() {
 
+    if (!selectedCourse) {
+      return;
+    }
+
     chaptersContainer.innerHTML =
       "<p>Loading chapters...</p>";
 
-    document
-      .getElementById("chapterStage")
-      .classList.remove("hidden");
+    showStage("chapterStage");
 
     const {
       data,
@@ -1973,19 +1729,11 @@
       await aqalverseSupabase
         .from("chapters")
         .select(
-          "id, title, chapter_number, description"
+          "id, course_id, title, chapter_number, description"
         )
-        .eq(
-          "course_id",
-          selectedCourse.id
-        )
-        .eq(
-          "is_active",
-          true
-        )
-        .order(
-          "chapter_number"
-        );
+        .eq("course_id", selectedCourse.id)
+        .eq("is_active", true)
+        .order("chapter_number");
 
     if (error) {
 
@@ -2001,19 +1749,20 @@
 
     }
 
-
     chaptersContainer.innerHTML = "";
-
 
     if (!data || data.length === 0) {
 
       chaptersContainer.innerHTML =
         "<p>No chapters are available yet for this course.</p>";
 
+      showCourseMessage(
+        "The course exists, but teaching content has not been added yet."
+      );
+
       return;
 
     }
-
 
     data.forEach(chapter => {
 
@@ -2021,7 +1770,6 @@
         document.createElement("button");
 
       button.type = "button";
-
       button.className =
         "select-button chapter-button";
 
@@ -2036,32 +1784,28 @@
         async () => {
 
           document
-            .querySelectorAll(
-              ".chapter-button"
-            )
+            .querySelectorAll(".chapter-button")
             .forEach(item =>
-              item.classList.remove(
-                "selected"
-              )
+              item.classList.remove("selected")
             );
 
-          button.classList.add(
-            "selected"
-          );
+          button.classList.add("selected");
 
-          selectedChapter =
-            chapter;
+          selectedChapter = chapter;
 
           resetAfterChapter();
+
+          showCourseMessage(
+            chapter.title +
+            " selected. Loading lessons..."
+          );
 
           await loadLessons();
 
         }
       );
 
-      chaptersContainer.appendChild(
-        button
-      );
+      chaptersContainer.appendChild(button);
 
     });
 
@@ -2074,12 +1818,14 @@
 
   async function loadLessons() {
 
+    if (!selectedChapter) {
+      return;
+    }
+
     lessonsContainer.innerHTML =
       "<p>Loading lessons...</p>";
 
-    document
-      .getElementById("lessonStage")
-      .classList.remove("hidden");
+    showStage("lessonStage");
 
     const {
       data,
@@ -2088,19 +1834,11 @@
       await aqalverseSupabase
         .from("lessons")
         .select(
-          "id, title, lesson_number, description, video_url, notes_url, passing_percentage"
+          "id, chapter_id, title, lesson_number, description, video_url, notes_url, passing_percentage"
         )
-        .eq(
-          "chapter_id",
-          selectedChapter.id
-        )
-        .eq(
-          "is_active",
-          true
-        )
-        .order(
-          "lesson_number"
-        );
+        .eq("chapter_id", selectedChapter.id)
+        .eq("is_active", true)
+        .order("lesson_number");
 
     if (error) {
 
@@ -2116,9 +1854,7 @@
 
     }
 
-
     lessonsContainer.innerHTML = "";
-
 
     if (!data || data.length === 0) {
 
@@ -2129,14 +1865,12 @@
 
     }
 
-
     data.forEach(lesson => {
 
       const button =
         document.createElement("button");
 
       button.type = "button";
-
       button.className =
         "select-button lesson-button";
 
@@ -2151,30 +1885,28 @@
         async () => {
 
           document
-            .querySelectorAll(
-              ".lesson-button"
-            )
+            .querySelectorAll(".lesson-button")
             .forEach(item =>
-              item.classList.remove(
-                "selected"
-              )
+              item.classList.remove("selected")
             );
 
-          button.classList.add(
-            "selected"
-          );
+          button.classList.add("selected");
 
-          selectedLesson =
-            lesson;
+          selectedLesson = lesson;
+
+          hideQuiz();
+
+          showCourseMessage(
+            lesson.title +
+            " selected. Loading assessments..."
+          );
 
           await loadTests();
 
         }
       );
 
-      lessonsContainer.appendChild(
-        button
-      );
+      lessonsContainer.appendChild(button);
 
     });
 
@@ -2182,21 +1914,36 @@
 
 
   /* =========================================================
-     LOAD TESTS
+     LOAD ASSESSMENTS
      ========================================================= */
 
   async function loadTests() {
 
+    if (!selectedLesson) {
+
+      testsContainer.innerHTML =
+        "<p>Please select a lesson first.</p>";
+
+      return;
+
+    }
+
     testsContainer.innerHTML =
       "<p>Loading assessments...</p>";
 
-    document
-      .getElementById("testStage")
-      .classList.remove("hidden");
+    showStage("testStage");
+    hideQuiz();
 
-    document
-      .getElementById("quizContainer")
-      .classList.add("hidden");
+    /*
+      IMPORTANT:
+      The test lookup uses the exact lesson ID
+      selected from the lessons table.
+    */
+
+    console.log(
+      "Loading tests for lesson ID:",
+      selectedLesson.id
+    );
 
     const {
       data,
@@ -2205,37 +1952,38 @@
       await aqalverseSupabase
         .from("tests")
         .select(
-          "id, title, number_of_questions, passing_percentage, randomize_questions"
+          "id, lesson_id, title, number_of_questions, passing_percentage, randomize_questions, is_active"
         )
-        .eq(
-          "lesson_id",
-          selectedLesson.id
-        )
-        .eq(
-          "is_active",
-          true
-        )
-        .order(
-          "id"
-        );
+        .eq("lesson_id", selectedLesson.id)
+        .eq("is_active", true)
+        .order("id");
 
     if (error) {
 
       console.error(
-        "Tests error:",
+        "Tests database error:",
         error
       );
 
       testsContainer.innerHTML =
-        "<p>Unable to load assessments.</p>";
+        "<p>Unable to load assessments: " +
+        error.message +
+        "</p>";
+
+      showCourseMessage(
+        "There was a database error while loading the assessment."
+      );
 
       return;
 
     }
 
+    console.log(
+      "Assessments found:",
+      data
+    );
 
     testsContainer.innerHTML = "";
-
 
     if (!data || data.length === 0) {
 
@@ -2243,13 +1991,12 @@
         "<p>No assessments are available for this lesson yet.</p>";
 
       showCourseMessage(
-        "Lesson loaded, but no active assessment is available yet."
+        "This lesson currently has no active assessment."
       );
 
       return;
 
     }
-
 
     data.forEach(test => {
 
@@ -2257,7 +2004,6 @@
         document.createElement("button");
 
       button.type = "button";
-
       button.className =
         "select-button test-button";
 
@@ -2272,61 +2018,50 @@
         async () => {
 
           document
-            .querySelectorAll(
-              ".test-button"
-            )
+            .querySelectorAll(".test-button")
             .forEach(item =>
-              item.classList.remove(
-                "selected"
-              )
+              item.classList.remove("selected")
             );
 
-          button.classList.add(
-            "selected"
-          );
+          button.classList.add("selected");
 
-          selectedTest =
-            test;
+          selectedTest = test;
 
           await startDatabaseTest();
 
         }
       );
 
-      testsContainer.appendChild(
-        button
-      );
+      testsContainer.appendChild(button);
 
     });
+
+    showCourseMessage(
+      data.length +
+      " assessment(s) available for " +
+      selectedLesson.title +
+      "."
+    );
 
   }
 
 
   /* =========================================================
-     LOAD TEST QUESTIONS
+     START DATABASE TEST
      ========================================================= */
 
   async function startDatabaseTest() {
 
     const quizContainer =
-      document.getElementById(
-        "quizContainer"
-      );
+      document.getElementById("quizContainer");
 
     const quizForm =
-      document.getElementById(
-        "quizForm"
-      );
+      document.getElementById("quizForm");
 
     const quizResult =
-      document.getElementById(
-        "quizResult"
-      );
+      document.getElementById("quizResult");
 
-
-    quizContainer.classList.remove(
-      "hidden"
-    );
+    quizContainer.classList.remove("hidden");
 
     quizResult.className =
       "result hidden";
@@ -2336,12 +2071,10 @@
     quizForm.innerHTML =
       "<p>Loading questions...</p>";
 
-
     document
       .getElementById("quizTitle")
       .textContent =
       selectedTest.title;
-
 
     document
       .getElementById("quizInfo")
@@ -2351,11 +2084,17 @@
       selectedTest.passing_percentage +
       "%";
 
-
     quizContainer.scrollIntoView({
-      behavior: "smooth"
+      behavior: "smooth",
+      block: "start"
     });
 
+
+    /*
+      STEP 1:
+      Get the questions connected
+      to this exact test.
+    */
 
     const {
       data: connections,
@@ -2366,13 +2105,8 @@
         .select(
           "question_id, question_order"
         )
-        .eq(
-          "test_id",
-          selectedTest.id
-        )
-        .order(
-          "question_order"
-        );
+        .eq("test_id", selectedTest.id)
+        .order("question_order");
 
 
     if (connectionError) {
@@ -2383,7 +2117,9 @@
       );
 
       quizForm.innerHTML =
-        "<p>Unable to load assessment questions.</p>";
+        "<p>Unable to load assessment questions: " +
+        connectionError.message +
+        "</p>";
 
       return;
 
@@ -2403,6 +2139,11 @@
     }
 
 
+    /*
+      STEP 2:
+      Get the actual question records.
+    */
+
     const questionIds =
       connections.map(
         item => item.question_id
@@ -2418,14 +2159,8 @@
         .select(
           "id, question_text, option_a, option_b, option_c, option_d, correct_option, explanation"
         )
-        .in(
-          "id",
-          questionIds
-        )
-        .eq(
-          "approved",
-          true
-        );
+        .in("id", questionIds)
+        .eq("approved", true);
 
 
     if (questionError) {
@@ -2436,7 +2171,9 @@
       );
 
       quizForm.innerHTML =
-        "<p>Unable to load questions.</p>";
+        "<p>Unable to load questions: " +
+        questionError.message +
+        "</p>";
 
       return;
 
@@ -2456,28 +2193,42 @@
     }
 
 
+    /*
+      STEP 3:
+      Put questions back into their
+      database-defined order.
+    */
+
     const questionMap =
       new Map(
         questions.map(
-          question =>
-            [question.id, question]
+          question => [
+            String(question.id),
+            question
+          ]
         )
       );
 
 
     currentQuizQuestions =
       connections
-        .map(connection =>
-          questionMap.get(
-            connection.question_id
-          )
+        .sort(
+          (a,b) =>
+            Number(a.question_order) -
+            Number(b.question_order)
+        )
+        .map(
+          connection =>
+            questionMap.get(
+              String(connection.question_id)
+            )
         )
         .filter(Boolean);
 
 
     /*
-      Randomize questions when the
-      database test says randomize = true.
+      STEP 4:
+      Randomize if the database says so.
     */
 
     if (
@@ -2493,14 +2244,26 @@
 
 
     /*
-      Respect the test's question count.
+      STEP 5:
+      Never show more questions than
+      the test configuration allows.
     */
 
     currentQuizQuestions =
       currentQuizQuestions.slice(
         0,
-        selectedTest.number_of_questions
+        Number(selectedTest.number_of_questions)
       );
+
+
+    if (!currentQuizQuestions.length) {
+
+      quizForm.innerHTML =
+        "<p>No usable questions were found for this assessment.</p>";
+
+      return;
+
+    }
 
 
     renderQuiz();
@@ -2514,8 +2277,7 @@
 
   function shuffleArray(array) {
 
-    const copy =
-      [...array];
+    const copy = [...array];
 
     for (
       let i = copy.length - 1;
@@ -2525,8 +2287,7 @@
 
       const j =
         Math.floor(
-          Math.random() *
-          (i + 1)
+          Math.random() * (i + 1)
         );
 
       [
@@ -2546,41 +2307,32 @@
 
 
   /* =========================================================
-     RENDER DATABASE QUIZ
+     RENDER QUIZ
      ========================================================= */
 
   function renderQuiz() {
 
     const quizForm =
-      document.getElementById(
-        "quizForm"
-      );
+      document.getElementById("quizForm");
 
     quizForm.innerHTML = "";
 
-
     currentQuizQuestions.forEach(
-      (question, index) => {
+      (question,index) => {
 
         const questionDiv =
-          document.createElement(
-            "div"
-          );
+          document.createElement("div");
 
         questionDiv.className =
           "question";
 
-
         const questionTitle =
-          document.createElement(
-            "p"
-          );
+          document.createElement("p");
 
         questionTitle.textContent =
           (index + 1) +
           ". " +
           question.question_text;
-
 
         questionDiv.appendChild(
           questionTitle
@@ -2588,61 +2340,46 @@
 
 
         const options = [
-          ["A", question.option_a],
-          ["B", question.option_b],
-          ["C", question.option_c],
-          ["D", question.option_d]
+          ["A",question.option_a],
+          ["B",question.option_b],
+          ["C",question.option_c],
+          ["D",question.option_d]
         ];
 
 
         options.forEach(
-          ([letter, text]) => {
+          ([letter,text]) => {
 
             const label =
-              document.createElement(
-                "label"
-              );
+              document.createElement("label");
 
             label.className =
               "option";
 
-
             const input =
-              document.createElement(
-                "input"
-              );
+              document.createElement("input");
 
-            input.type =
-              "radio";
+            input.type = "radio";
 
             input.name =
               "question_" +
               question.id;
 
-            input.value =
-              letter;
+            input.value = letter;
 
-            input.required =
-              true;
+            input.required = true;
 
-
-            label.appendChild(
-              input
-            );
+            label.appendChild(input);
 
             label.appendChild(
               document.createTextNode(
-                " " +
                 letter +
                 ". " +
                 text
               )
             );
 
-
-            questionDiv.appendChild(
-              label
-            );
+            questionDiv.appendChild(label);
 
           }
         );
@@ -2657,19 +2394,14 @@
 
 
     const submitButton =
-      document.createElement(
-        "button"
-      );
+      document.createElement("button");
 
-    submitButton.type =
-      "submit";
-
+    submitButton.type = "submit";
     submitButton.className =
       "primary-button";
 
     submitButton.textContent =
       "Submit Assessment";
-
 
     quizForm.appendChild(
       submitButton
@@ -2679,7 +2411,7 @@
 
 
   /* =========================================================
-     SUBMIT DATABASE QUIZ
+     SUBMIT QUIZ
      ========================================================= */
 
   document
@@ -2690,22 +2422,14 @@
 
         event.preventDefault();
 
-
-        if (
-          !currentQuizQuestions.length
-        ) {
-
+        if (!currentQuizQuestions.length) {
           return;
-
         }
-
 
         const form =
           event.target;
 
-
         let score = 0;
-
 
         currentQuizQuestions.forEach(
           question => {
@@ -2716,7 +2440,6 @@
                 question.id +
                 '"]:checked'
               );
-
 
             if (
               selected &&
@@ -2735,16 +2458,14 @@
         const total =
           currentQuizQuestions.length;
 
-
         const percentage =
           Math.round(
             (score / total) * 100
           );
 
-
         const passed =
           percentage >=
-          selectedTest.passing_percentage;
+          Number(selectedTest.passing_percentage);
 
 
         const result =
@@ -2762,9 +2483,7 @@
 
         if (passed) {
 
-          result.classList.add(
-            "success"
-          );
+          result.classList.add("success");
 
           result.textContent =
             "Congratulations! You scored " +
@@ -2777,9 +2496,7 @@
 
         } else {
 
-          result.classList.add(
-            "failure"
-          );
+          result.classList.add("failure");
 
           result.textContent =
             "You scored " +
@@ -2796,8 +2513,7 @@
 
 
         /*
-          Save the attempt when a student
-          is logged in.
+          Save attempt if logged in.
         */
 
         if (currentUser) {
@@ -2813,8 +2529,8 @@
 
 
         /*
-          A passed assessment completes
-          the lesson in student_progress.
+          Passing the assessment records
+          lesson completion.
         */
 
         if (
@@ -2852,25 +2568,13 @@
       await aqalverseSupabase
         .from("test_attempts")
         .insert({
-          student_id:
-            currentUser.id,
-
-          test_id:
-            selectedTest.id,
-
-          score:
-            score,
-
-          total_questions:
-            total,
-
-          percentage:
-            percentage,
-
-          passed:
-            passed
+          student_id: currentUser.id,
+          test_id: selectedTest.id,
+          score: score,
+          total_questions: total,
+          percentage: percentage,
+          passed: passed
         });
-
 
     if (error) {
 
@@ -2879,13 +2583,19 @@
         error
       );
 
+      /*
+        The result is still shown to the
+        student even if database saving
+        is blocked by RLS.
+      */
+
     }
 
   }
 
 
   /* =========================================================
-     COMPLETE LESSON PROGRESS
+     SAVE LESSON PROGRESS
      ========================================================= */
 
   async function completeLessonProgress() {
@@ -2897,24 +2607,19 @@
         .from("student_progress")
         .upsert(
           {
-            student_id:
-              currentUser.id,
+            student_id: currentUser.id,
+            lesson_id: selectedLesson.id,
 
-            lesson_id:
-              selectedLesson.id,
+            /*
+              These values currently mark
+              the lesson as completed after
+              passing the assessment.
+            */
 
-            video_completed:
-              true,
-
-            video_progress:
-              100,
-
-            lesson_unlocked:
-              true,
-
-            lesson_completed:
-              true,
-
+            video_completed: true,
+            video_progress: 100,
+            lesson_unlocked: true,
+            lesson_completed: true,
             completed_at:
               new Date().toISOString()
           },
@@ -2936,7 +2641,6 @@
 
     }
 
-
     await loadDashboardProgress();
 
   }
@@ -2952,49 +2656,33 @@
 
       event.preventDefault();
 
-      clearMessage(
-        registerMessage
-      );
-
+      clearMessage(registerMessage);
 
       const fullName =
         document
-          .getElementById(
-            "registerFullName"
-          )
+          .getElementById("registerFullName")
           .value
           .trim();
-
 
       const username =
         document
-          .getElementById(
-            "registerUsername"
-          )
+          .getElementById("registerUsername")
           .value
           .trim();
-
 
       const email =
         document
-          .getElementById(
-            "registerEmail"
-          )
+          .getElementById("registerEmail")
           .value
           .trim();
 
-
       const password =
         document
-          .getElementById(
-            "registerPassword"
-          )
+          .getElementById("registerPassword")
           .value;
-
 
       const gradeId =
         registerGrade.value;
-
 
       const boardId =
         registerBoard.value;
@@ -3029,7 +2717,6 @@
           await aqalverseSupabase.auth.signUp({
 
             email,
-
             password,
 
             options: {
@@ -3056,9 +2743,7 @@
 
 
         if (error) {
-
           throw error;
-
         }
 
 
@@ -3087,7 +2772,6 @@
         registerForm.reset();
 
         await loadGrades();
-
         await loadRegistrationBoards();
 
 
@@ -3098,11 +2782,9 @@
           error
         );
 
-
         let message =
           error.message ||
           "Unable to create account.";
-
 
         if (
           message
@@ -3114,7 +2796,6 @@
             "This username or account information already exists.";
 
         }
-
 
         showMessage(
           registerMessage,
@@ -3138,25 +2819,17 @@
 
       event.preventDefault();
 
-      clearMessage(
-        loginMessage
-      );
-
+      clearMessage(loginMessage);
 
       const email =
         document
-          .getElementById(
-            "loginEmail"
-          )
+          .getElementById("loginEmail")
           .value
           .trim();
 
-
       const password =
         document
-          .getElementById(
-            "loginPassword"
-          )
+          .getElementById("loginPassword")
           .value;
 
 
@@ -3168,18 +2841,13 @@
         } =
           await aqalverseSupabase.auth
             .signInWithPassword({
-
               email,
-
               password
-
             });
 
 
         if (error) {
-
           throw error;
-
         }
 
 
@@ -3206,7 +2874,6 @@
           error
         );
 
-
         showMessage(
           loginMessage,
           error.message ||
@@ -3221,21 +2888,16 @@
 
 
   /* =========================================================
-     LOAD STUDENT DASHBOARD
+     LOAD DASHBOARD
      ========================================================= */
 
-  async function loadStudentDashboard(
-    user
-  ) {
+  async function loadStudentDashboard(user) {
 
     if (!user) {
       return;
     }
 
-
-    currentUser =
-      user;
-
+    currentUser = user;
 
     try {
 
@@ -3248,10 +2910,7 @@
           .select(
             "full_name, username, role, preferred_language"
           )
-          .eq(
-            "id",
-            user.id
-          )
+          .eq("id",user.id)
           .maybeSingle();
 
 
@@ -3269,10 +2928,7 @@
           .select(
             "board_id, grade_id, trial_started_at, trial_ends_at, account_status"
           )
-          .eq(
-            "id",
-            user.id
-          )
+          .eq("id",user.id)
           .maybeSingle();
 
 
@@ -3290,9 +2946,7 @@
       }
 
 
-      let gradeName =
-        "—";
-
+      let gradeName = "—";
 
       if (student.grade_id) {
 
@@ -3301,15 +2955,9 @@
         } =
           await aqalverseSupabase
             .from("grades")
-            .select(
-              "name, grade_number"
-            )
-            .eq(
-              "id",
-              student.grade_id
-            )
+            .select("name, grade_number")
+            .eq("id",student.grade_id)
             .maybeSingle();
-
 
         if (data) {
 
@@ -3323,9 +2971,7 @@
       }
 
 
-      let boardName =
-        "—";
-
+      let boardName = "—";
 
       if (student.board_id) {
 
@@ -3334,15 +2980,9 @@
         } =
           await aqalverseSupabase
             .from("boards")
-            .select(
-              "name"
-            )
-            .eq(
-              "id",
-              student.board_id
-            )
+            .select("name")
+            .eq("id",student.board_id)
             .maybeSingle();
-
 
         if (data) {
           boardName = data.name;
@@ -3352,9 +2992,7 @@
 
 
       document
-        .getElementById(
-          "dashboardStudentName"
-        )
+        .getElementById("dashboardStudentName")
         .textContent =
         profile?.full_name ||
         user.user_metadata?.full_name ||
@@ -3362,9 +3000,7 @@
 
 
       document
-        .getElementById(
-          "dashboardUsername"
-        )
+        .getElementById("dashboardUsername")
         .textContent =
         profile?.username ||
         user.user_metadata?.username ||
@@ -3372,42 +3008,32 @@
 
 
       document
-        .getElementById(
-          "dashboardGrade"
-        )
+        .getElementById("dashboardGrade")
         .textContent =
         gradeName;
 
 
       document
-        .getElementById(
-          "dashboardBoard"
-        )
+        .getElementById("dashboardBoard")
         .textContent =
         boardName;
 
 
       document
-        .getElementById(
-          "dashboardAccountStatus"
-        )
+        .getElementById("dashboardAccountStatus")
         .textContent =
         student.account_status ||
         "active";
 
 
       document
-        .getElementById(
-          "dashboardLanguage"
-        )
+        .getElementById("dashboardLanguage")
         .textContent =
         profile?.preferred_language ||
         "English";
 
 
-      updateTrialStatus(
-        student
-      );
+      updateTrialStatus(student);
 
 
       await loadDashboardSubjects(
@@ -3419,9 +3045,7 @@
       await loadDashboardProgress();
 
 
-      dashboard.classList.remove(
-        "hidden"
-      );
+      dashboard.classList.remove("hidden");
 
 
       setTimeout(() => {
@@ -3430,7 +3054,7 @@
           behavior: "smooth"
         });
 
-      }, 100);
+      },100);
 
 
     } catch (error) {
@@ -3439,7 +3063,6 @@
         "Dashboard error:",
         error
       );
-
 
       showMessage(
         loginMessage,
@@ -3467,7 +3090,6 @@
         "dashboardSubjects"
       );
 
-
     container.innerHTML =
       "<p>Loading subjects...</p>";
 
@@ -3481,18 +3103,9 @@
         .select(
           "id, title, monthly_price, subjects(name)"
         )
-        .eq(
-          "grade_id",
-          gradeId
-        )
-        .eq(
-          "board_id",
-          boardId
-        )
-        .eq(
-          "is_active",
-          true
-        );
+        .eq("grade_id",gradeId)
+        .eq("board_id",boardId)
+        .eq("is_active",true);
 
 
     if (error) {
@@ -3513,12 +3126,10 @@
     container.innerHTML = "";
 
 
-    data.forEach(course => {
+    (data || []).forEach(course => {
 
       const card =
-        document.createElement(
-          "div"
-        );
+        document.createElement("div");
 
       card.className =
         "subject-card";
@@ -3529,18 +3140,26 @@
         "Subject";
 
 
-      card.innerHTML =
-        "<strong>" +
-        subjectName +
-        "</strong>" +
-        "<p>Course available • Rs. " +
+      const strong =
+        document.createElement("strong");
+
+      strong.textContent =
+        subjectName;
+
+
+      const paragraph =
+        document.createElement("p");
+
+      paragraph.textContent =
+        "Course available • Rs. " +
         course.monthly_price +
-        "/month</p>";
+        "/month";
 
 
-      container.appendChild(
-        card
-      );
+      card.appendChild(strong);
+      card.appendChild(paragraph);
+
+      container.appendChild(card);
 
     });
 
@@ -3561,9 +3180,7 @@
      TRIAL STATUS
      ========================================================= */
 
-  function updateTrialStatus(
-    student
-  ) {
+  function updateTrialStatus(student) {
 
     const element =
       document.getElementById(
@@ -3582,14 +3199,10 @@
 
 
     const endTime =
-      new Date(
-        student.trial_ends_at
-      );
-
+      new Date(student.trial_ends_at);
 
     const now =
       new Date();
-
 
     const difference =
       endTime.getTime() -
@@ -3612,12 +3225,10 @@
         (1000 * 60 * 60)
       );
 
-
     const days =
       Math.floor(
         totalHours / 24
       );
-
 
     const hours =
       totalHours % 24;
@@ -3666,9 +3277,7 @@
         error
       );
 
-      updateDashboardProgress(
-        0
-      );
+      updateDashboardProgress(0);
 
       return;
 
@@ -3680,9 +3289,7 @@
       data.length === 0
     ) {
 
-      updateDashboardProgress(
-        0
-      );
+      updateDashboardProgress(0);
 
       return;
 
@@ -3698,11 +3305,7 @@
 
     const percentage =
       Math.round(
-        (
-          completed /
-          data.length
-        ) *
-        100
+        (completed / data.length) * 100
       );
 
 
@@ -3739,9 +3342,7 @@
 
 
     fill.style.width =
-      safePercentage +
-      "%";
-
+      safePercentage + "%";
 
     text.textContent =
       safePercentage +
@@ -3765,8 +3366,7 @@
         const {
           error
         } =
-          await aqalverseSupabase.auth
-            .signOut();
+          await aqalverseSupabase.auth.signOut();
 
 
         if (error) {
@@ -3781,9 +3381,7 @@
         }
 
 
-        currentUser =
-          null;
-
+        currentUser = null;
 
         dashboard.classList.add(
           "hidden"
@@ -3812,7 +3410,7 @@
 
 
   /* =========================================================
-     CHECK CURRENT SESSION
+     SESSION
      ========================================================= */
 
   async function checkCurrentSession() {
@@ -3821,8 +3419,7 @@
       data,
       error
     } =
-      await aqalverseSupabase.auth
-        .getSession();
+      await aqalverseSupabase.auth.getSession();
 
 
     if (error) {
@@ -3851,20 +3448,18 @@
 
 
   /* =========================================================
-     AUTH STATE CHANGE
+     AUTH STATE
      ========================================================= */
 
   aqalverseSupabase.auth
     .onAuthStateChange(
-      (event, session) => {
+      (event,session) => {
 
         if (
-          event ===
-          "SIGNED_OUT"
+          event === "SIGNED_OUT"
         ) {
 
-          currentUser =
-            null;
+          currentUser = null;
 
           dashboard.classList.add(
             "hidden"
