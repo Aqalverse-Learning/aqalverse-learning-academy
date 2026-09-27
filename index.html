@@ -262,6 +262,19 @@
       border-color: #0f766e;
     }
 
+    .select-button.locked {
+      background: #f1f5f9;
+      color: #94a3b8;
+      border-color: #e2e8f0;
+      cursor: not-allowed;
+    }
+
+    .select-button.completed {
+      border-color: #16a34a;
+      background: #f0fdf4;
+      color: #166534;
+    }
+
     .message {
       margin-top: 20px;
       padding: 13px 15px;
@@ -363,9 +376,21 @@
 
     .dashboard-card strong {
       display: block;
-      font-size: 24px;
+      font-size: 22px;
       margin-top: 5px;
       color: #0f766e;
+    }
+
+    .status-active {
+      color: #15803d !important;
+    }
+
+    .status-expired {
+      color: #dc2626 !important;
+    }
+
+    .status-trial {
+      color: #b45309 !important;
     }
 
     .progress-bar {
@@ -443,10 +468,6 @@
       color: #991b1b;
     }
 
-    /* =========================================================
-       LESSON CONTENT
-       ========================================================= */
-
     .lesson-content {
       margin-top: 25px;
       padding: 25px;
@@ -510,19 +531,47 @@
       color: #155e75;
     }
 
-    .no-content {
-      padding: 15px;
-      border-radius: 10px;
-      background: #f8fafc;
-      color: #64748b;
-    }
-
     .trial-box {
       margin-top: 15px;
-      padding: 15px;
+      padding: 18px;
       border-radius: 10px;
       background: #fffbeb;
       color: #92400e;
+    }
+
+    .access-box {
+      margin-top: 15px;
+      padding: 18px;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    .access-active {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .access-expired {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .registration-note {
+      margin-bottom: 15px;
+      padding: 12px;
+      background: #f0fdfa;
+      color: #115e59;
+      border-radius: 9px;
+      font-size: 14px;
+    }
+
+    .lock-message {
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 10px;
+      background: #fff7ed;
+      color: #9a3412;
+      border: 1px solid #fed7aa;
     }
 
     footer {
@@ -591,9 +640,8 @@
   </div>
 </header>
 
-<!-- =========================================================
-     HERO
-     ========================================================= -->
+
+<!-- HERO -->
 
 <section class="hero">
   <div class="hero-container">
@@ -612,10 +660,7 @@
         assessments, progress tracking and student support.
       </p>
 
-      <a
-        href="#courses"
-        class="primary-button"
-      >
+      <a href="#courses" class="primary-button">
         Explore Courses
       </a>
     </div>
@@ -647,9 +692,8 @@
   </div>
 </section>
 
-<!-- =========================================================
-     FEATURES
-     ========================================================= -->
+
+<!-- FEATURES -->
 
 <section id="features">
 
@@ -712,9 +756,8 @@
 
 </section>
 
-<!-- =========================================================
-     COURSES
-     ========================================================= -->
+
+<!-- COURSES -->
 
 <section id="courses">
 
@@ -731,105 +774,77 @@
 
       <div id="courseMessage" class="message hidden"></div>
 
+      <div id="accessLockMessage" class="lock-message hidden"></div>
+
+
       <!-- GRADE -->
 
       <div id="gradeStage" class="stage">
 
         <h3>1. Select Grade</h3>
 
-        <div
-          id="gradesContainer"
-          class="button-grid"
-        >
+        <div id="gradesContainer" class="button-grid">
           <p>Loading grades...</p>
         </div>
 
       </div>
 
+
       <!-- BOARD -->
 
-      <div
-        id="boardStage"
-        class="stage hidden"
-      >
+      <div id="boardStage" class="stage hidden">
 
         <h3>2. Select Board</h3>
 
-        <div
-          id="boardsContainer"
-          class="button-grid"
-        ></div>
+        <div id="boardsContainer" class="button-grid"></div>
 
       </div>
+
 
       <!-- SUBJECT -->
 
-      <div
-        id="subjectStage"
-        class="stage hidden"
-      >
+      <div id="subjectStage" class="stage hidden">
 
         <h3>3. Select Subject</h3>
 
-        <div
-          id="subjectsContainer"
-          class="button-grid"
-        ></div>
+        <div id="subjectsContainer" class="button-grid"></div>
 
       </div>
+
 
       <!-- CHAPTER -->
 
-      <div
-        id="chapterStage"
-        class="stage hidden"
-      >
+      <div id="chapterStage" class="stage hidden">
 
         <h3>4. Select Chapter</h3>
 
-        <div
-          id="chaptersContainer"
-          class="button-grid"
-        ></div>
+        <div id="chaptersContainer" class="button-grid"></div>
 
       </div>
+
 
       <!-- LESSON -->
 
-      <div
-        id="lessonStage"
-        class="stage hidden"
-      >
+      <div id="lessonStage" class="stage hidden">
 
         <h3>5. Select Lesson</h3>
 
-        <div
-          id="lessonsContainer"
-          class="button-grid"
-        ></div>
+        <div id="lessonsContainer" class="button-grid"></div>
 
       </div>
 
+
       <!-- LESSON CONTENT -->
 
-      <div
-        id="lessonContent"
-        class="lesson-content hidden"
-      >
+      <div id="lessonContent" class="lesson-content hidden">
 
         <h3 id="lessonContentTitle">
           Lesson Content
         </h3>
 
-        <p
-          id="lessonContentDescription"
-          class="lesson-description"
-        ></p>
+        <p id="lessonContentDescription" class="lesson-description"></p>
 
-        <div
-          id="videoContainer"
-          class="video-wrapper hidden"
-        >
+        <div id="videoContainer" class="video-wrapper hidden">
 
           <video
             id="lessonVideo"
@@ -842,40 +857,27 @@
 
         </div>
 
-        <div
-          id="notesContainer"
-          class="lesson-actions"
-        ></div>
+        <div id="notesContainer" class="lesson-actions"></div>
 
-        <div
-          id="contentStatus"
-          class="content-status hidden"
-        ></div>
+        <div id="contentStatus" class="content-status hidden"></div>
 
       </div>
+
 
       <!-- ASSESSMENT -->
 
-      <div
-        id="testStage"
-        class="stage hidden"
-      >
+      <div id="testStage" class="stage hidden">
 
         <h3>6. Assessment</h3>
 
-        <div
-          id="testsContainer"
-          class="button-grid"
-        ></div>
+        <div id="testsContainer" class="button-grid"></div>
 
       </div>
 
+
       <!-- QUIZ -->
 
-      <div
-        id="quizContainer"
-        class="quiz-container hidden"
-      >
+      <div id="quizContainer" class="quiz-container hidden">
 
         <h3 id="quizTitle">
           Assessment
@@ -883,17 +885,11 @@
 
         <div id="quizQuestions"></div>
 
-        <button
-          id="submitQuiz"
-          class="quiz-submit"
-        >
+        <button id="submitQuiz" class="quiz-submit">
           Submit Assessment
         </button>
 
-        <div
-          id="quizResult"
-          class="hidden"
-        ></div>
+        <div id="quizResult" class="hidden"></div>
 
       </div>
 
@@ -903,9 +899,8 @@
 
 </section>
 
-<!-- =========================================================
-     PRICING
-     ========================================================= -->
+
+<!-- PRICING -->
 
 <section id="pricing">
 
@@ -964,9 +959,8 @@
 
 </section>
 
-<!-- =========================================================
-     LOGIN / REGISTER
-     ========================================================= -->
+
+<!-- LOGIN / REGISTER -->
 
 <section id="login">
 
@@ -980,6 +974,7 @@
     </div>
 
     <div class="auth-grid">
+
 
       <!-- LOGIN -->
 
@@ -1019,27 +1014,26 @@
 
           </div>
 
-          <button
-            type="submit"
-            class="form-button"
-          >
+          <button type="submit" class="form-button">
             Login
           </button>
 
         </form>
 
-        <div
-          id="loginMessage"
-          class="auth-message"
-        ></div>
+        <div id="loginMessage" class="auth-message"></div>
 
       </div>
+
 
       <!-- REGISTER -->
 
       <div class="panel">
 
         <h3>Create Student Account</h3>
+
+        <div class="registration-note">
+          Select your grade and board. These will be saved to your student profile.
+        </div>
 
         <form id="registerForm">
 
@@ -1058,6 +1052,7 @@
 
           </div>
 
+
           <div class="form-group">
 
             <label for="registerEmail">
@@ -1072,6 +1067,7 @@
             />
 
           </div>
+
 
           <div class="form-group">
 
@@ -1088,6 +1084,41 @@
             />
 
           </div>
+
+
+          <div class="form-group">
+
+            <label for="registerGrade">
+              Grade
+            </label>
+
+            <select id="registerGrade" required>
+
+              <option value="">
+                Select Grade
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="registerBoard">
+              Board
+            </label>
+
+            <select id="registerBoard" required>
+
+              <option value="">
+                Select Board
+              </option>
+
+            </select>
+
+          </div>
+
 
           <div class="form-group">
 
@@ -1113,19 +1144,14 @@
 
           </div>
 
-          <button
-            type="submit"
-            class="form-button"
-          >
+
+          <button type="submit" class="form-button">
             Create Account
           </button>
 
         </form>
 
-        <div
-          id="registerMessage"
-          class="auth-message"
-        ></div>
+        <div id="registerMessage" class="auth-message"></div>
 
       </div>
 
@@ -1135,47 +1161,39 @@
 
 </section>
 
-<!-- =========================================================
-     DASHBOARD
-     ========================================================= -->
 
-<section
-  id="dashboard"
-  class="dashboard"
->
+<!-- DASHBOARD -->
+
+<section id="dashboard" class="dashboard">
 
   <div class="section-container">
 
     <div class="dashboard-header">
 
       <div>
+
         <h2>Student Dashboard</h2>
 
         <p id="dashboardWelcome">
           Please login to view your dashboard.
         </p>
+
       </div>
 
-      <button
-        id="logoutButton"
-        class="logout-button hidden"
-      >
+      <button id="logoutButton" class="logout-button hidden">
         Logout
       </button>
 
     </div>
 
-    <div
-      id="dashboardLoginNotice"
-      class="panel"
-    >
+
+    <div id="dashboardLoginNotice" class="panel">
       Login to see your student dashboard.
     </div>
 
-    <div
-      id="dashboardContent"
-      class="hidden"
-    >
+
+    <div id="dashboardContent" class="hidden">
+
 
       <div class="dashboard-grid">
 
@@ -1189,6 +1207,7 @@
 
         </div>
 
+
         <div class="dashboard-card">
 
           <small>Board</small>
@@ -1199,6 +1218,7 @@
 
         </div>
 
+
         <div class="dashboard-card">
 
           <small>Lessons Completed</small>
@@ -1208,6 +1228,7 @@
           </strong>
 
         </div>
+
 
         <div class="dashboard-card">
 
@@ -1220,6 +1241,55 @@
         </div>
 
       </div>
+
+
+      <div class="dashboard-grid">
+
+        <div class="dashboard-card">
+
+          <small>Account Status</small>
+
+          <strong id="dashboardStatus">
+            —
+          </strong>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+          <small>Access Until</small>
+
+          <strong id="dashboardAccessEnd">
+            —
+          </strong>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+          <small>Subjects Available</small>
+
+          <strong>
+            9+
+          </strong>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+          <small>Passing Requirement</small>
+
+          <strong>
+            60%
+          </strong>
+
+        </div>
+
+      </div>
+
 
       <div class="panel">
 
@@ -1240,10 +1310,10 @@
 
       </div>
 
-      <div
-        id="trialBox"
-        class="trial-box hidden"
-      ></div>
+
+      <div id="trialBox" class="trial-box hidden"></div>
+
+      <div id="accessBox" class="access-box hidden"></div>
 
     </div>
 
@@ -1251,14 +1321,19 @@
 
 </section>
 
+
 <footer>
+
   <p>
     © 2026 Aqalverse Learning Academy.
     Learn • Practice • Progress
   </p>
+
 </footer>
 
+
 <script>
+
 /* =========================================================
    SUPABASE
    ========================================================= */
@@ -1328,6 +1403,10 @@ let currentUser = null;
 let currentProfile = null;
 let currentStudent = null;
 
+let studentProgressRows = [];
+
+let accessAllowed = false;
+
 
 /* =========================================================
    DOM
@@ -1365,6 +1444,9 @@ const quizResult =
 
 const courseMessage =
   document.getElementById("courseMessage");
+
+const accessLockMessage =
+  document.getElementById("accessLockMessage");
 
 
 /* =========================================================
@@ -1410,9 +1492,15 @@ function showCourseMessage(message) {
   courseMessage.textContent =
     message;
 
-  courseMessage.classList.remove(
-    "hidden"
-  );
+  courseMessage.classList.remove("hidden");
+}
+
+
+function hideCourseMessage() {
+
+  courseMessage.classList.add("hidden");
+
+  courseMessage.textContent = "";
 }
 
 
@@ -1446,6 +1534,387 @@ function randomizeArray(array) {
 }
 
 
+function formatDate(dateValue) {
+
+  if (!dateValue) {
+    return "—";
+  }
+
+  const date =
+    new Date(dateValue);
+
+  if (Number.isNaN(date.getTime())) {
+    return "—";
+  }
+
+  return date.toLocaleDateString(
+    "en-PK",
+    {
+      year: "numeric",
+      month: "short",
+      day: "numeric"
+    }
+  );
+}
+
+
+function isDateActive(dateValue) {
+
+  if (!dateValue) {
+    return false;
+  }
+
+  return new Date(dateValue) > new Date();
+}
+
+
+/* =========================================================
+   ACCESS CONTROL
+   ========================================================= */
+
+function calculateAccessStatus() {
+
+  accessAllowed = false;
+
+  if (!currentStudent) {
+    return;
+  }
+
+
+  /*
+     Suspended accounts are always locked.
+  */
+
+  if (
+    currentStudent.account_status ===
+    "suspended"
+  ) {
+    return;
+  }
+
+
+  /*
+     Active subscription.
+  */
+
+  if (
+    currentStudent.account_status ===
+    "active"
+  ) {
+
+    /*
+       Subscription is checked below.
+       If no subscription information is available,
+       do not automatically grant access forever.
+    */
+
+    return;
+  }
+
+
+  /*
+     Trial.
+  */
+
+  if (
+    currentStudent.account_status ===
+    "trial" &&
+    isDateActive(
+      currentStudent.trial_ends_at
+    )
+  ) {
+
+    accessAllowed = true;
+
+    return;
+  }
+
+
+  /*
+     Expired.
+  */
+
+  if (
+    currentStudent.account_status ===
+    "expired"
+  ) {
+
+    accessAllowed = false;
+
+    return;
+  }
+
+
+  /*
+     Fallback:
+     trial dates are still checked.
+  */
+
+  if (
+    isDateActive(
+      currentStudent.trial_ends_at
+    )
+  ) {
+
+    accessAllowed = true;
+
+  }
+
+}
+
+
+async function refreshAccessStatus() {
+
+  if (!currentStudent) {
+
+    accessAllowed = false;
+
+    return;
+
+  }
+
+
+  /*
+     Trial is active.
+  */
+
+  if (
+    currentStudent.account_status ===
+    "trial" &&
+    isDateActive(
+      currentStudent.trial_ends_at
+    )
+  ) {
+
+    accessAllowed = true;
+
+    return;
+
+  }
+
+
+  /*
+     Check active subscription.
+  */
+
+  const {
+    data: subscriptions,
+    error
+  } =
+    await aqalverseSupabase
+      .from("student_subscriptions")
+      .select(
+        "id, start_date, end_date, status"
+      )
+      .eq(
+        "student_id",
+        currentUser.id
+      )
+      .eq(
+        "status",
+        "active"
+      )
+      .order(
+        "end_date",
+        {
+          ascending: false
+        }
+      )
+      .limit(1);
+
+
+  if (error) {
+
+    console.error(
+      "Subscription check error:",
+      error
+    );
+
+    calculateAccessStatus();
+
+    return;
+
+  }
+
+
+  if (
+    subscriptions &&
+    subscriptions.length > 0
+  ) {
+
+    const subscription =
+      subscriptions[0];
+
+    const today =
+      new Date();
+
+    const endDate =
+      new Date(
+        subscription.end_date +
+        "T23:59:59"
+      );
+
+    if (
+      endDate >= today
+    ) {
+
+      accessAllowed = true;
+
+      /*
+         Keep the student marked active.
+      */
+
+      if (
+        currentStudent.account_status !==
+        "active"
+      ) {
+
+        currentStudent.account_status =
+          "active";
+
+      }
+
+      return;
+
+    }
+
+  }
+
+
+  /*
+     No active subscription.
+  */
+
+  accessAllowed = false;
+
+  if (
+    currentStudent.account_status ===
+    "trial"
+  ) {
+
+    /*
+       Trial has ended.
+    */
+
+    currentStudent.account_status =
+      "expired";
+
+  }
+
+}
+
+
+function showAccessLock(message) {
+
+  accessLockMessage.textContent =
+    message;
+
+  accessLockMessage.classList.remove(
+    "hidden"
+  );
+}
+
+
+function hideAccessLock() {
+
+  accessLockMessage.classList.add(
+    "hidden"
+  );
+
+  accessLockMessage.textContent = "";
+}
+
+
+/* =========================================================
+   LESSON PROGRESS HELPERS
+   ========================================================= */
+
+function getProgressForLesson(
+  lessonId
+) {
+
+  return (
+    studentProgressRows || []
+  ).find(
+    row =>
+      Number(row.lesson_id) ===
+      Number(lessonId)
+  );
+
+}
+
+
+function isLessonCompleted(
+  lessonId
+) {
+
+  const row =
+    getProgressForLesson(
+      lessonId
+    );
+
+  return Boolean(
+    row &&
+    row.lesson_completed === true
+  );
+
+}
+
+
+function isLessonUnlocked(
+  lesson,
+  lessons
+) {
+
+  if (!accessAllowed) {
+    return false;
+  }
+
+
+  /*
+     First lesson is always unlocked
+     while the student has access.
+  */
+
+  if (
+    Number(
+      lesson.lesson_number
+    ) === 1
+  ) {
+
+    return true;
+
+  }
+
+
+  /*
+     Find previous lesson.
+  */
+
+  const previousLesson =
+    lessons.find(
+      item =>
+        Number(
+          item.lesson_number
+        ) ===
+        Number(
+          lesson.lesson_number
+        ) - 1
+    );
+
+
+  if (!previousLesson) {
+    return false;
+  }
+
+
+  return isLessonCompleted(
+    previousLesson.id
+  );
+
+}
+
+
 /* =========================================================
    LESSON CONTENT
    ========================================================= */
@@ -1458,14 +1927,30 @@ function hideLessonContent() {
     );
 
   if (lessonContent) {
+
     lessonContent.classList.add(
       "hidden"
     );
+
   }
+
 }
 
 
-async function showLessonContent(lesson) {
+async function showLessonContent(
+  lesson
+) {
+
+  if (!accessAllowed) {
+
+    showAccessLock(
+      "Your learning access has expired. Please subscribe to continue."
+    );
+
+    return;
+
+  }
+
 
   const lessonContent =
     document.getElementById(
@@ -1502,9 +1987,11 @@ async function showLessonContent(lesson) {
       "contentStatus"
     );
 
+
   lessonContent.classList.remove(
     "hidden"
   );
+
 
   lessonTitle.textContent =
     "Lesson " +
@@ -1512,9 +1999,11 @@ async function showLessonContent(lesson) {
     ": " +
     lesson.title;
 
+
   lessonDescription.textContent =
     lesson.description ||
     "Study this lesson carefully before attempting the assessment.";
+
 
   videoContainer.classList.add(
     "hidden"
@@ -1537,7 +2026,9 @@ async function showLessonContent(lesson) {
   contentStatus.textContent = "";
 
 
-  /* VIDEO */
+  /*
+     VIDEO
+  */
 
   if (lesson.video_url) {
 
@@ -1556,10 +2047,13 @@ async function showLessonContent(lesson) {
       );
 
     }
+
   }
 
 
-  /* PDF */
+  /*
+     PDF
+  */
 
   if (lesson.notes_url) {
 
@@ -1593,10 +2087,13 @@ async function showLessonContent(lesson) {
       );
 
     }
+
   }
 
 
-  /* STATUS */
+  /*
+     STATUS
+  */
 
   if (
     !lesson.video_url &&
@@ -1641,6 +2138,7 @@ async function showLessonContent(lesson) {
 
     contentStatus.textContent =
       "PDF notes are available. Video has not been uploaded yet.";
+
   }
 
 
@@ -1648,6 +2146,7 @@ async function showLessonContent(lesson) {
     behavior: "smooth",
     block: "start"
   });
+
 }
 
 
@@ -1659,6 +2158,7 @@ async function loadGrades() {
 
   gradesContainer.innerHTML =
     "<p>Loading grades...</p>";
+
 
   const {
     data,
@@ -1677,6 +2177,7 @@ async function loadGrades() {
         "grade_number"
       );
 
+
   if (error) {
 
     console.error(
@@ -1688,12 +2189,28 @@ async function loadGrades() {
       "<p>Unable to load grades.</p>";
 
     return;
+
   }
+
 
   gradesContainer.innerHTML = "";
 
+
+  const registerGrade =
+    document.getElementById(
+      "registerGrade"
+    );
+
+  registerGrade.innerHTML =
+    '<option value="">Select Grade</option>';
+
+
   data.forEach(
     grade => {
+
+      /*
+         Course selector button
+      */
 
       const button =
         document.createElement(
@@ -1710,9 +2227,40 @@ async function loadGrades() {
         "Grade " +
         grade.grade_number;
 
+
       button.addEventListener(
         "click",
         async () => {
+
+          if (!currentUser) {
+
+            showCourseMessage(
+              "Please login first to access lessons and assessments."
+            );
+
+            document
+              .getElementById(
+                "login"
+              )
+              .scrollIntoView({
+                behavior: "smooth"
+              });
+
+            return;
+
+          }
+
+
+          if (!accessAllowed) {
+
+            showAccessLock(
+              "Your learning access is not active. Please subscribe or renew your access."
+            );
+
+            return;
+
+          }
+
 
           selectedGrade =
             grade;
@@ -1723,6 +2271,7 @@ async function loadGrades() {
           selectedChapter = null;
           selectedLesson = null;
           selectedTest = null;
+
 
           document
             .querySelectorAll(
@@ -1735,21 +2284,47 @@ async function loadGrades() {
                 )
             );
 
+
           button.classList.add(
             "selected"
           );
+
 
           await loadBoards();
 
         }
       );
 
+
       gradesContainer.appendChild(
         button
       );
 
+
+      /*
+         Registration dropdown
+      */
+
+      const option =
+        document.createElement(
+          "option"
+        );
+
+      option.value =
+        grade.id;
+
+      option.textContent =
+        grade.name ||
+        "Grade " +
+        grade.grade_number;
+
+      registerGrade.appendChild(
+        option
+      );
+
     }
   );
+
 }
 
 
@@ -1772,6 +2347,7 @@ async function loadBoards() {
   hideLessonContent();
   hideQuiz();
 
+
   const {
     data,
     error
@@ -1789,6 +2365,7 @@ async function loadBoards() {
         "name"
       );
 
+
   if (error) {
 
     console.error(
@@ -1800,9 +2377,21 @@ async function loadBoards() {
       "<p>Unable to load boards.</p>";
 
     return;
+
   }
 
+
   boardsContainer.innerHTML = "";
+
+
+  const registerBoard =
+    document.getElementById(
+      "registerBoard"
+    );
+
+  registerBoard.innerHTML =
+    '<option value="">Select Board</option>';
+
 
   data.forEach(
     board => {
@@ -1820,6 +2409,7 @@ async function loadBoards() {
       button.textContent =
         board.name;
 
+
       button.addEventListener(
         "click",
         async () => {
@@ -1833,6 +2423,7 @@ async function loadBoards() {
           selectedLesson = null;
           selectedTest = null;
 
+
           document
             .querySelectorAll(
               "#boardsContainer .select-button"
@@ -1844,21 +2435,45 @@ async function loadBoards() {
                 )
             );
 
+
           button.classList.add(
             "selected"
           );
+
 
           await loadSubjects();
 
         }
       );
 
+
       boardsContainer.appendChild(
         button
       );
 
+
+      /*
+         Registration dropdown
+      */
+
+      const option =
+        document.createElement(
+          "option"
+        );
+
+      option.value =
+        board.id;
+
+      option.textContent =
+        board.name;
+
+      registerBoard.appendChild(
+        option
+      );
+
     }
   );
+
 }
 
 
@@ -1880,6 +2495,7 @@ async function loadSubjects() {
   hideLessonContent();
   hideQuiz();
 
+
   const {
     data,
     error
@@ -1897,6 +2513,7 @@ async function loadSubjects() {
         "name"
       );
 
+
   if (error) {
 
     console.error(
@@ -1908,9 +2525,12 @@ async function loadSubjects() {
       "<p>Unable to load subjects.</p>";
 
     return;
+
   }
 
+
   subjectsContainer.innerHTML = "";
+
 
   data.forEach(
     subject => {
@@ -1928,6 +2548,7 @@ async function loadSubjects() {
       button.textContent =
         subject.name;
 
+
       button.addEventListener(
         "click",
         async () => {
@@ -1940,6 +2561,7 @@ async function loadSubjects() {
           selectedLesson = null;
           selectedTest = null;
 
+
           document
             .querySelectorAll(
               "#subjectsContainer .select-button"
@@ -1951,14 +2573,17 @@ async function loadSubjects() {
                 )
             );
 
+
           button.classList.add(
             "selected"
           );
+
 
           await loadCourse();
 
         }
       );
+
 
       subjectsContainer.appendChild(
         button
@@ -1966,6 +2591,7 @@ async function loadSubjects() {
 
     }
   );
+
 }
 
 
@@ -1981,6 +2607,7 @@ async function loadCourse() {
 
   hideLessonContent();
   hideQuiz();
+
 
   const {
     data,
@@ -2009,6 +2636,7 @@ async function loadCourse() {
       )
       .maybeSingle();
 
+
   if (error) {
 
     console.error(
@@ -2021,7 +2649,9 @@ async function loadCourse() {
     );
 
     return;
+
   }
+
 
   if (!data) {
 
@@ -2030,16 +2660,21 @@ async function loadCourse() {
     );
 
     return;
+
   }
+
 
   selectedCourse =
     data;
+
 
   showCourseMessage(
     selectedCourse.title
   );
 
+
   await loadChapters();
+
 }
 
 
@@ -2059,6 +2694,7 @@ async function loadChapters() {
 
   hideLessonContent();
   hideQuiz();
+
 
   const {
     data,
@@ -2081,6 +2717,7 @@ async function loadChapters() {
         "chapter_number"
       );
 
+
   if (error) {
 
     console.error(
@@ -2092,9 +2729,12 @@ async function loadChapters() {
       "<p>Unable to load chapters.</p>";
 
     return;
+
   }
 
+
   chaptersContainer.innerHTML = "";
+
 
   if (
     !data ||
@@ -2105,7 +2745,9 @@ async function loadChapters() {
       "<p>No chapters are available yet.</p>";
 
     return;
+
   }
+
 
   data.forEach(
     chapter => {
@@ -2126,6 +2768,7 @@ async function loadChapters() {
         " - " +
         chapter.title;
 
+
       button.addEventListener(
         "click",
         async () => {
@@ -2135,6 +2778,7 @@ async function loadChapters() {
 
           selectedLesson = null;
           selectedTest = null;
+
 
           document
             .querySelectorAll(
@@ -2147,14 +2791,17 @@ async function loadChapters() {
                 )
             );
 
+
           button.classList.add(
             "selected"
           );
+
 
           await loadLessons();
 
         }
       );
+
 
       chaptersContainer.appendChild(
         button
@@ -2162,11 +2809,12 @@ async function loadChapters() {
 
     }
   );
+
 }
 
 
 /* =========================================================
-   LOAD LESSONS
+   LOAD LESSONS WITH LOCK SYSTEM
    ========================================================= */
 
 async function loadLessons() {
@@ -2175,8 +2823,10 @@ async function loadLessons() {
     return;
   }
 
+
   lessonsContainer.innerHTML =
     "<p>Loading lessons...</p>";
+
 
   showStage("lessonStage");
 
@@ -2184,6 +2834,21 @@ async function loadLessons() {
 
   hideLessonContent();
   hideQuiz();
+
+
+  if (!accessAllowed) {
+
+    lessonsContainer.innerHTML =
+      "<p>Your learning access has expired. Please subscribe to continue.</p>";
+
+    showAccessLock(
+      "Your learning access is not active."
+    );
+
+    return;
+
+  }
+
 
   const {
     data,
@@ -2206,6 +2871,7 @@ async function loadLessons() {
         "lesson_number"
       );
 
+
   if (error) {
 
     console.error(
@@ -2217,9 +2883,12 @@ async function loadLessons() {
       "<p>Unable to load lessons.</p>";
 
     return;
+
   }
 
+
   lessonsContainer.innerHTML = "";
+
 
   if (
     !data ||
@@ -2230,30 +2899,99 @@ async function loadLessons() {
       "<p>No lessons are available yet.</p>";
 
     return;
+
   }
+
 
   data.forEach(
     lesson => {
+
+      const unlocked =
+        isLessonUnlocked(
+          lesson,
+          data
+        );
+
+      const completed =
+        isLessonCompleted(
+          lesson.id
+        );
+
 
       const button =
         document.createElement(
           "button"
         );
 
+
       button.type = "button";
+
 
       button.className =
         "select-button lesson-button";
 
-      button.textContent =
-        "Lesson " +
-        lesson.lesson_number +
-        " - " +
-        lesson.title;
+
+      if (completed) {
+
+        button.classList.add(
+          "completed"
+        );
+
+      }
+
+
+      if (!unlocked) {
+
+        button.classList.add(
+          "locked"
+        );
+
+      }
+
+
+      if (completed) {
+
+        button.textContent =
+          "✓ Lesson " +
+          lesson.lesson_number +
+          " - " +
+          lesson.title +
+          " (Completed)";
+
+      } else if (!unlocked) {
+
+        button.textContent =
+          "🔒 Lesson " +
+          lesson.lesson_number +
+          " - " +
+          lesson.title +
+          " (Locked)";
+
+      } else {
+
+        button.textContent =
+          "Lesson " +
+          lesson.lesson_number +
+          " - " +
+          lesson.title;
+
+      }
+
 
       button.addEventListener(
         "click",
         async () => {
+
+          if (!unlocked) {
+
+            showCourseMessage(
+              "This lesson is locked. Pass the previous lesson assessment with at least 60% to unlock it."
+            );
+
+            return;
+
+          }
+
 
           document
             .querySelectorAll(
@@ -2266,30 +3004,37 @@ async function loadLessons() {
                 )
             );
 
+
           button.classList.add(
             "selected"
           );
+
 
           selectedLesson =
             lesson;
 
           selectedTest = null;
 
+
           hideQuiz();
+
 
           await showLessonContent(
             lesson
           );
+
 
           showCourseMessage(
             lesson.title +
             " selected. Study the lesson content, then complete the assessment."
           );
 
+
           await loadTests();
 
         }
       );
+
 
       lessonsContainer.appendChild(
         button
@@ -2297,6 +3042,7 @@ async function loadLessons() {
 
     }
   );
+
 }
 
 
@@ -2310,10 +3056,23 @@ async function loadTests() {
     return;
   }
 
+
   testsContainer.innerHTML =
     "<p>Loading assessments...</p>";
 
+
   showStage("testStage");
+
+
+  if (!accessAllowed) {
+
+    testsContainer.innerHTML =
+      "<p>Your learning access has expired.</p>";
+
+    return;
+
+  }
+
 
   const {
     data,
@@ -2336,6 +3095,7 @@ async function loadTests() {
         "id"
       );
 
+
   if (error) {
 
     console.error(
@@ -2347,9 +3107,12 @@ async function loadTests() {
       "<p>Unable to load assessments.</p>";
 
     return;
+
   }
 
+
   testsContainer.innerHTML = "";
+
 
   if (
     !data ||
@@ -2360,7 +3123,9 @@ async function loadTests() {
       "<p>No assessment is available for this lesson yet.</p>";
 
     return;
+
   }
+
 
   data.forEach(
     test => {
@@ -2370,16 +3135,19 @@ async function loadTests() {
           "button"
         );
 
+
       button.type = "button";
 
       button.className =
         "select-button";
+
 
       button.textContent =
         test.title +
         " (" +
         test.number_of_questions +
         " Questions)";
+
 
       button.addEventListener(
         "click",
@@ -2396,17 +3164,21 @@ async function loadTests() {
                 )
             );
 
+
           button.classList.add(
             "selected"
           );
 
+
           selectedTest =
             test;
+
 
           await startDatabaseTest();
 
         }
       );
+
 
       testsContainer.appendChild(
         button
@@ -2414,6 +3186,7 @@ async function loadTests() {
 
     }
   );
+
 }
 
 
@@ -2430,17 +3203,50 @@ async function startDatabaseTest() {
     return;
   }
 
+
+  if (!currentUser) {
+
+    quizResult.className =
+      "result failure";
+
+    quizResult.textContent =
+      "Please login before starting the assessment.";
+
+    quizResult.classList.remove(
+      "hidden"
+    );
+
+    return;
+
+  }
+
+
+  if (!accessAllowed) {
+
+    showAccessLock(
+      "Your learning access has expired."
+    );
+
+    return;
+
+  }
+
+
   hideQuiz();
+
 
   quizTitle.textContent =
     selectedTest.title;
 
+
   quizQuestions.innerHTML =
     "<p>Loading questions...</p>";
+
 
   quizContainer.classList.remove(
     "hidden"
   );
+
 
   quizContainer.scrollIntoView({
     behavior: "smooth",
@@ -2465,6 +3271,7 @@ async function startDatabaseTest() {
         "question_order"
       );
 
+
   if (testQuestionsError) {
 
     console.error(
@@ -2476,6 +3283,7 @@ async function startDatabaseTest() {
       "<p>Unable to load assessment questions.</p>";
 
     return;
+
   }
 
 
@@ -2488,6 +3296,7 @@ async function startDatabaseTest() {
       "<p>No questions have been connected to this assessment yet.</p>";
 
     return;
+
   }
 
 
@@ -2520,6 +3329,7 @@ async function startDatabaseTest() {
         true
       );
 
+
   if (questionsError) {
 
     console.error(
@@ -2531,6 +3341,7 @@ async function startDatabaseTest() {
       "<p>Unable to load questions.</p>";
 
     return;
+
   }
 
 
@@ -2557,11 +3368,12 @@ async function startDatabaseTest() {
 
 
   /*
-     Remove duplicate question IDs
+     Remove duplicate IDs.
   */
 
   const seenIds =
     new Set();
+
 
   finalQuestions =
     finalQuestions.filter(
@@ -2572,24 +3384,29 @@ async function startDatabaseTest() {
             question.id
           )
         ) {
+
           return false;
+
         }
+
 
         seenIds.add(
           question.id
         );
 
         return true;
+
       }
     );
 
 
   /*
-     Remove duplicate question text
+     Remove duplicate question text.
   */
 
   const seenTexts =
     new Set();
+
 
   finalQuestions =
     finalQuestions.filter(
@@ -2602,25 +3419,30 @@ async function startDatabaseTest() {
             .trim()
             .toLowerCase();
 
+
         if (
           seenTexts.has(
             text
           )
         ) {
+
           return false;
+
         }
+
 
         seenTexts.add(
           text
         );
 
         return true;
+
       }
     );
 
 
   /*
-     Randomize
+     Randomize questions.
   */
 
   if (
@@ -2636,7 +3458,7 @@ async function startDatabaseTest() {
 
 
   /*
-     Limit to requested number
+     Limit requested number.
   */
 
   finalQuestions =
@@ -2654,6 +3476,7 @@ async function startDatabaseTest() {
       "<p>No usable questions are available.</p>";
 
     return;
+
   }
 
 
@@ -2668,18 +3491,22 @@ async function startDatabaseTest() {
           "div"
         );
 
+
       wrapper.className =
         "quiz-question";
+
 
       const heading =
         document.createElement(
           "h4"
         );
 
+
       heading.textContent =
         (index + 1) +
         ". " +
         question.question_text;
+
 
       wrapper.appendChild(
         heading
@@ -2702,6 +3529,7 @@ async function startDatabaseTest() {
               "label"
             );
 
+
           label.className =
             "option";
 
@@ -2711,15 +3539,19 @@ async function startDatabaseTest() {
               "input"
             );
 
+
           radio.type =
             "radio";
+
 
           radio.name =
             "question_" +
             question.id;
 
+
           radio.value =
             letter;
+
 
           radio.dataset.questionId =
             question.id;
@@ -2728,6 +3560,7 @@ async function startDatabaseTest() {
           label.appendChild(
             radio
           );
+
 
           label.appendChild(
             document.createTextNode(
@@ -2753,15 +3586,6 @@ async function startDatabaseTest() {
 
     }
   );
-
-
-  quizContainer.dataset.questionIds =
-    JSON.stringify(
-      finalQuestions.map(
-        question =>
-          question.id
-      )
-    );
 
 
   quizContainer.dataset.questions =
@@ -2794,14 +3618,43 @@ async function submitQuiz() {
     quizResult.className =
       "result failure";
 
+
     quizResult.textContent =
       "Please login before submitting the assessment.";
 
+
+    quizResult.classList.remove(
+      "hidden"
+    );
+
+
     return;
+
+  }
+
+
+  if (!accessAllowed) {
+
+    quizResult.className =
+      "result failure";
+
+
+    quizResult.textContent =
+      "Your learning access has expired.";
+
+
+    quizResult.classList.remove(
+      "hidden"
+    );
+
+
+    return;
+
   }
 
 
   let questions = [];
+
 
   try {
 
@@ -2816,6 +3669,7 @@ async function submitQuiz() {
     console.error(error);
 
     questions = [];
+
   }
 
 
@@ -2826,10 +3680,18 @@ async function submitQuiz() {
     quizResult.className =
       "result failure";
 
+
     quizResult.textContent =
       "No questions are available.";
 
+
+    quizResult.classList.remove(
+      "hidden"
+    );
+
+
     return;
+
   }
 
 
@@ -2864,10 +3726,12 @@ async function submitQuiz() {
   const total =
     questions.length;
 
+
   const percentage =
     total > 0
       ? (score / total) * 100
       : 0;
+
 
   const passed =
     percentage >=
@@ -2875,7 +3739,6 @@ async function submitQuiz() {
 
 
   const {
-    data: attempt,
     error: attemptError
   } =
     await aqalverseSupabase
@@ -2883,19 +3746,22 @@ async function submitQuiz() {
       .insert({
         student_id:
           currentUser.id,
+
         test_id:
           selectedTest.id,
+
         score:
           score,
+
         total_questions:
           total,
+
         percentage:
           percentage,
+
         passed:
           passed
-      })
-      .select()
-      .single();
+      });
 
 
   if (attemptError) {
@@ -2905,13 +3771,22 @@ async function submitQuiz() {
       attemptError
     );
 
+
     quizResult.className =
       "result failure";
+
 
     quizResult.textContent =
       "Your result was calculated, but it could not be saved. Please try again.";
 
+
+    quizResult.classList.remove(
+      "hidden"
+    );
+
+
     return;
+
   }
 
 
@@ -2919,8 +3794,10 @@ async function submitQuiz() {
 
     await completeLessonProgress();
 
+
     quizResult.className =
       "result success";
+
 
     quizResult.innerHTML =
       "<strong>Passed!</strong><br>" +
@@ -2931,12 +3808,15 @@ async function submitQuiz() {
       " (" +
       percentage.toFixed(0) +
       "%)<br>" +
-      "The lesson has been marked as completed.";
+      "The lesson has been marked as completed.<br><br>" +
+      "The next lesson is now unlocked.";
+
 
   } else {
 
     quizResult.className =
       "result failure";
+
 
     quizResult.innerHTML =
       "<strong>Not passed yet.</strong><br>" +
@@ -2953,6 +3833,7 @@ async function submitQuiz() {
 
   }
 
+
   quizResult.classList.remove(
     "hidden"
   );
@@ -2960,7 +3841,11 @@ async function submitQuiz() {
 
   if (passed) {
 
+    await reloadStudentProgress();
+
     await loadDashboard();
+
+    await loadLessons();
 
   }
 
@@ -3024,17 +3909,67 @@ async function completeLessonProgress() {
     );
 
     return;
+
   }
 
 
   console.log(
     "Lesson progress saved successfully."
   );
+
 }
 
 
 /* =========================================================
-   AUTH - REGISTER
+   LOAD STUDENT PROGRESS
+   ========================================================= */
+
+async function reloadStudentProgress() {
+
+  if (!currentUser) {
+
+    studentProgressRows = [];
+
+    return;
+
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await aqalverseSupabase
+      .from("student_progress")
+      .select(
+        "id, lesson_id, video_completed, video_progress, lesson_unlocked, lesson_completed, completed_at"
+      )
+      .eq(
+        "student_id",
+        currentUser.id
+      );
+
+
+  if (error) {
+
+    console.error(
+      "Progress reload error:",
+      error
+    );
+
+    return;
+
+  }
+
+
+  studentProgressRows =
+    data || [];
+
+}
+
+
+/* =========================================================
+   REGISTER
    ========================================================= */
 
 document
@@ -3052,32 +3987,39 @@ async function registerStudent(event) {
 
   const name =
     document
-      .getElementById(
-        "registerName"
-      )
+      .getElementById("registerName")
       .value
       .trim();
+
 
   const email =
     document
-      .getElementById(
-        "registerEmail"
-      )
+      .getElementById("registerEmail")
       .value
       .trim();
 
+
   const password =
     document
-      .getElementById(
-        "registerPassword"
-      )
+      .getElementById("registerPassword")
       .value;
+
+
+  const gradeId =
+    document
+      .getElementById("registerGrade")
+      .value;
+
+
+  const boardId =
+    document
+      .getElementById("registerBoard")
+      .value;
+
 
   const language =
     document
-      .getElementById(
-        "registerLanguage"
-      )
+      .getElementById("registerLanguage")
       .value;
 
 
@@ -3085,6 +4027,19 @@ async function registerStudent(event) {
     document.getElementById(
       "registerMessage"
     );
+
+
+  if (
+    !gradeId ||
+    !boardId
+  ) {
+
+    message.textContent =
+      "Please select your grade and board.";
+
+    return;
+
+  }
 
 
   message.textContent =
@@ -3098,14 +4053,18 @@ async function registerStudent(event) {
     await aqalverseSupabase.auth.signUp({
       email:
         email,
+
       password:
         password,
+
       options: {
         data: {
           full_name:
             name,
+
           role:
             "student",
+
           preferred_language:
             language
         }
@@ -3124,22 +4083,22 @@ async function registerStudent(event) {
       error.message;
 
     return;
+
   }
 
 
-  if (
-    !data.user
-  ) {
+  if (!data.user) {
 
     message.textContent =
       "Account could not be created.";
 
     return;
+
   }
 
 
   /*
-     Create profile
+     Profile
   */
 
   const {
@@ -3151,10 +4110,13 @@ async function registerStudent(event) {
         {
           id:
             data.user.id,
+
           full_name:
             name,
+
           role:
             "student",
+
           preferred_language:
             language
         },
@@ -3176,11 +4138,12 @@ async function registerStudent(event) {
 
 
   /*
-     Create student record
+     Trial
   */
 
   const trialStart =
     new Date();
+
 
   const trialEnd =
     new Date(
@@ -3193,6 +4156,10 @@ async function registerStudent(event) {
     );
 
 
+  /*
+     Student record
+  */
+
   const {
     error: studentError
   } =
@@ -3202,6 +4169,12 @@ async function registerStudent(event) {
         {
           id:
             data.user.id,
+
+          board_id:
+            Number(boardId),
+
+          grade_id:
+            Number(gradeId),
 
           trial_started_at:
             trialStart.toISOString(),
@@ -3226,15 +4199,18 @@ async function registerStudent(event) {
       studentError
     );
 
+    message.textContent =
+      "Account created, but student profile could not be completed. Please contact administrator.";
+
+    return;
+
   }
 
 
-  if (
-    data.session
-  ) {
+  if (data.session) {
 
     message.textContent =
-      "Account created successfully. You are now logged in.";
+      "Account created successfully. Your 2-day free trial has started.";
 
     await initializeUser();
 
@@ -3249,7 +4225,7 @@ async function registerStudent(event) {
 
 
 /* =========================================================
-   AUTH - LOGIN
+   LOGIN
    ========================================================= */
 
 document
@@ -3267,17 +4243,14 @@ async function loginStudent(event) {
 
   const email =
     document
-      .getElementById(
-        "loginEmail"
-      )
+      .getElementById("loginEmail")
       .value
       .trim();
 
+
   const password =
     document
-      .getElementById(
-        "loginPassword"
-      )
+      .getElementById("loginPassword")
       .value;
 
 
@@ -3298,6 +4271,7 @@ async function loginStudent(event) {
     await aqalverseSupabase.auth.signInWithPassword({
       email:
         email,
+
       password:
         password
     });
@@ -3314,6 +4288,7 @@ async function loginStudent(event) {
       error.message;
 
     return;
+
   }
 
 
@@ -3329,9 +4304,7 @@ async function loginStudent(event) {
 
 
   document
-    .getElementById(
-      "dashboard"
-    )
+    .getElementById("dashboard")
     .scrollIntoView({
       behavior: "smooth"
     });
@@ -3349,9 +4322,7 @@ aqalverseSupabase.auth.onAuthStateChange(
     session
   ) => {
 
-    if (
-      session?.user
-    ) {
+    if (session?.user) {
 
       currentUser =
         session.user;
@@ -3365,6 +4336,10 @@ aqalverseSupabase.auth.onAuthStateChange(
       currentProfile = null;
 
       currentStudent = null;
+
+      studentProgressRows = [];
+
+      accessAllowed = false;
 
       resetDashboard();
 
@@ -3427,9 +4402,7 @@ async function initializeUser() {
   } =
     await aqalverseSupabase
       .from("students")
-      .select(
-        "*"
-      )
+      .select("*")
       .eq(
         "id",
         currentUser.id
@@ -3451,6 +4424,20 @@ async function initializeUser() {
     student;
 
 
+  /*
+     Progress
+  */
+
+  await reloadStudentProgress();
+
+
+  /*
+     Access
+  */
+
+  await refreshAccessStatus();
+
+
   updateDashboardHeader();
 
   await loadDashboard();
@@ -3464,9 +4451,7 @@ async function initializeUser() {
 
 async function loadDashboard() {
 
-  if (
-    !currentUser
-  ) {
+  if (!currentUser) {
     return;
   }
 
@@ -3479,6 +4464,7 @@ async function loadDashboard() {
       "hidden"
     );
 
+
   document
     .getElementById(
       "dashboardContent"
@@ -3486,6 +4472,7 @@ async function loadDashboard() {
     .classList.remove(
       "hidden"
     );
+
 
   document
     .getElementById(
@@ -3499,90 +4486,139 @@ async function loadDashboard() {
   updateDashboardHeader();
 
 
-  /*
-     Student progress
-  */
-
-  const {
-    data: progressRows,
-    error: progressError
-  } =
-    await aqalverseSupabase
-      .from("student_progress")
-      .select(
-        "id, lesson_id, video_completed, video_progress, lesson_unlocked, lesson_completed, completed_at"
-      )
-      .eq(
-        "student_id",
-        currentUser.id
-      );
-
-
-  if (progressError) {
-
-    console.error(
-      "Progress error:",
-      progressError
-    );
-
-    return;
-  }
+  const progressRows =
+    studentProgressRows || [];
 
 
   const completed =
-    (progressRows || [])
-      .filter(
-        row =>
-          row.lesson_completed ===
-          true
-      )
-      .length;
+    progressRows.filter(
+      row =>
+        row.lesson_completed === true
+    ).length;
 
 
   const started =
-    (progressRows || [])
-      .filter(
-        row =>
-          row.video_progress > 0 ||
-          row.lesson_completed === true
-      )
-      .length;
+    progressRows.filter(
+      row =>
+        row.video_progress > 0 ||
+        row.lesson_completed === true
+    ).length;
 
 
   /*
-     Count available lessons
+     Count lessons belonging to
+     student's selected grade and board.
   */
 
   let totalLessons = 0;
 
 
-  const {
-    data: lessons,
-    error: lessonsError
-  } =
-    await aqalverseSupabase
-      .from("lessons")
-      .select(
-        "id"
-      )
-      .eq(
-        "is_active",
-        true
-      );
-
-
   if (
-    !lessonsError &&
-    lessons
+    currentStudent &&
+    currentStudent.grade_id &&
+    currentStudent.board_id
   ) {
 
-    totalLessons =
-      lessons.length;
+    const {
+      data: courses,
+      error: coursesError
+    } =
+      await aqalverseSupabase
+        .from("courses")
+        .select("id")
+        .eq(
+          "grade_id",
+          currentStudent.grade_id
+        )
+        .eq(
+          "board_id",
+          currentStudent.board_id
+        )
+        .eq(
+          "is_active",
+          true
+        );
+
+
+    if (
+      !coursesError &&
+      courses &&
+      courses.length > 0
+    ) {
+
+      const courseIds =
+        courses.map(
+          course =>
+            course.id
+        );
+
+
+      const {
+        data: chapters,
+        error: chaptersError
+      } =
+        await aqalverseSupabase
+          .from("chapters")
+          .select("id")
+          .in(
+            "course_id",
+            courseIds
+          )
+          .eq(
+            "is_active",
+            true
+          );
+
+
+      if (
+        !chaptersError &&
+        chapters &&
+        chapters.length > 0
+      ) {
+
+        const chapterIds =
+          chapters.map(
+            chapter =>
+              chapter.id
+          );
+
+
+        const {
+          data: lessons,
+          error: lessonsError
+        } =
+          await aqalverseSupabase
+            .from("lessons")
+            .select("id")
+            .in(
+              "chapter_id",
+              chapterIds
+            )
+            .eq(
+              "is_active",
+              true
+            );
+
+
+        if (
+          !lessonsError &&
+          lessons
+        ) {
+
+          totalLessons =
+            lessons.length;
+
+        }
+
+      }
+
+    }
 
   }
 
 
-  let progressPercentage = 0;
+  let progressPercentage =
+    0;
 
 
   if (
@@ -3598,21 +4634,16 @@ async function loadDashboard() {
         100
       );
 
-  } else if (
-    completed > 0
-  ) {
-
-    progressPercentage =
-      100;
-
   }
 
 
   if (
     progressPercentage > 100
   ) {
+
     progressPercentage =
       100;
+
   }
 
 
@@ -3650,10 +4681,14 @@ async function loadDashboard() {
     completed +
     " completed lesson(s), " +
     started +
-    " started lesson(s).";
+    " started lesson(s) out of " +
+    totalLessons +
+    " available lesson(s).";
 
 
   updateTrialBox();
+
+  updateAccessBox();
 
 }
 
@@ -3670,9 +4705,7 @@ function updateDashboardHeader() {
     );
 
 
-  if (
-    currentProfile
-  ) {
+  if (currentProfile) {
 
     welcome.textContent =
       "Welcome, " +
@@ -3695,15 +4728,14 @@ function updateDashboardHeader() {
       "dashboardGrade"
     );
 
+
   const boardElement =
     document.getElementById(
       "dashboardBoard"
     );
 
 
-  if (
-    currentStudent
-  ) {
+  if (currentStudent) {
 
     if (
       currentStudent.grade_id
@@ -3786,6 +4818,7 @@ async function loadDashboardGrade(
       "—";
 
     return;
+
   }
 
 
@@ -3838,6 +4871,7 @@ async function loadDashboardBoard(
       "—";
 
     return;
+
   }
 
 
@@ -3852,7 +4886,7 @@ async function loadDashboardBoard(
 
 
 /* =========================================================
-   TRIAL
+   TRIAL BOX
    ========================================================= */
 
 function updateTrialBox() {
@@ -3873,6 +4907,7 @@ function updateTrialBox() {
     );
 
     return;
+
   }
 
 
@@ -3881,49 +4916,295 @@ function updateTrialBox() {
       currentStudent.trial_ends_at
     );
 
+
   const now =
     new Date();
 
 
   if (
-    trialEnd > now
+    trialEnd > now &&
+    currentStudent.account_status ===
+    "trial"
   ) {
 
     const difference =
       trialEnd.getTime() -
       now.getTime();
 
-    const days =
+
+    const hours =
       Math.ceil(
         difference /
         (
           1000 *
           60 *
-          60 *
-          24
+          60
         )
       );
 
 
+    const days =
+      Math.floor(
+        hours / 24
+      );
+
+
+    const remainingHours =
+      hours % 24;
+
+
     box.classList.remove(
       "hidden"
     );
 
-    box.textContent =
-      "Your free trial is active. " +
-      days +
-      " day(s) remaining.";
 
-  } else {
+    if (days > 0) {
 
-    box.classList.remove(
-      "hidden"
-    );
+      box.textContent =
+        "🎓 Your free trial is active. " +
+        days +
+        " day(s) and " +
+        remainingHours +
+        " hour(s) remaining.";
 
-    box.textContent =
-      "Your free trial has ended. Subscription access will be handled through the payment system.";
+    } else {
+
+      box.textContent =
+        "🎓 Your free trial is active. " +
+        hours +
+        " hour(s) remaining.";
+
+    }
+
+
+    return;
 
   }
+
+
+  if (
+    currentStudent.account_status ===
+    "trial"
+  ) {
+
+    box.classList.remove(
+      "hidden"
+    );
+
+
+    box.textContent =
+      "Your 2-day free trial has ended. Please subscribe to continue learning.";
+
+    return;
+
+  }
+
+
+  box.classList.add(
+    "hidden"
+  );
+
+}
+
+
+/* =========================================================
+   ACCESS BOX
+   ========================================================= */
+
+function updateAccessBox() {
+
+  const box =
+    document.getElementById(
+      "accessBox"
+    );
+
+
+  const status =
+    document.getElementById(
+      "dashboardStatus"
+    );
+
+
+  const accessEnd =
+    document.getElementById(
+      "dashboardAccessEnd"
+    );
+
+
+  if (!currentStudent) {
+
+    box.classList.add(
+      "hidden"
+    );
+
+    status.textContent =
+      "—";
+
+    accessEnd.textContent =
+      "—";
+
+    return;
+
+  }
+
+
+  /*
+     Active subscription
+  */
+
+  if (
+    accessAllowed &&
+    currentStudent.account_status ===
+    "active"
+  ) {
+
+    status.textContent =
+      "Active";
+
+    status.className =
+      "status-active";
+
+
+    loadSubscriptionEndDate();
+
+
+    box.className =
+      "access-box access-active";
+
+
+    box.textContent =
+      "Your subscription is active. You have access to your learning courses.";
+
+
+    return;
+
+  }
+
+
+  /*
+     Active trial
+  */
+
+  if (
+    accessAllowed &&
+    currentStudent.account_status ===
+    "trial"
+  ) {
+
+    status.textContent =
+      "Free Trial";
+
+    status.className =
+      "status-trial";
+
+
+    accessEnd.textContent =
+      formatDate(
+        currentStudent.trial_ends_at
+      );
+
+
+    box.className =
+      "access-box access-active";
+
+
+    box.textContent =
+      "Your 2-day free trial is active. You can access your lessons and assessments.";
+
+
+    return;
+
+  }
+
+
+  /*
+     Expired
+  */
+
+  status.textContent =
+    "Expired";
+
+  status.className =
+    "status-expired";
+
+
+  accessEnd.textContent =
+    currentStudent.trial_ends_at
+      ? formatDate(
+          currentStudent.trial_ends_at
+        )
+      : "—";
+
+
+  box.className =
+    "access-box access-expired";
+
+
+  box.textContent =
+    "Your learning access has expired. Subscription renewal will be required to continue.";
+
+}
+
+
+async function loadSubscriptionEndDate() {
+
+  if (!currentUser) {
+    return;
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await aqalverseSupabase
+      .from("student_subscriptions")
+      .select(
+        "end_date"
+      )
+      .eq(
+        "student_id",
+        currentUser.id
+      )
+      .eq(
+        "status",
+        "active"
+      )
+      .order(
+        "end_date",
+        {
+          ascending: false
+        }
+      )
+      .limit(1);
+
+
+  if (
+    error ||
+    !data ||
+    data.length === 0
+  ) {
+
+    document
+      .getElementById(
+        "dashboardAccessEnd"
+      )
+      .textContent =
+      "Subscription date pending";
+
+    return;
+
+  }
+
+
+  document
+    .getElementById(
+      "dashboardAccessEnd"
+    )
+    .textContent =
+    formatDate(
+      data[0].end_date
+    );
 
 }
 
@@ -3954,12 +5235,19 @@ document
         );
 
         return;
+
       }
 
 
       currentUser = null;
+
       currentProfile = null;
+
       currentStudent = null;
+
+      studentProgressRows = [];
+
+      accessAllowed = false;
 
 
       resetDashboard();
@@ -3991,6 +5279,7 @@ function resetDashboard() {
       "hidden"
     );
 
+
   document
     .getElementById(
       "dashboardContent"
@@ -3998,6 +5287,7 @@ function resetDashboard() {
     .classList.add(
       "hidden"
     );
+
 
   document
     .getElementById(
@@ -4058,11 +5348,50 @@ function resetDashboard() {
 
   document
     .getElementById(
+      "dashboardStatus"
+    )
+    .textContent =
+    "—";
+
+
+  document
+    .getElementById(
+      "dashboardAccessEnd"
+    )
+    .textContent =
+    "—";
+
+
+  document
+    getElementByIdSafe(
       "trialBox"
     )
-    .classList.add(
+    ?.classList.add(
       "hidden"
     );
+
+
+  document
+    getElementByIdSafe(
+      "accessBox"
+    )
+    ?.classList.add(
+      "hidden"
+    );
+
+
+  hideAccessLock();
+
+}
+
+
+/* =========================================================
+   SAFE ELEMENT HELPER
+   ========================================================= */
+
+function getElementByIdSafe(id) {
+
+  return document.getElementById(id);
 
 }
 
@@ -4074,6 +5403,8 @@ function resetDashboard() {
 async function initializeApplication() {
 
   await loadGrades();
+
+  await loadBoardsForRegistration();
 
 
   const {
@@ -4096,6 +5427,84 @@ async function initializeApplication() {
     resetDashboard();
 
   }
+
+}
+
+
+/* =========================================================
+   REGISTRATION BOARD LOADER
+   ========================================================= */
+
+async function loadBoardsForRegistration() {
+
+  const select =
+    document.getElementById(
+      "registerBoard"
+    );
+
+
+  if (!select) {
+    return;
+  }
+
+
+  const {
+    data,
+    error
+  } =
+    await aqalverseSupabase
+      .from("boards")
+      .select(
+        "id, name"
+      )
+      .eq(
+        "is_active",
+        true
+      )
+      .order(
+        "name"
+      );
+
+
+  if (error) {
+
+    console.error(
+      "Registration board error:",
+      error
+    );
+
+    return;
+
+  }
+
+
+  select.innerHTML =
+    '<option value="">Select Board</option>';
+
+
+  data.forEach(
+    board => {
+
+      const option =
+        document.createElement(
+          "option"
+        );
+
+
+      option.value =
+        board.id;
+
+
+      option.textContent =
+        board.name;
+
+
+      select.appendChild(
+        option
+      );
+
+    }
+  );
 
 }
 
