@@ -1,1415 +1,1507 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Aqalverse Learning Academy</title>
-
-  <meta
-    name="description"
-    content="Aqalverse Learning Academy - Smart learning for Pakistani students."
-  >
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f5f7fb;
-      color: #172033;
-      line-height: 1.6;
-    }
-
-    button,
-    input,
-    select,
-    textarea {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .container {
-      width: min(1180px, 92%);
-      margin: auto;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      background: #ffffff;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .nav {
-      min-height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .logo {
-      font-size: 22px;
-      font-weight: 800;
-      color: #155e75;
-    }
-
-    .logo span {
-      color: #2563eb;
-    }
-
-    nav {
-      display: flex;
-      gap: 18px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    nav a {
-      font-size: 14px;
-      font-weight: 600;
-      color: #475569;
-    }
-
-    nav a:hover {
-      color: #2563eb;
-    }
-
-    .hero {
-      padding: 75px 0;
-      background: linear-gradient(135deg, #e0f2fe, #eff6ff, #ffffff);
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.25fr .75fr;
-      gap: 35px;
-      align-items: center;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 7px 13px;
-      background: #dbeafe;
-      color: #1d4ed8;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 800;
-      margin-bottom: 15px;
-    }
-
-    h1 {
-      font-size: clamp(38px, 6vw, 65px);
-      line-height: 1.05;
-      margin-bottom: 20px;
-    }
-
-    .hero p {
-      font-size: 18px;
-      color: #475569;
-      max-width: 650px;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 25px;
-    }
-
-    .btn {
-      border: none;
-      border-radius: 10px;
-      padding: 12px 19px;
-      font-weight: 700;
-      transition: .2s;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .btn-primary {
-      background: #2563eb;
-      color: white;
-    }
-
-    .btn-secondary {
-      background: white;
-      color: #1e40af;
-      border: 1px solid #bfdbfe;
-    }
-
-    .btn-danger {
-      background: #dc2626;
-      color: white;
-    }
-
-    .btn-success {
-      background: #16a34a;
-      color: white;
-    }
-
-    .btn-small {
-      padding: 8px 12px;
-      font-size: 13px;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-
-    .stat {
-      background: white;
-      padding: 22px;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(15, 23, 42, .07);
-    }
-
-    .stat strong {
-      display: block;
-      font-size: 28px;
-      color: #2563eb;
-    }
-
-    section {
-      padding: 65px 0;
-    }
-
-    .section-title {
-      text-align: center;
-      margin-bottom: 35px;
-    }
-
-    .section-title h2 {
-      font-size: 34px;
-      margin-bottom: 8px;
-    }
-
-    .section-title p {
-      color: #64748b;
-    }
-
-    .grid {
-      display: grid;
-      gap: 18px;
-    }
-
-    .grid-3 {
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    .grid-4 {
-      grid-template-columns: repeat(4, 1fr);
-    }
-
-    .card {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 16px;
-      padding: 23px;
-      box-shadow: 0 7px 25px rgba(15, 23, 42, .04);
-    }
-
-    .card h3 {
-      margin-bottom: 8px;
-    }
-
-    .card p {
-      color: #64748b;
-      font-size: 14px;
-    }
-
-    .course-builder {
-      background: white;
-      padding: 25px;
-      border-radius: 18px;
-      border: 1px solid #e5e7eb;
-    }
-
-    .select-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      font-weight: 700;
-      font-size: 13px;
-      margin-bottom: 6px;
-    }
-
-    input,
-    select,
-    textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #cbd5e1;
-      border-radius: 9px;
-      background: white;
-      outline: none;
-    }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: #2563eb;
-    }
-
-    .pricing-card {
-      text-align: center;
-    }
-
-    .price {
-      font-size: 34px;
-      font-weight: 800;
-      color: #2563eb;
-      margin: 12px 0;
-    }
-
-    .auth-section {
-      background: #eef6ff;
-    }
-
-    .auth-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 25px;
-    }
-
-    .form-group {
-      margin-bottom: 14px;
-    }
-
-    .message {
-      padding: 12px;
-      border-radius: 9px;
-      margin-bottom: 15px;
-      display: none;
-      font-size: 14px;
-    }
-
-    .message.show {
-      display: block;
-    }
-
-    .message.success {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .message.error {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    .message.info {
-      background: #dbeafe;
-      color: #1e40af;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    #dashboard {
-      padding: 35px 0 70px;
-      background: #f8fafc;
-    }
-
-    .dashboard-head {
-      background: #0f172a;
-      color: white;
-      border-radius: 18px;
-      padding: 25px;
-      margin-bottom: 20px;
-    }
-
-    .dashboard-head p {
-      color: #cbd5e1;
-    }
-
-    .dashboard-layout {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      gap: 20px;
-    }
-
-    .sidebar {
-      background: white;
-      border-radius: 15px;
-      padding: 12px;
-      height: fit-content;
-      border: 1px solid #e5e7eb;
-    }
-
-    .side-btn {
-      width: 100%;
-      text-align: left;
-      padding: 12px;
-      border: none;
-      background: transparent;
-      border-radius: 8px;
-      margin-bottom: 4px;
-      font-weight: 600;
-      color: #475569;
-    }
-
-    .side-btn:hover,
-    .side-btn.active {
-      background: #dbeafe;
-      color: #1d4ed8;
-    }
-
-    .dashboard-content {
-      min-width: 0;
-    }
-
-    .dash-tab {
-      display: none;
-    }
-
-    .dash-tab.active {
-      display: block;
-    }
-
-    .mini-stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .mini-stat {
-      background: white;
-      border-radius: 13px;
-      padding: 17px;
-      border: 1px solid #e5e7eb;
-    }
-
-    .mini-stat strong {
-      display: block;
-      font-size: 24px;
-      color: #2563eb;
-    }
-
-    .subject-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-
-    .subject-option {
-      border: 1px solid #cbd5e1;
-      border-radius: 10px;
-      padding: 13px;
-      background: white;
-    }
-
-    .subject-option label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 0;
-    }
-
-    .subject-option input {
-      width: auto;
-    }
-
-    .compulsory {
-      font-size: 11px;
-      color: #15803d;
-      font-weight: 700;
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-      background: white;
-      border-radius: 14px;
-      border: 1px solid #e5e7eb;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 650px;
-    }
-
-    th,
-    td {
-      padding: 12px;
-      border-bottom: 1px solid #e5e7eb;
-      text-align: left;
-      font-size: 13px;
-    }
-
-    th {
-      background: #f8fafc;
-      color: #475569;
-    }
-
-    .day-card {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 14px;
-      padding: 18px;
-      margin-bottom: 12px;
-    }
-
-    .day-title {
-      font-size: 18px;
-      font-weight: 800;
-      color: #1d4ed8;
-      margin-bottom: 10px;
-    }
-
-    .class-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 15px;
-      padding: 10px 0;
-      border-bottom: 1px solid #f1f5f9;
-    }
-
-    .class-row:last-child {
-      border-bottom: none;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 700;
-      background: #e2e8f0;
-      color: #334155;
-    }
-
-    .badge-green {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .badge-yellow {
-      background: #fef3c7;
-      color: #92400e;
-    }
-
-    .badge-red {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    .lesson-card {
-      background: white;
-      border: 1px solid #e5e7eb;
-      padding: 18px;
-      border-radius: 13px;
-      margin-bottom: 12px;
-    }
-
-    .lesson-card.locked {
-      opacity: .65;
-    }
-
-    .quiz-question {
-      background: white;
-      border: 1px solid #e5e7eb;
-      padding: 18px;
-      border-radius: 12px;
-      margin-bottom: 12px;
-    }
-
-    .quiz-option {
-      display: block;
-      padding: 8px;
-      margin-top: 7px;
-      border: 1px solid #e2e8f0;
-      border-radius: 7px;
-      font-weight: normal;
-    }
-
-    .quiz-option input {
-      width: auto;
-      margin-right: 8px;
-    }
-
-    .empty {
-      text-align: center;
-      padding: 35px;
-      color: #64748b;
-      background: white;
-      border-radius: 14px;
-      border: 1px dashed #cbd5e1;
-    }
-
-    footer {
-      background: #0f172a;
-      color: #cbd5e1;
-      padding: 35px 0;
-      text-align: center;
-    }
-
-    footer strong {
-      color: white;
-    }
-
-    .loading {
-      text-align: center;
-      padding: 25px;
-      color: #64748b;
-    }
-
-    @media(max-width: 900px) {
-      .hero-grid,
-      .auth-grid,
-      .dashboard-layout {
-        grid-template-columns: 1fr;
-      }
-
-      .grid-4 {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .grid-3 {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .mini-stats {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media(max-width: 650px) {
-      .nav {
-        flex-direction: column;
-        padding: 14px 0;
-      }
-
-      nav {
-        justify-content: center;
-      }
-
-      .select-row,
-      .subject-grid,
-      .grid-3,
-      .grid-4 {
-        grid-template-columns: 1fr;
-      }
-
-      .mini-stats {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      h1 {
-        font-size: 40px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Aqalverse Learning Academy</title>
+
+<meta name="description"
+content="Aqalverse Learning Academy - Smart learning for Pakistani students.">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f5f7fb;
+  color:#172033;
+  line-height:1.6
+}
+
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+
+.container{width:min(1200px,92%);margin:auto}
+
+header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:#fff;
+  border-bottom:1px solid #e5e7eb
+}
+
+.nav{
+  min-height:70px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px
+}
+
+.logo{
+  font-size:21px;
+  font-weight:800;
+  color:#155e75
+}
+
+.logo span{color:#2563eb}
+
+nav{
+  display:flex;
+  gap:18px;
+  align-items:center;
+  flex-wrap:wrap
+}
+
+nav a{
+  font-size:14px;
+  font-weight:600;
+  color:#475569
+}
+
+.hero{
+  padding:75px 0;
+  background:linear-gradient(135deg,#e0f2fe,#eff6ff,#fff)
+}
+
+.hero-grid{
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  gap:35px;
+  align-items:center
+}
+
+.tag{
+  display:inline-block;
+  padding:7px 13px;
+  background:#dbeafe;
+  color:#1d4ed8;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:800;
+  margin-bottom:15px
+}
+
+h1{
+  font-size:clamp(38px,6vw,64px);
+  line-height:1.05;
+  margin-bottom:20px
+}
+
+.hero p{
+  font-size:18px;
+  color:#475569;
+  max-width:650px
+}
+
+.hero-buttons{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:25px
+}
+
+.btn{
+  border:0;
+  border-radius:10px;
+  padding:11px 18px;
+  font-weight:700
+}
+
+.btn-primary{background:#2563eb;color:white}
+.btn-secondary{background:white;color:#1d4ed8;border:1px solid #bfdbfe}
+.btn-success{background:#16a34a;color:white}
+.btn-danger{background:#dc2626;color:white}
+.btn-warning{background:#d97706;color:white}
+
+.btn-small{
+  padding:7px 11px;
+  font-size:12px
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px
+}
+
+.stat{
+  background:#fff;
+  padding:22px;
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(15,23,42,.07)
+}
+
+.stat strong{
+  display:block;
+  font-size:28px;
+  color:#2563eb
+}
+
+section{padding:65px 0}
+
+.section-title{
+  text-align:center;
+  margin-bottom:35px
+}
+
+.section-title h2{
+  font-size:34px;
+  margin-bottom:8px
+}
+
+.section-title p{color:#64748b}
+
+.grid{
+  display:grid;
+  gap:18px
+}
+
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+
+.card{
+  background:white;
+  border:1px solid #e5e7eb;
+  border-radius:16px;
+  padding:22px;
+  box-shadow:0 7px 25px rgba(15,23,42,.04)
+}
+
+.card h3{margin-bottom:8px}
+.card p{color:#64748b;font-size:14px}
+
+.course-builder{
+  background:white;
+  padding:25px;
+  border-radius:18px;
+  border:1px solid #e5e7eb
+}
+
+.select-row{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  margin-bottom:18px
+}
+
+.form-group{margin-bottom:14px}
+
+label{
+  display:block;
+  font-weight:700;
+  font-size:13px;
+  margin-bottom:6px
+}
+
+input,select,textarea{
+  width:100%;
+  padding:11px;
+  border:1px solid #cbd5e1;
+  border-radius:9px;
+  background:#fff;
+  outline:none
+}
+
+input:focus,select:focus,textarea:focus{
+  border-color:#2563eb
+}
+
+.auth-section{background:#eef6ff}
+
+.auth-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:25px
+}
+
+.message{
+  display:none;
+  padding:11px;
+  border-radius:8px;
+  margin-bottom:14px;
+  font-size:14px
+}
+
+.message.show{display:block}
+.message.success{background:#dcfce7;color:#166534}
+.message.error{background:#fee2e2;color:#991b1b}
+.message.info{background:#dbeafe;color:#1e40af}
+
+.hidden{display:none!important}
+
+#dashboard{
+  padding:35px 0 70px;
+  background:#f8fafc
+}
+
+.dashboard-head{
+  background:#0f172a;
+  color:white;
+  border-radius:18px;
+  padding:25px;
+  margin-bottom:20px
+}
+
+.dashboard-head p{color:#cbd5e1}
+
+.dashboard-layout{
+  display:grid;
+  grid-template-columns:220px 1fr;
+  gap:20px
+}
+
+.sidebar{
+  background:white;
+  border-radius:15px;
+  padding:12px;
+  height:max-content;
+  border:1px solid #e5e7eb
+}
+
+.side-btn{
+  width:100%;
+  text-align:left;
+  padding:11px;
+  border:0;
+  background:transparent;
+  border-radius:8px;
+  margin-bottom:3px;
+  font-weight:600;
+  color:#475569
+}
+
+.side-btn:hover,.side-btn.active{
+  background:#dbeafe;
+  color:#1d4ed8
+}
+
+.dashboard-content{min-width:0}
+
+.dash-tab{display:none}
+.dash-tab.active{display:block}
+
+.mini-stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-bottom:20px
+}
+
+.mini-stat{
+  background:#fff;
+  border-radius:13px;
+  padding:17px;
+  border:1px solid #e5e7eb
+}
+
+.mini-stat strong{
+  display:block;
+  font-size:24px;
+  color:#2563eb
+}
+
+.subject-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px
+}
+
+.subject-option{
+  border:1px solid #cbd5e1;
+  border-radius:10px;
+  padding:13px;
+  background:#fff
+}
+
+.subject-option label{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:0
+}
+
+.subject-option input{width:auto}
+
+.compulsory{
+  font-size:11px;
+  color:#15803d;
+  font-weight:700
+}
+
+.table-wrap{
+  overflow-x:auto;
+  background:#fff;
+  border-radius:14px;
+  border:1px solid #e5e7eb
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:650px
+}
+
+th,td{
+  padding:11px;
+  border-bottom:1px solid #e5e7eb;
+  text-align:left;
+  font-size:13px
+}
+
+th{
+  background:#f8fafc;
+  color:#475569
+}
+
+.day-card{
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:12px
+}
+
+.day-title{
+  font-size:18px;
+  font-weight:800;
+  color:#1d4ed8;
+  margin-bottom:10px
+}
+
+.class-row{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:11px 0;
+  border-bottom:1px solid #f1f5f9
+}
+
+.class-row:last-child{border-bottom:0}
+
+.lesson-card{
+  background:#fff;
+  border:1px solid #e5e7eb;
+  padding:18px;
+  border-radius:13px;
+  margin-bottom:12px
+}
+
+.lesson-card.locked{opacity:.6}
+
+.badge{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:700;
+  background:#e2e8f0;
+  color:#334155;
+  margin-right:4px
+}
+
+.badge-green{background:#dcfce7;color:#166534}
+.badge-yellow{background:#fef3c7;color:#92400e}
+.badge-red{background:#fee2e2;color:#991b1b}
+.badge-blue{background:#dbeafe;color:#1d4ed8}
+
+.empty{
+  text-align:center;
+  padding:30px;
+  color:#64748b;
+  background:#fff;
+  border-radius:14px;
+  border:1px dashed #cbd5e1
+}
+
+.loading{
+  text-align:center;
+  padding:25px;
+  color:#64748b
+}
+
+.progress{
+  height:9px;
+  background:#e2e8f0;
+  border-radius:999px;
+  overflow:hidden;
+  margin:8px 0
+}
+
+.progress-bar{
+  height:100%;
+  background:#2563eb
+}
+
+.quiz-question{
+  background:#fff;
+  border:1px solid #e5e7eb;
+  padding:18px;
+  border-radius:12px;
+  margin-bottom:12px
+}
+
+.quiz-option{
+  display:block;
+  padding:8px;
+  margin-top:7px;
+  border:1px solid #e2e8f0;
+  border-radius:7px;
+  font-weight:normal
+}
+
+.quiz-option input{
+  width:auto;
+  margin-right:8px
+}
+
+footer{
+  background:#0f172a;
+  color:#cbd5e1;
+  padding:35px 0;
+  text-align:center
+}
+
+footer strong{color:white}
+
+@media(max-width:900px){
+  .hero-grid,.auth-grid,.dashboard-layout{
+    grid-template-columns:1fr
+  }
+
+  .grid-3{grid-template-columns:repeat(2,1fr)}
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+  .mini-stats{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:650px){
+  .nav{
+    flex-direction:column;
+    padding:14px 0
+  }
+
+  nav{justify-content:center}
+
+  .select-row,
+  .subject-grid,
+  .grid-3,
+  .grid-4{
+    grid-template-columns:1fr
+  }
+
+  h1{font-size:40px}
+}
+</style>
 </head>
 
 <body>
 
 <header>
-  <div class="container nav">
-    <div class="logo">
-      Aqalverse <span>Learning Academy</span>
-    </div>
+<div class="container nav">
 
-    <nav>
-      <a href="#features">Features</a>
-      <a href="#courses">Courses</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#login">Login</a>
-      <button id="logoutTop" class="btn btn-danger btn-small hidden">
-        Logout
-      </button>
-    </nav>
+  <div class="logo">
+    Aqalverse <span>Learning Academy</span>
   </div>
+
+  <nav>
+    <a href="#features">Features</a>
+    <a href="#courses">Courses</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#login">Login</a>
+
+    <button id="logoutTop"
+            class="btn btn-danger btn-small hidden">
+      Logout
+    </button>
+  </nav>
+
+</div>
 </header>
+
 
 <main>
 
+<!-- HERO -->
+
 <section class="hero">
-  <div class="container hero-grid">
+<div class="container hero-grid">
 
-    <div>
-      <span class="tag">LEARN • PRACTICE • PROGRESS</span>
+<div>
 
-      <h1>Smart learning for Pakistani students.</h1>
+<span class="tag">
+LEARN • PRACTICE • PROGRESS
+</span>
 
-      <p>
-        Board-specific online learning for Grades 9–12 with lessons,
-        assessments, assignments, timetable and progress tracking.
-      </p>
+<h1>
+Smart learning for Pakistani students.
+</h1>
 
-      <div class="hero-buttons">
-        <a href="#courses" class="btn btn-primary">Explore Courses</a>
-        <a href="#login" class="btn btn-secondary">Student Login</a>
-      </div>
-    </div>
+<p>
+Board-specific online learning for Grades 9–12 with
+lessons, assessments, assignments, timetable,
+attendance and progress tracking.
+</p>
 
-    <div class="stats">
-      <div class="stat">
-        <strong>9–12</strong>
-        Grades
-      </div>
+<div class="hero-buttons">
 
-      <div class="stat">
-        <strong>9+</strong>
-        Subjects
-      </div>
+<a href="#courses"
+   class="btn btn-primary">
+Explore Courses
+</a>
 
-      <div class="stat">
-        <strong>10</strong>
-        Assessment Questions
-      </div>
+<a href="#login"
+   class="btn btn-secondary">
+Student Login
+</a>
 
-      <div class="stat">
-        <strong>60%</strong>
-        Passing Requirement
-      </div>
-    </div>
+</div>
 
-  </div>
+</div>
+
+<div class="stats">
+
+<div class="stat">
+<strong>9–12</strong>
+Grades
+</div>
+
+<div class="stat">
+<strong>9+</strong>
+Subjects
+</div>
+
+<div class="stat">
+<strong>10</strong>
+Assessment Questions
+</div>
+
+<div class="stat">
+<strong>60%</strong>
+Passing Requirement
+</div>
+
+</div>
+
+</div>
 </section>
+
+
+<!-- FEATURES -->
 
 <section id="features">
-  <div class="container">
+<div class="container">
 
-    <div class="section-title">
-      <h2>Everything students need</h2>
-      <p>A complete learning environment for Pakistani students.</p>
-    </div>
+<div class="section-title">
+<h2>Everything students need</h2>
+<p>A complete learning environment.</p>
+</div>
 
-    <div class="grid grid-3">
+<div class="grid grid-3">
 
-      <div class="card">
-        <h3>📚 Board-Specific Learning</h3>
-        <p>Choose your grade, board and subject.</p>
-      </div>
+<div class="card">
+<h3>📚 Board-Specific Learning</h3>
+<p>Choose grade, board and subject.</p>
+</div>
 
-      <div class="card">
-        <h3>🧠 Smart Assessments</h3>
-        <p>Tests with a 60% passing requirement.</p>
-      </div>
+<div class="card">
+<h3>🧠 Smart Assessments</h3>
+<p>Tests with a 60% passing requirement.</p>
+</div>
 
-      <div class="card">
-        <h3>👨‍👩‍👧 Parent Portal</h3>
-        <p>Parents can monitor student progress.</p>
-      </div>
+<div class="card">
+<h3>👨‍👩‍👧 Parent Portal</h3>
+<p>Parents can monitor linked students.</p>
+</div>
 
-      <div class="card">
-        <h3>👩‍🏫 Teacher Review</h3>
-        <p>Teachers can review students and assignments.</p>
-      </div>
+<div class="card">
+<h3>👩‍🏫 Teacher Portal</h3>
+<p>Teachers can manage assigned learning activities.</p>
+</div>
 
-      <div class="card">
-        <h3>📅 Attendance & Fees</h3>
-        <p>Track attendance, payments and access.</p>
-      </div>
+<div class="card">
+<h3>📅 Timetable</h3>
+<p>Weekly subject-based class schedule.</p>
+</div>
 
-      <div class="card">
-        <h3>🌐 English + Urdu</h3>
-        <p>Learning support in both languages.</p>
-      </div>
+<div class="card">
+<h3>💳 Fees & Attendance</h3>
+<p>Payment and attendance management.</p>
+</div>
 
-    </div>
-  </div>
+</div>
+</div>
 </section>
+
+
+<!-- COURSES -->
 
 <section id="courses">
-  <div class="container">
+<div class="container">
 
-    <div class="section-title">
-      <h2>Explore Courses</h2>
-      <p>Select your grade, board and subject.</p>
-    </div>
+<div class="section-title">
+<h2>Explore Courses</h2>
+<p>Select your grade, board and subject.</p>
+</div>
 
-    <div class="course-builder">
+<div class="course-builder">
 
-      <div class="select-row">
+<div class="select-row">
 
-        <div>
-          <label>Grade</label>
-          <select id="publicGrade">
-            <option value="">Select Grade</option>
-          </select>
-        </div>
+<div>
+<label>Grade</label>
+<select id="publicGrade">
+<option value="">Select Grade</option>
+</select>
+</div>
 
-        <div>
-          <label>Board</label>
-          <select id="publicBoard">
-            <option value="">Select Board</option>
-          </select>
-        </div>
+<div>
+<label>Board</label>
+<select id="publicBoard">
+<option value="">Select Board</option>
+</select>
+</div>
 
-        <div>
-          <label>Subject</label>
-          <select id="publicSubject">
-            <option value="">Select Subject</option>
-          </select>
-        </div>
+<div>
+<label>Subject</label>
+<select id="publicSubject">
+<option value="">Select Subject</option>
+</select>
+</div>
 
-      </div>
+</div>
 
-      <div id="publicCourseResult" class="empty">
-        Select grade, board and subject to view the course.
-      </div>
+<div id="publicCourseResult"
+     class="empty">
+Select grade, board and subject.
+</div>
 
-    </div>
-
-  </div>
+</div>
+</div>
 </section>
+
+
+<!-- PRICING -->
 
 <section id="pricing">
-  <div class="container">
+<div class="container">
 
-    <div class="section-title">
-      <h2>Simple Pricing</h2>
-      <p>Start with a 2-day free trial.</p>
-    </div>
+<div class="section-title">
+<h2>Simple Pricing</h2>
+<p>Start with a 2-day free trial.</p>
+</div>
 
-    <div class="grid grid-3">
+<div class="grid grid-3">
 
-      <div class="card pricing-card">
-        <h3>Individual Subject</h3>
-        <div class="price">Rs. 500</div>
-        <p>Per subject / month</p>
-      </div>
+<div class="card" style="text-align:center">
+<h3>Individual Subject</h3>
+<div style="font-size:34px;font-weight:800;color:#2563eb;margin:12px 0">
+Rs. 500
+</div>
+<p>Per subject / month</p>
+</div>
 
-      <div class="card pricing-card">
-        <h3>All Subjects</h3>
-        <div class="price">Rs. 2,000</div>
-        <p>All available subjects / month</p>
-      </div>
+<div class="card" style="text-align:center">
+<h3>All Subjects</h3>
+<div style="font-size:34px;font-weight:800;color:#2563eb;margin:12px 0">
+Rs. 2,000
+</div>
+<p>All subjects / month</p>
+</div>
 
-      <div class="card pricing-card">
-        <h3>Free Trial</h3>
-        <div class="price">2 Days</div>
-        <p>Try the learning platform before payment.</p>
-      </div>
+<div class="card" style="text-align:center">
+<h3>Free Trial</h3>
+<div style="font-size:34px;font-weight:800;color:#2563eb;margin:12px 0">
+2 Days
+</div>
+<p>Try before payment.</p>
+</div>
 
-    </div>
-
-  </div>
+</div>
+</div>
 </section>
 
+
+<!-- AUTH -->
+
 <section id="login" class="auth-section">
-  <div class="container">
+<div class="container">
 
-    <div class="section-title">
-      <h2>Student Access</h2>
-      <p>Create your account or sign in.</p>
-    </div>
+<div class="section-title">
+<h2>Student Access</h2>
+<p>Create your account or sign in.</p>
+</div>
 
-    <div class="auth-grid">
+<div class="auth-grid">
 
-      <!-- REGISTER -->
-      <div class="card">
 
-        <h3>Create Student Account</h3>
-        <br>
+<!-- REGISTER -->
 
-        <div id="registerMessage" class="message"></div>
+<div class="card">
 
-        <form id="registerForm">
+<h3>Create Student Account</h3>
+<br>
 
-          <div class="form-group">
-            <label>Full Name</label>
-            <input id="regName" required>
-          </div>
+<div id="registerMessage"
+     class="message"></div>
 
-          <div class="form-group">
-            <label>Email</label>
-            <input id="regEmail" type="email" required>
-          </div>
+<form id="registerForm">
 
-          <div class="form-group">
-            <label>Password</label>
-            <input id="regPassword" type="password" minlength="6" required>
-          </div>
+<div class="form-group">
+<label>Full Name</label>
+<input id="regName" required>
+</div>
 
-          <div class="form-group">
-            <label>Grade</label>
-            <select id="regGrade" required>
-              <option value="">Select Grade</option>
-            </select>
-          </div>
+<div class="form-group">
+<label>Email</label>
+<input id="regEmail"
+       type="email"
+       required>
+</div>
 
-          <div class="form-group">
-            <label>Board</label>
-            <select id="regBoard" required>
-              <option value="">Select Board</option>
-            </select>
-          </div>
+<div class="form-group">
+<label>Password</label>
+<input id="regPassword"
+       type="password"
+       minlength="6"
+       required>
+</div>
 
-          <div class="form-group">
-            <label>Language</label>
-            <select id="regLanguage">
-              <option value="both">English + Urdu</option>
-              <option value="english">English</option>
-              <option value="urdu">Urdu</option>
-            </select>
-          </div>
+<div class="form-group">
+<label>Grade</label>
+<select id="regGrade" required>
+<option value="">Select Grade</option>
+</select>
+</div>
 
-          <button class="btn btn-primary" style="width:100%">
-            Create Account
-          </button>
+<div class="form-group">
+<label>Board</label>
+<select id="regBoard" required>
+<option value="">Select Board</option>
+</select>
+</div>
 
-        </form>
+<div class="form-group">
+<label>Language</label>
+<select id="regLanguage">
+<option value="both">English + Urdu</option>
+<option value="english">English</option>
+<option value="urdu">Urdu</option>
+</select>
+</div>
 
-      </div>
+<button class="btn btn-primary"
+        style="width:100%">
+Create Account
+</button>
 
-      <!-- LOGIN -->
-      <div class="card">
+</form>
+</div>
 
-        <h3>Login</h3>
-        <br>
 
-        <div id="loginMessage" class="message"></div>
+<!-- LOGIN -->
 
-        <form id="loginForm">
+<div class="card">
 
-          <div class="form-group">
-            <label>Email</label>
-            <input id="loginEmail" type="email" required>
-          </div>
+<h3>Login</h3>
+<br>
 
-          <div class="form-group">
-            <label>Password</label>
-            <input id="loginPassword" type="password" required>
-          </div>
+<div id="loginMessage"
+     class="message"></div>
 
-          <button class="btn btn-primary" style="width:100%">
-            Login
-          </button>
+<form id="loginForm">
 
-        </form>
+<div class="form-group">
+<label>Email</label>
+<input id="loginEmail"
+       type="email"
+       required>
+</div>
 
-        <br>
+<div class="form-group">
+<label>Password</label>
+<input id="loginPassword"
+       type="password"
+       required>
+</div>
 
-        <button id="forgotBtn" class="btn btn-secondary" style="width:100%">
-          Forgot Password?
-        </button>
+<button class="btn btn-primary"
+        style="width:100%">
+Login
+</button>
 
-        <div id="forgotBox" class="hidden" style="margin-top:15px">
+</form>
 
-          <div class="form-group">
-            <label>Email</label>
-            <input id="forgotEmail" type="email">
-          </div>
+<br>
 
-          <button id="sendResetBtn" class="btn btn-primary">
-            Send Reset Email
-          </button>
+<button id="forgotBtn"
+        class="btn btn-secondary"
+        style="width:100%">
+Forgot Password?
+</button>
 
-        </div>
+<div id="forgotBox"
+     class="hidden"
+     style="margin-top:15px">
 
-      </div>
+<div class="form-group">
+<label>Email</label>
+<input id="forgotEmail"
+       type="email">
+</div>
 
-    </div>
-  </div>
+<button id="sendResetBtn"
+        class="btn btn-primary">
+Send Reset Email
+</button>
+
+</div>
+
+</div>
+
+</div>
+</div>
 </section>
 
 
 <!-- DASHBOARD -->
 
-<section id="dashboard" class="hidden">
+<section id="dashboard"
+         class="hidden">
 
-  <div class="container">
+<div class="container">
 
-    <div class="dashboard-head">
+<div class="dashboard-head">
 
-      <h2 id="dashboardTitle">Student Dashboard</h2>
+<h2 id="dashboardTitle">
+Dashboard
+</h2>
+
+<p id="dashboardSubtitle">
+Welcome to Aqalverse Learning Academy.
+</p>
 
-      <p id="dashboardSubtitle">
-        Welcome to Aqalverse Learning Academy.
-      </p>
+</div>
 
-    </div>
 
-    <div class="dashboard-layout">
+<div class="dashboard-layout">
 
-      <aside class="sidebar">
 
-        <button class="side-btn active" data-tab="overview">
-          🏠 Overview
-        </button>
+<!-- SIDEBAR -->
 
-        <button class="side-btn" data-tab="subjects">
-          📚 My Subjects
-        </button>
+<aside class="sidebar">
 
-        <button class="side-btn" data-tab="timetable">
-          📅 Timetable
-        </button>
+<button class="side-btn active"
+        data-tab="overview">
+🏠 Overview
+</button>
 
-        <button class="side-btn" data-tab="lessons">
-          🎥 Lessons
-        </button>
+<button class="side-btn student-only"
+        data-tab="subjects">
+📚 My Subjects
+</button>
 
-        <button class="side-btn" data-tab="assignments">
-          📝 Assignments
-        </button>
+<button class="side-btn student-only"
+        data-tab="timetable">
+📅 Timetable
+</button>
 
-        <button class="side-btn" data-tab="tests">
-          🧠 Tests
-        </button>
+<button class="side-btn student-only"
+        data-tab="lessons">
+🎥 Lessons
+</button>
 
-        <button class="side-btn" data-tab="payments">
-          💳 Payments
-        </button>
+<button class="side-btn student-only"
+        data-tab="assignments">
+📝 Assignments
+</button>
 
-        <button class="side-btn staff-only hidden" data-tab="staffStudents">
-          👨‍🎓 Students
-        </button>
+<button class="side-btn student-only"
+        data-tab="tests">
+🧠 Tests
+</button>
 
-        <button class="side-btn staff-only hidden" data-tab="staffCourses">
-          📚 Courses
-        </button>
+<button class="side-btn student-only"
+        data-tab="payments">
+💳 Payments
+</button>
 
-        <button class="side-btn staff-only hidden" data-tab="staffAssignments">
-          📝 Manage Assignments
-        </button>
+<button class="side-btn staff-only hidden"
+        data-tab="staffStudents">
+👨‍🎓 Students
+</button>
 
-        <button class="side-btn staff-only hidden" data-tab="staffPayments">
-          💰 Payments
-        </button>
+<button class="side-btn staff-only hidden"
+        data-tab="staffCourses">
+📚 Courses
+</button>
 
-        <button class="side-btn staff-only hidden" data-tab="attendance">
-          📋 Attendance
-        </button>
+<button class="side-btn staff-only hidden"
+        data-tab="staffAssignments">
+📝 Assignments
+</button>
 
-        <button class="side-btn staff-only hidden" data-tab="teachers">
-          👩‍🏫 Teachers
-        </button>
+<button class="side-btn staff-only hidden"
+        data-tab="staffPayments">
+💰 Payments
+</button>
 
-        <button id="logoutDashboard" class="side-btn" style="color:#dc2626">
-          🚪 Logout
-        </button>
+<button class="side-btn staff-only hidden"
+        data-tab="attendance">
+📋 Attendance
+</button>
 
-      </aside>
+<button class="side-btn staff-only hidden"
+        data-tab="teachers">
+👩‍🏫 Teachers
+</button>
 
+<button class="side-btn parent-only hidden"
+        data-tab="parentStudents">
+👨‍👩‍👧 My Children
+</button>
 
-      <div class="dashboard-content">
+<button class="side-btn parent-only hidden"
+        data-tab="parentProgress">
+📊 Progress
+</button>
 
-        <!-- OVERVIEW -->
-        <div id="tab-overview" class="dash-tab active">
+<button class="side-btn parent-only hidden"
+        data-tab="parentTimetable">
+📅 Timetable
+</button>
 
-          <div class="mini-stats">
+<button id="logoutDashboard"
+        class="side-btn"
+        style="color:#dc2626">
+🚪 Logout
+</button>
 
-            <div class="mini-stat">
-              <strong id="statGrade">-</strong>
-              Grade
-            </div>
+</aside>
 
-            <div class="mini-stat">
-              <strong id="statSubjects">0</strong>
-              Subjects
-            </div>
 
-            <div class="mini-stat">
-              <strong id="statCourses">0</strong>
-              Enrollments
-            </div>
+<!-- CONTENT -->
 
-            <div class="mini-stat">
-              <strong id="statAccess">-</strong>
-              Access
-            </div>
+<div class="dashboard-content">
 
-          </div>
 
-          <div class="card">
-            <h3>Welcome</h3>
-            <br>
-            <p id="overviewText">
-              Your learning dashboard is ready.
-            </p>
-          </div>
+<!-- OVERVIEW -->
 
-        </div>
+<div id="tab-overview"
+     class="dash-tab active">
 
+<div class="mini-stats">
 
-        <!-- SUBJECTS -->
-        <div id="tab-subjects" class="dash-tab">
+<div class="mini-stat">
+<strong id="statGrade">-</strong>
+Grade
+</div>
 
-          <div class="card">
+<div class="mini-stat">
+<strong id="statSubjects">0</strong>
+Subjects
+</div>
 
-            <h3>My Subjects</h3>
+<div class="mini-stat">
+<strong id="statCourses">0</strong>
+Courses
+</div>
 
-            <p style="margin:8px 0 20px">
-              Select your subject group and subjects.
-            </p>
+<div class="mini-stat">
+<strong id="statAccess">-</strong>
+Access
+</div>
 
-            <div id="subjectMessage" class="message"></div>
+</div>
 
-            <div class="form-group">
+<div class="card">
 
-              <label>Subject Group</label>
+<h3>Welcome</h3>
+<br>
 
-              <select id="studentGroupSelect">
-                <option value="">Select subject group</option>
-              </select>
+<p id="overviewText">
+Your dashboard is ready.
+</p>
 
-            </div>
+</div>
 
-            <div id="subjectOptions" class="subject-grid">
-              <div class="empty">
-                Select a subject group.
-              </div>
-            </div>
+</div>
 
-            <br>
 
-            <button id="saveSubjectsBtn" class="btn btn-primary">
-              Save My Subjects
-            </button>
+<!-- SUBJECTS -->
 
-            <br><br>
+<div id="tab-subjects"
+     class="dash-tab">
 
-            <div id="selectedSubjectsList"></div>
+<div class="card">
 
-          </div>
+<h3>My Subjects</h3>
 
-        </div>
+<p style="margin:8px 0 18px">
+Choose your subject group and subjects.
+</p>
 
+<div id="subjectMessage"
+     class="message"></div>
 
-        <!-- TIMETABLE -->
-        <div id="tab-timetable" class="dash-tab">
+<div class="form-group">
 
-          <div class="card">
+<label>Subject Group</label>
 
-            <h3>My Weekly Timetable</h3>
+<select id="studentGroupSelect">
+<option value="">
+Select subject group
+</option>
+</select>
 
-            <p style="margin:7px 0 20px">
-              Your classes are arranged according to the academy timetable.
-            </p>
+</div>
 
-            <div id="timetableContainer">
-              <div class="loading">
-                Loading timetable...
-              </div>
-            </div>
+<div id="subjectOptions"
+     class="subject-grid">
 
-          </div>
+<div class="empty">
+Select a subject group.
+</div>
 
-        </div>
+</div>
 
+<br>
 
-        <!-- LESSONS -->
-        <div id="tab-lessons" class="dash-tab">
+<button id="saveSubjectsBtn"
+        class="btn btn-primary">
+Save My Subjects
+</button>
 
-          <div class="card">
+<br><br>
 
-            <h3>My Lessons</h3>
+<div id="selectedSubjectsList"></div>
 
-            <p style="margin:7px 0 20px">
-              Complete lessons and pass the assessment before moving forward.
-            </p>
+</div>
 
-            <div id="lessonsContainer">
-              <div class="loading">
-                Loading lessons...
-              </div>
-            </div>
+</div>
 
-          </div>
 
-        </div>
+<!-- TIMETABLE -->
 
+<div id="tab-timetable"
+     class="dash-tab">
 
-        <!-- ASSIGNMENTS -->
-        <div id="tab-assignments" class="dash-tab">
+<div class="card">
 
-          <div class="card">
+<h3>My Weekly Timetable</h3>
 
-            <h3>My Assignments</h3>
+<p style="margin:7px 0 20px">
+Your scheduled classes.
+</p>
 
-            <p style="margin:7px 0 20px">
-              One assignment is provided for each subject each week.
-            </p>
+<div id="timetableContainer">
+<div class="loading">
+Loading timetable...
+</div>
+</div>
 
-            <div id="assignmentsContainer">
-              <div class="loading">
-                Loading assignments...
-              </div>
-            </div>
+</div>
 
-          </div>
+</div>
 
-        </div>
 
+<!-- LESSONS -->
 
-        <!-- TESTS -->
-        <div id="tab-tests" class="dash-tab">
+<div id="tab-lessons"
+     class="dash-tab">
 
-          <div class="card">
+<div class="card">
 
-            <h3>My Tests</h3>
+<h3>My Lessons</h3>
 
-            <div id="testsContainer">
-              <div class="loading">
-                Loading tests...
-              </div>
-            </div>
+<p style="margin:7px 0 20px">
+Complete lessons in sequence.
+</p>
 
-          </div>
+<div id="lessonsContainer">
+<div class="loading">
+Loading lessons...
+</div>
+</div>
 
-        </div>
+</div>
 
+</div>
 
-        <!-- PAYMENTS -->
-        <div id="tab-payments" class="dash-tab">
 
-          <div class="card">
+<!-- ASSIGNMENTS -->
 
-            <h3>Payments</h3>
+<div id="tab-assignments"
+     class="dash-tab">
 
-            <p style="margin:7px 0 20px">
-              JazzCash payment submission.
-            </p>
+<div class="card">
 
-            <div id="paymentMessage" class="message"></div>
+<h3>My Assignments</h3>
 
-            <form id="paymentForm">
+<p style="margin:7px 0 20px">
+Weekly assignments for your subjects.
+</p>
 
-              <div class="form-group">
-                <label>Amount</label>
-                <input id="paymentAmount" type="number" min="1" required>
-              </div>
+<div id="assignmentsContainer">
+<div class="loading">
+Loading assignments...
+</div>
+</div>
 
-              <div class="form-group">
-                <label>JazzCash Transaction Reference</label>
-                <input id="transactionReference" required>
-              </div>
+</div>
 
-              <div class="form-group">
-                <label>Notes</label>
-                <textarea id="paymentNotes" rows="3"></textarea>
-              </div>
+</div>
 
-              <button class="btn btn-primary">
-                Submit Payment
-              </button>
 
-            </form>
+<!-- TESTS -->
 
-            <br>
+<div id="tab-tests"
+     class="dash-tab">
 
-            <div id="paymentHistory"></div>
+<div class="card">
 
-          </div>
+<h3>My Tests</h3>
 
-        </div>
+<div id="testsContainer">
+<div class="loading">
+Loading tests...
+</div>
+</div>
 
+</div>
 
-        <!-- STAFF STUDENTS -->
-        <div id="tab-staffStudents" class="dash-tab">
+</div>
 
-          <div class="card">
 
-            <h3>Students</h3>
+<!-- PAYMENTS -->
 
-            <div id="staffStudentsContainer">
-              <div class="loading">Loading...</div>
-            </div>
+<div id="tab-payments"
+     class="dash-tab">
 
-          </div>
+<div class="card">
 
-        </div>
+<h3>JazzCash Payments</h3>
 
+<div id="paymentMessage"
+     class="message"></div>
 
-        <!-- STAFF COURSES -->
-        <div id="tab-staffCourses" class="dash-tab">
+<form id="paymentForm">
 
-          <div class="card">
+<div class="form-group">
+<label>Amount</label>
+<input id="paymentAmount"
+       type="number"
+       min="1"
+       required>
+</div>
 
-            <h3>Courses</h3>
+<div class="form-group">
+<label>JazzCash Transaction Reference</label>
+<input id="transactionReference"
+       required>
+</div>
 
-            <div id="staffCoursesContainer">
-              <div class="loading">Loading...</div>
-            </div>
+<div class="form-group">
+<label>Notes</label>
+<textarea id="paymentNotes"
+          rows="3"></textarea>
+</div>
 
-          </div>
+<button class="btn btn-primary">
+Submit Payment
+</button>
 
-        </div>
+</form>
 
+<br>
 
-        <!-- STAFF ASSIGNMENTS -->
-        <div id="tab-staffAssignments" class="dash-tab">
+<div id="paymentHistory"></div>
 
-          <div class="card">
+</div>
 
-            <h3>Manage Assignments</h3>
+</div>
 
-            <p style="margin:7px 0 20px">
-              Create weekly assignments for courses.
-            </p>
 
-            <div id="assignmentAdminMessage" class="message"></div>
+<!-- STAFF STUDENTS -->
 
-            <form id="assignmentCreateForm">
+<div id="tab-staffStudents"
+     class="dash-tab">
 
-              <div class="select-row">
+<div class="card">
 
-                <div>
-                  <label>Course</label>
-                  <select id="assignmentCourse" required>
-                    <option value="">Select Course</option>
-                  </select>
-                </div>
+<h3>Students</h3>
 
-                <div>
-                  <label>Week Start</label>
-                  <input id="assignmentWeek" type="date" required>
-                </div>
+<div id="staffStudentsContainer">
+<div class="loading">Loading...</div>
+</div>
 
-                <div>
-                  <label>Due Date</label>
-                  <input id="assignmentDue" type="date">
-                </div>
+</div>
 
-              </div>
+</div>
 
-              <div class="form-group">
-                <label>Title</label>
-                <input id="assignmentTitle" required>
-              </div>
 
-              <div class="form-group">
-                <label>Description</label>
-                <textarea id="assignmentDescription" rows="4"></textarea>
-              </div>
+<!-- STAFF COURSES -->
 
-              <div class="form-group">
-                <label>Total Marks</label>
-                <input id="assignmentMarks" type="number" value="100" min="1">
-              </div>
+<div id="tab-staffCourses"
+     class="dash-tab">
 
-              <button class="btn btn-primary">
-                Create Assignment
-              </button>
+<div class="card">
 
-            </form>
+<h3>Courses</h3>
 
-            <br>
+<div id="staffCoursesContainer">
+<div class="loading">Loading...</div>
+</div>
 
-            <div id="adminAssignmentsList"></div>
+</div>
 
-          </div>
+</div>
 
-        </div>
 
+<!-- STAFF ASSIGNMENTS -->
 
-        <!-- STAFF PAYMENTS -->
-        <div id="tab-staffPayments" class="dash-tab">
+<div id="tab-staffAssignments"
+     class="dash-tab">
 
-          <div class="card">
+<div class="card">
 
-            <h3>Payment Management</h3>
+<h3>Manage Assignments</h3>
 
-            <div id="staffPaymentsContainer">
-              <div class="loading">Loading...</div>
-            </div>
+<div id="assignmentAdminMessage"
+     class="message"></div>
 
-          </div>
+<form id="assignmentCreateForm">
 
-        </div>
+<div class="select-row">
 
+<div>
+<label>Course</label>
+<select id="assignmentCourse" required>
+<option value="">
+Select Course
+</option>
+</select>
+</div>
 
-        <!-- ATTENDANCE -->
-        <div id="tab-attendance" class="dash-tab">
+<div>
+<label>Week Start</label>
+<input id="assignmentWeek"
+       type="date"
+       required>
+</div>
 
-          <div class="card">
+<div>
+<label>Due Date</label>
+<input id="assignmentDue"
+       type="date">
+</div>
 
-            <h3>Attendance</h3>
+</div>
 
-            <div id="attendanceContainer">
-              <div class="loading">Loading...</div>
-            </div>
+<div class="form-group">
+<label>Title</label>
+<input id="assignmentTitle" required>
+</div>
 
-          </div>
+<div class="form-group">
+<label>Description</label>
+<textarea id="assignmentDescription"
+          rows="4"></textarea>
+</div>
 
-        </div>
+<div class="form-group">
+<label>Total Marks</label>
+<input id="assignmentMarks"
+       type="number"
+       min="1"
+       value="100">
+</div>
 
+<button class="btn btn-primary">
+Create Assignment
+</button>
 
-        <!-- TEACHERS -->
-        <div id="tab-teachers" class="dash-tab">
+</form>
 
-          <div class="card">
+<br>
 
-            <h3>Teachers</h3>
+<div id="adminAssignmentsList"></div>
 
-            <div id="teachersContainer">
-              <div class="loading">Loading...</div>
-            </div>
+</div>
 
-          </div>
+</div>
 
-        </div>
 
-      </div>
+<!-- STAFF PAYMENTS -->
 
-    </div>
+<div id="tab-staffPayments"
+     class="dash-tab">
 
-  </div>
+<div class="card">
 
+<h3>Payment Management</h3>
+
+<div id="staffPaymentsContainer">
+<div class="loading">Loading...</div>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ATTENDANCE -->
+
+<div id="tab-attendance"
+     class="dash-tab">
+
+<div class="card">
+
+<h3>Attendance</h3>
+
+<div id="attendanceContainer">
+<div class="loading">Loading...</div>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- TEACHERS -->
+
+<div id="tab-teachers"
+     class="dash-tab">
+
+<div class="card">
+
+<h3>Teachers</h3>
+
+<div id="teachersContainer">
+<div class="loading">Loading...</div>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- PARENT CHILDREN -->
+
+<div id="tab-parentStudents"
+     class="dash-tab">
+
+<div class="card">
+
+<h3>My Children</h3>
+
+<div id="parentStudentsContainer">
+<div class="loading">Loading...</div>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- PARENT PROGRESS -->
+
+<div id="tab-parentProgress"
+     class="dash-tab">
+
+<div class="card">
+
+<h3>Student Progress</h3>
+
+<div id="parentProgressContainer">
+<div class="loading">Loading...</div>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- PARENT TIMETABLE -->
+
+<div id="tab-parentTimetable"
+     class="dash-tab">
+
+<div class="card">
+
+<h3>Student Timetable</h3>
+
+<div id="parentTimetableContainer">
+<div class="loading">Loading...</div>
+</div>
+
+</div>
+
+</div>
+
+
+</div>
+</div>
+</div>
 </section>
 
 </main>
 
 
 <footer>
-  <div class="container">
-    <strong>Aqalverse Learning Academy</strong>
-    <br>
-    Smart learning for Pakistani students.
-    <br><br>
-    © 2026 Aqalverse Learning Academy
-  </div>
+
+<div class="container">
+
+<strong>Aqalverse Learning Academy</strong>
+
+<br>
+
+Smart learning for Pakistani students.
+
+<br><br>
+
+Grades 9–12 · All Boards of Pakistan · English + Urdu
+
+<br><br>
+
+© 2026 Aqalverse Learning Academy
+
+</div>
+
 </footer>
 
 
 <script>
 
+/* =========================================================
+   SUPABASE
+========================================================= */
+
 const SUPABASE_URL =
-  "https://lmfkrykuxspddjfcwpuf.supabase.co";
+"https://lmfkrykuxspddjfcwpuf.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_4mtcQW0b7WZzuCAnfrBpcA_KCp-F7Oc";
+"sb_publishable_4mtcQW0b7WZzuCAnfrBpcA_KCp-F7Oc";
 
 const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+/* =========================================================
+   GLOBAL STATE
+========================================================= */
 
 let currentUser = null;
 let currentProfile = null;
 let currentStudent = null;
+
 let currentGroups = [];
 let currentGroupSubjects = [];
 let selectedSubjectIds = [];
@@ -1419,101 +1511,126 @@ let selectedSubjectIds = [];
    HELPERS
 ========================================================= */
 
-function showMessage(id, text, type = "info") {
+function escapeHtml(value){
 
-  const el = document.getElementById(id);
-
-  if (!el) return;
-
-  el.textContent = text;
-  el.className = "message show " + type;
-}
-
-
-function clearMessage(id) {
-
-  const el = document.getElementById(id);
-
-  if (el) {
-    el.textContent = "";
-    el.className = "message";
-  }
-}
-
-
-function escapeHtml(value) {
-
-  if (value === null || value === undefined) return "";
+  if(value === null || value === undefined)
+    return "";
 
   return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
 
-function formatDate(value) {
+function formatDate(value){
 
-  if (!value) return "-";
+  if(!value) return "-";
 
-  return new Date(value).toLocaleDateString(
-    "en-PK",
-    {
-      year: "numeric",
-      month: "short",
-      day: "numeric"
-    }
-  );
+  return new Date(value)
+    .toLocaleDateString("en-PK",{
+      year:"numeric",
+      month:"short",
+      day:"numeric"
+    });
 }
 
 
-function todayISO() {
+function showMessage(id,text,type="info"){
 
-  return new Date().toISOString().slice(0, 10);
+  const el =
+    document.getElementById(id);
 
+  if(!el) return;
+
+  el.textContent = text;
+  el.className =
+    "message show " + type;
 }
 
 
-function getMondayISO() {
+function clearMessage(id){
 
-  const d = new Date();
+  const el =
+    document.getElementById(id);
 
-  const day = d.getDay();
+  if(el)
+    el.className="message";
+}
 
-  const diff = day === 0 ? -6 : 1 - day;
 
-  d.setDate(d.getDate() + diff);
+function mondayDate(){
 
-  return d.toISOString().slice(0, 10);
+  const d=new Date();
+  const day=d.getDay();
+  const diff=day===0?-6:1-day;
 
+  d.setDate(d.getDate()+diff);
+
+  return d.toISOString().slice(0,10);
+}
+
+
+function fillSelect(
+  id,
+  rows,
+  valueKey,
+  textKey,
+  placeholder
+){
+
+  const select =
+    document.getElementById(id);
+
+  if(!select) return;
+
+  select.innerHTML =
+    `<option value="">
+      ${placeholder}
+    </option>`;
+
+  (rows||[]).forEach(row=>{
+
+    const option =
+      document.createElement("option");
+
+    option.value =
+      row[valueKey];
+
+    option.textContent =
+      row[textKey];
+
+    select.appendChild(option);
+
+  });
 }
 
 
 /* =========================================================
-   INITIAL LOAD
+   PUBLIC DATA
 ========================================================= */
 
-async function loadPublicData() {
+async function loadPublicData(){
 
-  const { data: grades } =
+  const {data:grades} =
     await supabaseClient
       .from("grades")
       .select("id,name,grade_number")
-      .eq("is_active", true)
+      .eq("is_active",true)
       .order("grade_number");
 
-  const { data: boards } =
+  const {data:boards} =
     await supabaseClient
       .from("boards")
       .select("id,name")
-      .eq("is_active", true)
+      .eq("is_active",true)
       .order("name");
 
   fillSelect(
     "publicGrade",
-    grades || [],
+    grades,
     "id",
     "name",
     "Select Grade"
@@ -1521,7 +1638,7 @@ async function loadPublicData() {
 
   fillSelect(
     "regGrade",
-    grades || [],
+    grades,
     "id",
     "name",
     "Select Grade"
@@ -1529,7 +1646,7 @@ async function loadPublicData() {
 
   fillSelect(
     "publicBoard",
-    boards || [],
+    boards,
     "id",
     "name",
     "Select Board"
@@ -1537,7 +1654,7 @@ async function loadPublicData() {
 
   fillSelect(
     "regBoard",
-    boards || [],
+    boards,
     "id",
     "name",
     "Select Board"
@@ -1545,64 +1662,32 @@ async function loadPublicData() {
 }
 
 
-function fillSelect(
-  id,
-  data,
-  valueKey,
-  textKey,
-  placeholder
-) {
+async function loadPublicSubjects(){
 
-  const select =
-    document.getElementById(id);
+  const grade =
+    document.getElementById(
+      "publicGrade"
+    ).value;
 
-  if (!select) return;
+  const board =
+    document.getElementById(
+      "publicBoard"
+    ).value;
 
-  select.innerHTML =
-    `<option value="">${placeholder}</option>`;
+  const subject =
+    document.getElementById(
+      "publicSubject"
+    );
 
-  data.forEach(row => {
+  subject.innerHTML =
+    `<option value="">
+      Select Subject
+    </option>`;
 
-    const option =
-      document.createElement("option");
+  if(!grade || !board)
+    return;
 
-    option.value = row[valueKey];
-
-    option.textContent = row[textKey];
-
-    select.appendChild(option);
-
-  });
-
-}
-
-
-/* =========================================================
-   PUBLIC COURSE SEARCH
-========================================================= */
-
-async function loadPublicSubjects() {
-
-  const gradeId =
-    document.getElementById("publicGrade").value;
-
-  const boardId =
-    document.getElementById("publicBoard").value;
-
-  const subjectSelect =
-    document.getElementById("publicSubject");
-
-  subjectSelect.innerHTML =
-    `<option value="">Select Subject</option>`;
-
-  document.getElementById(
-    "publicCourseResult"
-  ).innerHTML =
-    "Select grade, board and subject to view the course.";
-
-  if (!gradeId || !boardId) return;
-
-  const { data, error } =
+  const {data,error} =
     await supabaseClient
       .from("courses")
       .select(`
@@ -1610,124 +1695,123 @@ async function loadPublicSubjects() {
         subject_id,
         subjects(id,name)
       `)
-      .eq("grade_id", gradeId)
-      .eq("board_id", boardId)
-      .eq("is_active", true);
+      .eq("grade_id",grade)
+      .eq("board_id",board)
+      .eq("is_active",true);
 
-  if (error) {
+  if(error){
 
     console.error(error);
-
-    document.getElementById(
-      "publicCourseResult"
-    ).textContent =
-      "Unable to load subjects.";
-
     return;
   }
 
-  (data || []).forEach(course => {
+  (data||[]).forEach(row=>{
 
-    if (!course.subjects) return;
+    if(!row.subjects) return;
 
     const option =
       document.createElement("option");
 
     option.value =
-      course.subject_id;
+      row.subject_id;
 
     option.textContent =
-      course.subjects.name;
+      row.subjects.name;
 
-    subjectSelect.appendChild(option);
+    subject.appendChild(option);
 
   });
 }
 
 
-async function showPublicCourse() {
+async function showPublicCourse(){
 
-  const gradeId =
-    document.getElementById("publicGrade").value;
+  const grade =
+    document.getElementById(
+      "publicGrade"
+    ).value;
 
-  const boardId =
-    document.getElementById("publicBoard").value;
+  const board =
+    document.getElementById(
+      "publicBoard"
+    ).value;
 
-  const subjectId =
-    document.getElementById("publicSubject").value;
+  const subject =
+    document.getElementById(
+      "publicSubject"
+    ).value;
 
   const result =
     document.getElementById(
       "publicCourseResult"
     );
 
-  if (!gradeId || !boardId || !subjectId) {
+  if(!grade || !board || !subject){
 
-    result.innerHTML =
-      "Select grade, board and subject to view the course.";
+    result.textContent =
+      "Select grade, board and subject.";
 
     return;
   }
 
-  const { data, error } =
+  const {data,error} =
     await supabaseClient
       .from("courses")
       .select(`
-        id,
-        title,
-        description,
-        monthly_price,
-        subjects(name),
+        id,title,description,monthly_price,
         grades(name),
-        boards(name)
+        boards(name),
+        subjects(name)
       `)
-      .eq("grade_id", gradeId)
-      .eq("board_id", boardId)
-      .eq("subject_id", subjectId)
-      .eq("is_active", true)
+      .eq("grade_id",grade)
+      .eq("board_id",board)
+      .eq("subject_id",subject)
+      .eq("is_active",true)
       .maybeSingle();
 
-  if (error || !data) {
+  if(error || !data){
 
     result.innerHTML =
       `<div class="message show error">
-        Course not found.
-      </div>`;
+       Course not found.
+       </div>`;
 
     return;
   }
 
-  result.innerHTML = `
+  result.innerHTML=`
 
     <div style="text-align:left">
 
       <h3>${escapeHtml(data.title)}</h3>
 
       <p>
-        ${escapeHtml(data.grades?.name || "")}
-        ·
-        ${escapeHtml(data.boards?.name || "")}
-        ·
-        ${escapeHtml(data.subjects?.name || "")}
+      ${escapeHtml(data.grades?.name||"")}
+      ·
+      ${escapeHtml(data.boards?.name||"")}
+      ·
+      ${escapeHtml(data.subjects?.name||"")}
       </p>
 
       <br>
 
       <p>
-        ${escapeHtml(
-          data.description ||
-          "Complete lessons, assessments and assignments."
-        )}
+      ${escapeHtml(
+        data.description||
+        "Online lessons, assessments and assignments."
+      )}
       </p>
 
       <br>
 
       <strong>
-        Rs. ${Number(data.monthly_price || 500).toLocaleString()}
-        / month
+      Rs. ${Number(
+        data.monthly_price||500
+      ).toLocaleString()} / month
       </strong>
 
     </div>
+
   `;
 }
 
@@ -1736,54 +1820,57 @@ async function showPublicCourse() {
    REGISTER
 ========================================================= */
 
-async function registerStudent(e) {
+async function registerStudent(e){
 
   e.preventDefault();
 
   clearMessage("registerMessage");
 
   const name =
-    document.getElementById("regName").value.trim();
+    document.getElementById(
+      "regName"
+    ).value.trim();
 
   const email =
-    document.getElementById("regEmail").value.trim();
+    document.getElementById(
+      "regEmail"
+    ).value.trim();
 
   const password =
-    document.getElementById("regPassword").value;
+    document.getElementById(
+      "regPassword"
+    ).value;
 
-  const gradeId =
-    document.getElementById("regGrade").value;
+  const grade =
+    document.getElementById(
+      "regGrade"
+    ).value;
 
-  const boardId =
-    document.getElementById("regBoard").value;
+  const board =
+    document.getElementById(
+      "regBoard"
+    ).value;
 
   const language =
-    document.getElementById("regLanguage").value;
+    document.getElementById(
+      "regLanguage"
+    ).value;
 
-  if (!name || !email || !password ||
-      !gradeId || !boardId) {
-
-    showMessage(
-      "registerMessage",
-      "Please complete all required fields.",
-      "error"
-    );
-
-    return;
-  }
-
-  const { data, error } =
+  const {data,error} =
     await supabaseClient.auth.signUp({
+
       email,
       password,
-      options: {
-        data: {
-          full_name: name
+
+      options:{
+        data:{
+          full_name:name
         }
       }
+
     });
 
-  if (error) {
+  if(error){
 
     showMessage(
       "registerMessage",
@@ -1794,71 +1881,71 @@ async function registerStudent(e) {
     return;
   }
 
-  if (!data.user) {
+  if(!data.user){
 
     showMessage(
       "registerMessage",
-      "Account creation did not return a user.",
+      "Account creation failed.",
       "error"
     );
 
     return;
   }
 
-  const userId = data.user.id;
+  const id=data.user.id;
 
-  const { error: profileError } =
+  const {error:profileError} =
     await supabaseClient
       .from("profiles")
       .upsert({
-        id: userId,
-        full_name: name,
-        username: email.split("@")[0],
-        role: "student",
-        preferred_language: language
+        id,
+        full_name:name,
+        username:email.split("@")[0],
+        role:"student",
+        preferred_language:language
       });
 
-  if (profileError) {
-
-    console.error(profileError);
+  if(profileError){
 
     showMessage(
       "registerMessage",
-      "Account created, but profile setup needs attention.",
+      profileError.message,
       "error"
     );
 
     return;
   }
 
-  const trialStart =
-    new Date();
+  const start=new Date();
 
-  const trialEnd =
-    new Date(
-      trialStart.getTime() +
-      2 * 24 * 60 * 60 * 1000
-    );
+  const end=new Date(
+    start.getTime()+
+    2*24*60*60*1000
+  );
 
-  const { error: studentError } =
+  const {error:studentError} =
     await supabaseClient
       .from("students")
       .upsert({
-        id: userId,
-        grade_id: Number(gradeId),
-        board_id: Number(boardId),
-        trial_started_at: trialStart.toISOString(),
-        trial_ends_at: trialEnd.toISOString(),
-        account_status: "trial"
+
+        id,
+        grade_id:Number(grade),
+        board_id:Number(board),
+
+        trial_started_at:
+          start.toISOString(),
+
+        trial_ends_at:
+          end.toISOString(),
+
+        account_status:"trial"
+
       });
 
-  if (studentError) {
-
-    console.error(studentError);
+  if(studentError){
 
     showMessage(
       "registerMessage",
-      "Account created, but student profile setup failed: " +
       studentError.message,
       "error"
     );
@@ -1868,14 +1955,13 @@ async function registerStudent(e) {
 
   showMessage(
     "registerMessage",
-    "Account created successfully. You can now log in.",
+    "Account created successfully. Please log in.",
     "success"
   );
 
   document.getElementById(
     "registerForm"
   ).reset();
-
 }
 
 
@@ -1883,25 +1969,30 @@ async function registerStudent(e) {
    LOGIN
 ========================================================= */
 
-async function loginStudent(e) {
+async function loginStudent(e){
 
   e.preventDefault();
 
   clearMessage("loginMessage");
 
   const email =
-    document.getElementById("loginEmail").value.trim();
+    document.getElementById(
+      "loginEmail"
+    ).value.trim();
 
   const password =
-    document.getElementById("loginPassword").value;
+    document.getElementById(
+      "loginPassword"
+    ).value;
 
-  const { data, error } =
-    await supabaseClient.auth.signInWithPassword({
-      email,
-      password
-    });
+  const {data,error} =
+    await supabaseClient.auth
+      .signInWithPassword({
+        email,
+        password
+      });
 
-  if (error) {
+  if(error){
 
     showMessage(
       "loginMessage",
@@ -1912,7 +2003,7 @@ async function loginStudent(e) {
     return;
   }
 
-  currentUser = data.user;
+  currentUser=data.user;
 
   await loadDashboard();
 
@@ -1923,9 +2014,8 @@ async function loginStudent(e) {
   document.getElementById(
     "dashboard"
   ).scrollIntoView({
-    behavior: "smooth"
+    behavior:"smooth"
   });
-
 }
 
 
@@ -1933,13 +2023,13 @@ async function loginStudent(e) {
    LOGOUT
 ========================================================= */
 
-async function logout() {
+async function logout(){
 
   await supabaseClient.auth.signOut();
 
-  currentUser = null;
-  currentProfile = null;
-  currentStudent = null;
+  currentUser=null;
+  currentProfile=null;
+  currentStudent=null;
 
   document.getElementById(
     "dashboard"
@@ -1949,12 +2039,13 @@ async function logout() {
     "logoutTop"
   ).classList.add("hidden");
 
-  document.getElementById(
-    "login"
-  ).scrollIntoView({
-    behavior: "smooth"
-  });
+  document.querySelectorAll(
+    ".staff-only,.parent-only"
+  ).forEach(el=>
+    el.classList.add("hidden")
+  );
 
+  window.location.hash="login";
 }
 
 
@@ -1962,65 +2053,80 @@ async function logout() {
    LOAD DASHBOARD
 ========================================================= */
 
-async function loadDashboard() {
+async function loadDashboard(){
 
-  if (!currentUser) return;
+  if(!currentUser) return;
 
-  const { data: profile } =
+  const {data:profile,error} =
     await supabaseClient
       .from("profiles")
       .select("*")
-      .eq("id", currentUser.id)
+      .eq("id",currentUser.id)
       .maybeSingle();
 
-  currentProfile = profile;
+  if(error){
 
-  if (!profile) {
-
-    document.getElementById(
-      "dashboardTitle"
-    ).textContent =
-      "Account Dashboard";
-
+    console.error(error);
     return;
   }
+
+  currentProfile=profile;
+
+  if(!profile) return;
 
   document.getElementById(
     "dashboardTitle"
   ).textContent =
-    profile.role === "student"
+    profile.role==="student"
       ? "Student Dashboard"
-      : profile.role === "teacher"
+      : profile.role==="teacher"
         ? "Teacher Dashboard"
-        : profile.role === "admin"
+        : profile.role==="admin"
           ? "Admin Dashboard"
           : "Parent Dashboard";
 
   document.getElementById(
     "dashboardSubtitle"
   ).textContent =
-    "Welcome, " +
-    (profile.full_name || "User") +
-    ".";
+    "Welcome, "+
+    (profile.full_name||"User")+".";
 
   document.getElementById(
     "logoutTop"
   ).classList.remove("hidden");
 
-  if (profile.role === "student") {
+  if(profile.role==="student"){
 
-    await loadStudent();
+    document.querySelectorAll(
+      ".student-only"
+    ).forEach(el=>
+      el.classList.remove("hidden")
+    );
 
-  } else {
+    await loadStudentDashboard();
 
-    showStaffButtons();
+  }else if(
+    profile.role==="teacher"||
+    profile.role==="admin"
+  ){
 
-    if (profile.role === "teacher" ||
-        profile.role === "admin") {
+    document.querySelectorAll(
+      ".staff-only"
+    ).forEach(el=>
+      el.classList.remove("hidden")
+    );
 
-      await loadStaffDashboard();
+    await loadStaffDashboard();
 
-    }
+  }else if(profile.role==="parent"){
+
+    document.querySelectorAll(
+      ".parent-only"
+    ).forEach(el=>
+      el.classList.remove("hidden")
+    );
+
+    await loadParentDashboard();
 
   }
 
@@ -2028,12 +2134,12 @@ async function loadDashboard() {
 
 
 /* =========================================================
-   LOAD STUDENT
+   STUDENT
 ========================================================= */
 
-async function loadStudent() {
+async function loadStudentDashboard(){
 
-  const { data: student, error } =
+  const {data,error} =
     await supabaseClient
       .from("students")
       .select(`
@@ -2041,45 +2147,36 @@ async function loadStudent() {
         grades(id,name,grade_number),
         boards(id,name)
       `)
-      .eq("id", currentUser.id)
+      .eq("id",currentUser.id)
       .maybeSingle();
 
-  if (error) {
+  if(error){
 
     console.error(error);
-
     return;
   }
 
-  currentStudent = student;
+  currentStudent=data;
 
-  if (!student) {
-
-    document.getElementById(
-      "overviewText"
-    ).textContent =
-      "Student profile was not found.";
-
-    return;
-  }
+  if(!data) return;
 
   document.getElementById(
     "statGrade"
   ).textContent =
-    student.grades?.name || "-";
+    data.grades?.name||"-";
 
   document.getElementById(
     "statAccess"
   ).textContent =
-    student.account_status || "trial";
+    data.account_status||"trial";
 
   document.getElementById(
     "overviewText"
   ).textContent =
-    `${student.grades?.name || ""} ·
-     ${student.boards?.name || ""}.
-     Your selected subjects, timetable,
-     lessons and assignments are available below.`;
+    `${data.grades?.name||""} ·
+     ${data.boards?.name||""}.
+     Select your subjects to access your courses,
+     timetable and assignments.`;
 
   await loadStudentSubjects();
 
@@ -2087,14 +2184,13 @@ async function loadStudent() {
 
   await loadTimetable();
 
-  await loadAssignments();
-
   await loadLessons();
+
+  await loadAssignments();
 
   await loadTests();
 
   await loadPaymentHistory();
-
 }
 
 
@@ -2102,11 +2198,11 @@ async function loadStudent() {
    SUBJECT GROUPS
 ========================================================= */
 
-async function loadStudentGroups() {
+async function loadStudentGroups(){
 
-  if (!currentStudent) return;
+  if(!currentStudent) return;
 
-  const { data, error } =
+  const {data,error} =
     await supabaseClient
       .from("subject_groups")
       .select(`
@@ -2116,25 +2212,25 @@ async function loadStudentGroups() {
         grade_id,
         board_id
       `)
-      .eq("grade_id", currentStudent.grade_id)
-      .eq("board_id", currentStudent.board_id)
-      .eq("is_active", true)
+      .eq("grade_id",currentStudent.grade_id)
+      .eq("board_id",currentStudent.board_id)
+      .eq("is_active",true)
       .order("name");
 
-  if (error) {
+  if(error){
 
     console.error(error);
 
     showMessage(
       "subjectMessage",
-      "Could not load subject groups.",
+      error.message,
       "error"
     );
 
     return;
   }
 
-  currentGroups = data || [];
+  currentGroups=data||[];
 
   const select =
     document.getElementById(
@@ -2142,75 +2238,71 @@ async function loadStudentGroups() {
     );
 
   select.innerHTML =
-    `<option value="">Select subject group</option>`;
+    `<option value="">
+      Select subject group
+    </option>`;
 
-  currentGroups.forEach(group => {
+  currentGroups.forEach(group=>{
 
     const option =
       document.createElement("option");
 
-    option.value = group.id;
-
-    option.textContent = group.name;
+    option.value=group.id;
+    option.textContent=group.name;
 
     select.appendChild(option);
 
   });
-
 }
 
 
-async function loadGroupSubjects(groupId) {
+async function loadGroupSubjects(groupId){
 
   const container =
     document.getElementById(
       "subjectOptions"
     );
 
-  if (!groupId) {
+  if(!groupId){
 
     container.innerHTML =
       `<div class="empty">
-        Select a subject group.
-      </div>`;
+       Select a subject group.
+       </div>`;
 
     return;
   }
 
-  const { data, error } =
+  const {data,error} =
     await supabaseClient
       .from("subject_group_subjects")
       .select(`
         subject_group_id,
         subject_id,
         is_compulsory,
-        subjects(
-          id,
-          name,
-          code
-        )
+        subjects(id,name,code)
       `)
-      .eq("subject_group_id", groupId);
+      .eq("subject_group_id",groupId);
 
-  if (error) {
+  if(error){
 
     console.error(error);
 
     container.innerHTML =
       `<div class="empty">
-        Unable to load subjects.
-      </div>`;
+       Unable to load subjects.
+       </div>`;
 
     return;
   }
 
-  currentGroupSubjects = data || [];
+  currentGroupSubjects=data||[];
 
-  container.innerHTML = "";
+  container.innerHTML="";
 
-  currentGroupSubjects.forEach(row => {
+  currentGroupSubjects.forEach(row=>{
 
-    if (!row.subjects) return;
+    if(!row.subjects) return;
 
     const checked =
       selectedSubjectIds.includes(
@@ -2220,10 +2312,9 @@ async function loadGroupSubjects(groupId) {
     const div =
       document.createElement("div");
 
-    div.className =
-      "subject-option";
+    div.className="subject-option";
 
-    div.innerHTML = `
+    div.innerHTML=`
 
       <label>
 
@@ -2231,8 +2322,9 @@ async function loadGroupSubjects(groupId) {
           type="checkbox"
           class="subject-checkbox"
           value="${row.subject_id}"
-          ${checked ? "checked" : ""}
-          ${row.is_compulsory ? "data-compulsory=true" : ""}
+          ${checked?"checked":""}
+          ${row.is_compulsory?
+            "data-compulsory=true":""}
         >
 
         <span>
@@ -2242,7 +2334,7 @@ async function loadGroupSubjects(groupId) {
           ${
             row.is_compulsory
               ? `<span class="compulsory">
-                   Compulsory
+                  Compulsory
                  </span>`
               : ""
           }
@@ -2250,25 +2342,18 @@ async function loadGroupSubjects(groupId) {
         </span>
 
       </label>
-
     `;
 
     container.appendChild(div);
-
   });
-
 }
 
 
-/* =========================================================
-   LOAD SELECTED SUBJECTS
-========================================================= */
-
-async function loadStudentSubjects() {
+async function loadStudentSubjects(){
 
   await loadStudentGroups();
 
-  const { data, error } =
+  const {data,error} =
     await supabaseClient
       .from("student_subjects")
       .select(`
@@ -2276,72 +2361,62 @@ async function loadStudentSubjects() {
         subject_group_id,
         is_active,
         selected_at,
-        subjects(
-          id,
-          name,
-          code
-        )
+        subjects(id,name,code)
       `)
-      .eq("student_id", currentUser.id)
-      .eq("is_active", true);
+      .eq("student_id",currentUser.id)
+      .eq("is_active",true);
 
-  if (error) {
+  if(error){
 
     console.error(error);
-
     return;
   }
 
-  selectedSubjectIds =
-    (data || []).map(
-      row => Number(row.subject_id)
+  selectedSubjectIds=
+    (data||[]).map(
+      row=>Number(row.subject_id)
     );
 
-  const existingGroup =
+  const group =
     data?.find(
-      row => row.subject_group_id
+      row=>row.subject_group_id
     )?.subject_group_id;
 
-  if (existingGroup) {
+  if(group){
 
     document.getElementById(
       "studentGroupSelect"
-    ).value = existingGroup;
+    ).value=group;
 
-    await loadGroupSubjects(
-      existingGroup
-    );
-
+    await loadGroupSubjects(group);
   }
 
-  renderSelectedSubjects(data || []);
+  renderSelectedSubjects(data||[]);
 
   document.getElementById(
     "statSubjects"
-  ).textContent =
-    data?.length || 0;
-
+  ).textContent=data?.length||0;
 }
 
 
-function renderSelectedSubjects(rows) {
+function renderSelectedSubjects(rows){
 
   const container =
     document.getElementById(
       "selectedSubjectsList"
     );
 
-  if (!rows.length) {
+  if(!rows.length){
 
     container.innerHTML =
       `<div class="empty">
-        No subjects selected yet.
-      </div>`;
+       No subjects selected yet.
+       </div>`;
 
     return;
   }
 
-  container.innerHTML = `
+  container.innerHTML=`
 
     <h4 style="margin-bottom:10px">
       Currently Selected Subjects
@@ -2349,20 +2424,20 @@ function renderSelectedSubjects(rows) {
 
     <div class="subject-grid">
 
-      ${rows.map(row => `
+      ${rows.map(row=>`
 
         <div class="subject-option">
 
           <strong>
-            ${escapeHtml(
-              row.subjects?.name || "Subject"
-            )}
+          ${escapeHtml(
+            row.subjects?.name||"Subject"
+          )}
           </strong>
 
           <br>
 
           <span class="badge badge-green">
-            Selected
+          Selected
           </span>
 
         </div>
@@ -2370,9 +2445,7 @@ function renderSelectedSubjects(rows) {
       `).join("")}
 
     </div>
-
   `;
-
 }
 
 
@@ -2380,31 +2453,22 @@ function renderSelectedSubjects(rows) {
    SAVE SUBJECTS
 ========================================================= */
 
-async function saveSubjects() {
+async function saveSubjects(){
 
   clearMessage("subjectMessage");
 
-  if (!currentUser || !currentStudent) {
-
-    showMessage(
-      "subjectMessage",
-      "Please log in first.",
-      "error"
+  const groupId =
+    Number(
+      document.getElementById(
+        "studentGroupSelect"
+      ).value
     );
 
-    return;
-  }
-
-  const groupId =
-    document.getElementById(
-      "studentGroupSelect"
-    ).value;
-
-  if (!groupId) {
+  if(!groupId){
 
     showMessage(
       "subjectMessage",
-      "Please select a subject group.",
+      "Select a subject group first.",
       "error"
     );
 
@@ -2415,14 +2479,13 @@ async function saveSubjects() {
     [...document.querySelectorAll(
       ".subject-checkbox:checked"
     )].map(
-      checkbox =>
-        Number(checkbox.value)
+      x=>Number(x.value)
     );
 
   const compulsory =
     currentGroupSubjects
-      .filter(row => row.is_compulsory)
-      .map(row => Number(row.subject_id));
+      .filter(x=>x.is_compulsory)
+      .map(x=>Number(x.subject_id));
 
   const finalSubjects =
     [...new Set([
@@ -2430,51 +2493,51 @@ async function saveSubjects() {
       ...compulsory
     ])];
 
-  if (!finalSubjects.length) {
+  if(!finalSubjects.length){
 
     showMessage(
       "subjectMessage",
-      "Please select at least one subject.",
+      "Select at least one subject.",
       "error"
     );
 
     return;
   }
 
-  const { data, error } =
+  /* First use the working RPC */
+
+  const rpc =
     await supabaseClient.rpc(
       "save_student_subjects",
       {
-        p_student_id: currentUser.id,
-        p_subject_group_id: Number(groupId),
-        p_subject_ids: finalSubjects
+        p_student_id:currentUser.id,
+        p_subject_group_id:groupId,
+        p_subject_ids:finalSubjects
       }
     );
 
-  if (error) {
+  /*
+    If the RPC works, stop here.
+    If it fails, try direct upsert.
+  */
 
-    console.error(
-      "save_student_subjects error:",
-      error
+  if(rpc.error){
+
+    console.warn(
+      "RPC save failed:",
+      rpc.error
     );
 
-    /*
-      Fallback: direct database save.
-      This is useful if the RPC exists but
-      its response has a problem.
-    */
-
-    const { error: deleteError } =
+    const {error:deleteError} =
       await supabaseClient
         .from("student_subjects")
         .delete()
-        .eq("student_id", currentUser.id);
+        .eq("student_id",currentUser.id);
 
-    if (deleteError) {
+    if(deleteError){
 
       showMessage(
         "subjectMessage",
-        "Could not save subjects: " +
         deleteError.message,
         "error"
       );
@@ -2483,71 +2546,62 @@ async function saveSubjects() {
     }
 
     const rows =
-      finalSubjects.map(subjectId => ({
-        student_id: currentUser.id,
-        subject_id: subjectId,
-        subject_group_id: Number(groupId),
-        is_active: true
+      finalSubjects.map(id=>({
+
+        student_id:currentUser.id,
+        subject_id:id,
+        subject_group_id:groupId,
+        is_active:true
+
       }));
 
-    const { error: insertError } =
+    const {error:insertError} =
       await supabaseClient
         .from("student_subjects")
         .insert(rows);
 
-    if (insertError) {
+    if(insertError){
 
       showMessage(
         "subjectMessage",
-        "Could not save subjects: " +
         insertError.message,
         "error"
       );
 
       return;
     }
-
   }
 
-  /*
-    Sync selected subjects with courses/enrollments.
-  */
+  /* Sync enrollments */
 
   const sync =
     await supabaseClient.rpc(
       "sync_student_courses",
       {
-        p_student_id: currentUser.id
+        p_student_id:currentUser.id
       }
     );
 
-  if (sync.error) {
+  if(sync.error){
 
     console.warn(
-      "Course sync warning:",
+      "Enrollment sync:",
       sync.error
     );
-
   }
 
   showMessage(
     "subjectMessage",
-    "Subjects saved successfully. Your courses and timetable have been updated.",
+    "Subjects saved. Courses and timetable updated.",
     "success"
   );
 
   await loadStudentSubjects();
-
   await loadStudentEnrollments();
-
   await loadTimetable();
-
-  await loadAssignments();
-
   await loadLessons();
-
+  await loadAssignments();
   await loadTests();
-
 }
 
 
@@ -2555,9 +2609,9 @@ async function saveSubjects() {
    ENROLLMENTS
 ========================================================= */
 
-async function loadStudentEnrollments() {
+async function loadStudentEnrollments(){
 
-  const { data, error } =
+  const {data,error} =
     await supabaseClient
       .from("enrollments")
       .select(`
@@ -2573,21 +2627,19 @@ async function loadStudentEnrollments() {
           subjects(name)
         )
       `)
-      .eq("student_id", currentUser.id);
+      .eq("student_id",currentUser.id);
 
-  if (error) {
+  if(error){
 
     console.error(error);
-
     return [];
   }
 
   document.getElementById(
     "statCourses"
-  ).textContent =
-    data?.length || 0;
+  ).textContent=data?.length||0;
 
-  return data || [];
+  return data||[];
 }
 
 
@@ -2595,33 +2647,24 @@ async function loadStudentEnrollments() {
    TIMETABLE
 ========================================================= */
 
-async function loadTimetable() {
+async function loadTimetable(){
 
   const container =
     document.getElementById(
       "timetableContainer"
     );
 
+  if(!container) return;
+
   container.innerHTML =
     `<div class="loading">
       Loading timetable...
-    </div>`;
+     </div>`;
 
-  if (!currentUser) return;
-
-  /*
-    IMPORTANT:
-    We do NOT use student_timetable view.
-
-    We read the existing tables directly:
-    enrollments → courses → video_timetable → lessons
-  */
-
-  const { data: enrollments, error: enrollmentError } =
+  const {data:enrollments,error:eError} =
     await supabaseClient
       .from("enrollments")
       .select(`
-        id,
         course_id,
         status,
         access_end,
@@ -2631,36 +2674,34 @@ async function loadTimetable() {
           subjects(name)
         )
       `)
-      .eq("student_id", currentUser.id);
+      .eq("student_id",currentUser.id);
 
-  if (enrollmentError) {
-
-    console.error(enrollmentError);
+  if(eError){
 
     container.innerHTML =
       `<div class="empty">
-        Unable to load your enrollments.
-      </div>`;
+       ${escapeHtml(eError.message)}
+       </div>`;
 
     return;
   }
 
-  if (!enrollments?.length) {
+  if(!enrollments?.length){
 
     container.innerHTML =
       `<div class="empty">
-        No enrolled subjects found.
-      </div>`;
+       Select subjects first.
+       </div>`;
 
     return;
   }
 
   const courseIds =
     enrollments.map(
-      e => e.course_id
+      x=>x.course_id
     );
 
-  const { data: timetable, error: timetableError } =
+  const {data:rows,error:tError} =
     await supabaseClient
       .from("video_timetable")
       .select(`
@@ -2671,74 +2712,66 @@ async function loadTimetable() {
         lesson_id,
         is_active
       `)
-      .in("course_id", courseIds)
-      .eq("is_active", true)
-      .order("class_number");
+      .in("course_id",courseIds)
+      .eq("is_active",true);
 
-  if (timetableError) {
-
-    console.error(timetableError);
+  if(tError){
 
     container.innerHTML =
       `<div class="empty">
-        Unable to load timetable: 
-        ${escapeHtml(timetableError.message)}
-      </div>`;
+       ${escapeHtml(tError.message)}
+       </div>`;
 
     return;
   }
 
-  if (!timetable?.length) {
+  if(!rows?.length){
 
     container.innerHTML =
       `<div class="empty">
-        Your timetable has not been assigned yet.
-      </div>`;
+       No timetable has been assigned yet.
+       </div>`;
 
     return;
   }
 
   const lessonIds =
-    timetable
-      .filter(row => row.lesson_id)
-      .map(row => row.lesson_id);
+    rows
+      .filter(x=>x.lesson_id)
+      .map(x=>x.lesson_id);
 
-  let lessons = [];
+  let lessons=[];
 
-  if (lessonIds.length) {
+  if(lessonIds.length){
 
-    const { data } =
+    const {data} =
       await supabaseClient
         .from("lessons")
         .select("id,title,lesson_number")
-        .in("id", lessonIds);
+        .in("id",lessonIds);
 
-    lessons = data || [];
+    lessons=data||[];
   }
 
-  const courseMap = {};
+  const courseMap={};
 
-  enrollments.forEach(e => {
+  enrollments.forEach(e=>{
 
-    courseMap[e.course_id] = {
+    courseMap[e.course_id]={
       subject:
-        e.courses?.subjects?.name ||
-        "Subject",
-      status: e.status,
-      access_end: e.access_end
+        e.courses?.subjects?.name||
+        "Subject"
     };
 
   });
 
-  const lessonMap = {};
+  const lessonMap={};
 
-  lessons.forEach(l => {
-
-    lessonMap[l.id] = l;
-
+  lessons.forEach(l=>{
+    lessonMap[l.id]=l;
   });
 
-  const days = [
+  const days=[
     "Monday",
     "Tuesday",
     "Wednesday",
@@ -2748,42 +2781,46 @@ async function loadTimetable() {
     "Sunday"
   ];
 
-  const grouped = {};
+  const grouped={};
 
-  days.forEach(day => {
-    grouped[day] = [];
+  days.forEach(day=>{
+    grouped[day]=[];
   });
 
-  timetable.forEach(row => {
+  rows.forEach(row=>{
 
-    if (!grouped[row.day_of_week]) {
-      grouped[row.day_of_week] = [];
-    }
+    if(!grouped[row.day_of_week])
+      grouped[row.day_of_week]=[];
 
     grouped[row.day_of_week].push(row);
 
   });
 
-  let html = "";
+  let html="";
 
-  days.forEach(day => {
+  days.forEach(day=>{
 
-    const rows = grouped[day] || [];
+    const list=grouped[day];
 
-    if (!rows.length) return;
+    if(!list.length) return;
 
-    html += `
+    list.sort(
+      (a,b)=>
+        a.class_number-b.class_number
+    );
+
+    html+=`
 
       <div class="day-card">
 
         <div class="day-title">
-          ${day}
+        ${day}
         </div>
 
-        ${rows.map(row => {
+        ${list.map(row=>{
 
           const course =
-            courseMap[row.course_id] || {};
+            courseMap[row.course_id]||{};
 
           const lesson =
             lessonMap[row.lesson_id];
@@ -2795,27 +2832,30 @@ async function loadTimetable() {
               <div>
 
                 <strong>
-                  ${escapeHtml(
-                    course.subject || "Subject"
-                  )}
+                ${escapeHtml(
+                  course.subject||"Subject"
+                )}
                 </strong>
 
                 <br>
 
                 <small>
-                  Class ${row.class_number}
-                  ${
-                    lesson
-                      ? " · " +
-                        escapeHtml(lesson.title)
-                      : ""
-                  }
+                Class ${row.class_number}
+
+                ${
+                  lesson
+                    ? " · "+
+                      escapeHtml(
+                        lesson.title
+                      )
+                    :""
+                }
                 </small>
 
               </div>
 
               <span class="badge badge-green">
-                Scheduled
+              Scheduled
               </span>
 
             </div>
@@ -2830,12 +2870,217 @@ async function loadTimetable() {
 
   });
 
-  container.innerHTML =
-    html ||
+  container.innerHTML=
+    html||
     `<div class="empty">
-      No timetable entries found for your selected subjects.
-    </div>`;
+     No timetable entries found.
+     </div>`;
+}
 
+
+/* =========================================================
+   LESSONS
+========================================================= */
+
+async function loadLessons(){
+
+  const container =
+    document.getElementById(
+      "lessonsContainer"
+    );
+
+  const {data:enrollments} =
+    await supabaseClient
+      .from("enrollments")
+      .select(`
+        course_id,
+        courses(
+          id,
+          subjects(name)
+        )
+      `)
+      .eq("student_id",currentUser.id);
+
+  const courseIds =
+    (enrollments||[]).map(
+      x=>x.course_id
+    );
+
+  if(!courseIds.length){
+
+    container.innerHTML =
+      `<div class="empty">
+       Select subjects first.
+       </div>`;
+
+    return;
+  }
+
+  const {data:chapters} =
+    await supabaseClient
+      .from("chapters")
+      .select(`
+        id,
+        course_id,
+        title,
+        chapter_number
+      `)
+      .in("course_id",courseIds)
+      .eq("is_active",true)
+      .order("chapter_number");
+
+  if(!chapters?.length){
+
+    container.innerHTML =
+      `<div class="empty">
+       Lessons have not been added yet.
+       </div>`;
+
+    return;
+  }
+
+  const chapterIds =
+    chapters.map(x=>x.id);
+
+  const {data:lessons} =
+    await supabaseClient
+      .from("lessons")
+      .select(`
+        id,
+        chapter_id,
+        title,
+        lesson_number,
+        description,
+        passing_percentage
+      `)
+      .in("chapter_id",chapterIds)
+      .eq("is_active",true)
+      .order("lesson_number");
+
+  if(!lessons?.length){
+
+    container.innerHTML =
+      `<div class="empty">
+       No lessons available yet.
+       </div>`;
+
+    return;
+  }
+
+  const lessonIds=
+    lessons.map(x=>x.id);
+
+  const {data:progress} =
+    await supabaseClient
+      .from("student_progress")
+      .select(`
+        lesson_id,
+        video_completed,
+        video_progress,
+        lesson_unlocked,
+        lesson_completed,
+        completed_at
+      `)
+      .eq("student_id",currentUser.id)
+      .in("lesson_id",lessonIds);
+
+  const progressMap={};
+
+  (progress||[]).forEach(x=>{
+    progressMap[x.lesson_id]=x;
+  });
+
+  const chapterMap={};
+
+  chapters.forEach(x=>{
+    chapterMap[x.id]=x;
+  });
+
+  const courseMap={};
+
+  (enrollments||[]).forEach(x=>{
+    courseMap[x.course_id]=x.courses;
+  });
+
+  container.innerHTML =
+    lessons.map(lesson=>{
+
+      const chapter =
+        chapterMap[lesson.chapter_id];
+
+      const course =
+        courseMap[chapter?.course_id];
+
+      const p =
+        progressMap[lesson.id];
+
+      const unlocked =
+        p?.lesson_unlocked||
+        lesson.lesson_number===1;
+
+      const completed =
+        p?.lesson_completed;
+
+      const percent =
+        Number(p?.video_progress||0);
+
+      return `
+
+        <div class="lesson-card
+          ${unlocked?"":"locked"}">
+
+          <h3>
+          ${escapeHtml(lesson.title)}
+          </h3>
+
+          <p>
+          <strong>
+          ${escapeHtml(
+            course?.subjects?.name||
+            "Subject"
+          )}
+          </strong>
+
+          · Chapter
+          ${chapter?.chapter_number||""}
+          </p>
+
+          <p>
+          ${escapeHtml(
+            lesson.description||""
+          )}
+          </p>
+
+          <div class="progress">
+            <div class="progress-bar"
+                 style="width:${percent}%">
+            </div>
+          </div>
+
+          <small>
+          Video progress: ${percent}%
+          </small>
+
+          <br><br>
+
+          ${
+            completed
+              ? `<span class="badge badge-green">
+                 Completed
+                 </span>`
+              : unlocked
+                ? `<span class="badge badge-blue">
+                   Unlocked
+                   </span>`
+                : `<span class="badge badge-yellow">
+                   Locked
+                   </span>`
+          }
+
+        </div>
+      `;
+
+    }).join("");
 }
 
 
@@ -2843,50 +3088,35 @@ async function loadTimetable() {
    ASSIGNMENTS
 ========================================================= */
 
-async function loadAssignments() {
+async function loadAssignments(){
 
   const container =
     document.getElementById(
       "assignmentsContainer"
     );
 
-  container.innerHTML =
-    `<div class="loading">
-      Loading assignments...
-    </div>`;
-
-  const { data: enrollments, error: enrollmentError } =
+  const {data:enrollments} =
     await supabaseClient
       .from("enrollments")
       .select("course_id")
-      .eq("student_id", currentUser.id);
-
-  if (enrollmentError) {
-
-    container.innerHTML =
-      `<div class="empty">
-        Unable to load enrolled courses.
-      </div>`;
-
-    return;
-  }
+      .eq("student_id",currentUser.id);
 
   const courseIds =
-    (enrollments || []).map(
-      row => row.course_id
+    (enrollments||[]).map(
+      x=>x.course_id
     );
 
-  if (!courseIds.length) {
+  if(!courseIds.length){
 
     container.innerHTML =
       `<div class="empty">
-        Select subjects first.
-      </div>`;
+       Select subjects first.
+       </div>`;
 
     return;
   }
 
-  const { data: assignments, error } =
+  const {data,error} =
     await supabaseClient
       .from("assignments")
       .select(`
@@ -2898,44 +3128,39 @@ async function loadAssignments() {
         week_start,
         due_date,
         total_marks,
-        is_active,
         courses(
           subjects(name)
         )
       `)
-      .in("course_id", courseIds)
-      .eq("is_active", true)
-      .order("week_start", {
-        ascending: false
+      .in("course_id",courseIds)
+      .eq("is_active",true)
+      .order("week_start",{
+        ascending:false
       });
 
-  if (error) {
-
-    console.error(error);
+  if(error){
 
     container.innerHTML =
       `<div class="empty">
-        Unable to load assignments:
-        ${escapeHtml(error.message)}
-      </div>`;
+       ${escapeHtml(error.message)}
+       </div>`;
 
     return;
   }
 
-  if (!assignments?.length) {
+  if(!data?.length){
 
     container.innerHTML =
       `<div class="empty">
-        No assignments available yet.
-      </div>`;
+       No assignments available yet.
+       </div>`;
 
     return;
   }
 
-  const assignmentIds =
-    assignments.map(a => a.id);
+  const ids=data.map(x=>x.id);
 
-  const { data: submissions } =
+  const {data:subs} =
     await supabaseClient
       .from("assignment_submissions")
       .select(`
@@ -2945,81 +3170,62 @@ async function loadAssignments() {
         status,
         teacher_feedback
       `)
-      .eq("student_id", currentUser.id)
-      .in("assignment_id", assignmentIds);
+      .eq("student_id",currentUser.id)
+      .in("assignment_id",ids);
 
-  const submissionMap = {};
+  const subMap={};
 
-  (submissions || []).forEach(row => {
-
-    submissionMap[row.assignment_id] =
-      row;
-
+  (subs||[]).forEach(x=>{
+    subMap[x.assignment_id]=x;
   });
 
   container.innerHTML =
-    assignments.map(a => {
+    data.map(a=>{
 
-      const sub =
-        submissionMap[a.id];
+      const sub=subMap[a.id];
 
       return `
 
         <div class="lesson-card">
 
           <h3>
-            ${escapeHtml(a.title)}
+          ${escapeHtml(a.title)}
           </h3>
 
           <p>
-            <strong>Subject:</strong>
-            ${escapeHtml(
-              a.courses?.subjects?.name ||
-              "Subject"
-            )}
+          <strong>
+          ${escapeHtml(
+            a.courses?.subjects?.name||
+            "Subject"
+          )}
+          </strong>
           </p>
 
           <p>
-            ${escapeHtml(
-              a.description || ""
-            )}
+          ${escapeHtml(a.description||"")}
           </p>
 
           <p>
-            <strong>Week:</strong>
-            ${formatDate(a.week_start)}
-            &nbsp; | &nbsp;
-            <strong>Due:</strong>
-            ${formatDate(a.due_date)}
-            &nbsp; | &nbsp;
-            <strong>Marks:</strong>
-            ${a.total_marks}
+          Week:
+          ${formatDate(a.week_start)}
+          · Due:
+          ${formatDate(a.due_date)}
+          · Marks:
+          ${a.total_marks}
           </p>
 
           <br>
 
           ${
             sub
-              ? `
-                <span class="badge badge-green">
-                  ${escapeHtml(
-                    sub.status || "submitted"
-                  )}
-                </span>
-
-                ${
-                  sub.marks_obtained !== null
-                    ? `<span class="badge">
-                         ${sub.marks_obtained}/${a.total_marks}
-                       </span>`
-                    : ""
-                }
-              `
-              : `
-                <span class="badge badge-yellow">
-                  Not submitted
-                </span>
-              `
+              ? `<span class="badge badge-green">
+                 ${escapeHtml(
+                   sub.status||"submitted"
+                 )}
+                 </span>`
+              : `<span class="badge badge-yellow">
+                 Not submitted
+                 </span>`
           }
 
         </div>
@@ -3027,260 +3233,6 @@ async function loadAssignments() {
       `;
 
     }).join("");
-
-}
-
-
-/* =========================================================
-   LESSONS
-========================================================= */
-
-async function loadLessons() {
-
-  const container =
-    document.getElementById(
-      "lessonsContainer"
-    );
-
-  container.innerHTML =
-    `<div class="loading">
-      Loading lessons...
-    </div>`;
-
-  const { data: enrollments, error } =
-    await supabaseClient
-      .from("enrollments")
-      .select(`
-        course_id,
-        courses(
-          id,
-          title,
-          subjects(name)
-        )
-      `)
-      .eq("student_id", currentUser.id);
-
-  if (error) {
-
-    container.innerHTML =
-      `<div class="empty">
-        Unable to load lessons.
-      </div>`;
-
-    return;
-  }
-
-  if (!enrollments?.length) {
-
-    container.innerHTML =
-      `<div class="empty">
-        Select subjects first.
-      </div>`;
-
-    return;
-  }
-
-  const courseIds =
-    enrollments.map(
-      e => e.course_id
-    );
-
-  const { data: chapters } =
-    await supabaseClient
-      .from("chapters")
-      .select(`
-        id,
-        course_id,
-        title,
-        chapter_number
-      `)
-      .in("course_id", courseIds)
-      .eq("is_active", true)
-      .order("chapter_number");
-
-  if (!chapters?.length) {
-
-    container.innerHTML =
-      `<div class="empty">
-        Lessons have not been added yet.
-      </div>`;
-
-    return;
-  }
-
-  const chapterIds =
-    chapters.map(c => c.id);
-
-  const { data: lessons, error: lessonError } =
-    await supabaseClient
-      .from("lessons")
-      .select(`
-        id,
-        chapter_id,
-        title,
-        lesson_number,
-        description,
-        passing_percentage,
-        video_url,
-        notes_url
-      `)
-      .in("chapter_id", chapterIds)
-      .eq("is_active", true)
-      .order("lesson_number");
-
-  if (lessonError) {
-
-    console.error(lessonError);
-
-    container.innerHTML =
-      `<div class="empty">
-        Unable to load lessons.
-      </div>`;
-
-    return;
-  }
-
-  const lessonIds =
-    (lessons || []).map(
-      l => l.id
-    );
-
-  let progress = [];
-
-  if (lessonIds.length) {
-
-    const { data } =
-      await supabaseClient
-        .from("student_progress")
-        .select(`
-          lesson_id,
-          video_completed,
-          video_progress,
-          lesson_unlocked,
-          lesson_completed,
-          completed_at
-        `)
-        .eq("student_id", currentUser.id)
-        .in("lesson_id", lessonIds);
-
-    progress = data || [];
-
-  }
-
-  const progressMap = {};
-
-  progress.forEach(p => {
-
-    progressMap[p.lesson_id] = p;
-
-  });
-
-  const chapterMap = {};
-
-  chapters.forEach(ch => {
-
-    chapterMap[ch.id] = ch;
-
-  });
-
-  const courseMap = {};
-
-  enrollments.forEach(e => {
-
-    courseMap[e.course_id] =
-      e.courses;
-
-  });
-
-  container.innerHTML =
-    (lessons || []).map(lesson => {
-
-      const ch =
-        chapterMap[lesson.chapter_id];
-
-      const course =
-        courseMap[ch?.course_id];
-
-      const p =
-        progressMap[lesson.id];
-
-      const unlocked =
-        p?.lesson_unlocked ||
-        lesson.lesson_number === 1;
-
-      const completed =
-        p?.lesson_completed;
-
-      return `
-
-        <div class="lesson-card ${!unlocked ? "locked" : ""}">
-
-          <h3>
-            ${escapeHtml(lesson.title)}
-          </h3>
-
-          <p>
-            <strong>
-              ${escapeHtml(
-                course?.subjects?.name ||
-                "Subject"
-              )}
-            </strong>
-
-            ·
-
-            Chapter
-            ${ch?.chapter_number || ""}
-
-          </p>
-
-          <p>
-            ${escapeHtml(
-              lesson.description || ""
-            )}
-          </p>
-
-          <br>
-
-          ${
-            completed
-              ? `
-                <span class="badge badge-green">
-                  Completed
-                </span>
-              `
-              : unlocked
-                ? `
-                  <span class="badge badge-green">
-                    Unlocked
-                  </span>
-                `
-                : `
-                  <span class="badge badge-yellow">
-                    Locked
-                  </span>
-                `
-          }
-
-          ${
-            p?.video_progress
-              ? `
-                <span class="badge">
-                  ${p.video_progress}% video progress
-                </span>
-              `
-              : ""
-          }
-
-        </div>
-
-      `;
-
-    }).join("") ||
-    `<div class="empty">
-      No lessons available yet.
-    </div>`;
-
 }
 
 
@@ -3288,67 +3240,67 @@ async function loadLessons() {
    TESTS
 ========================================================= */
 
-async function loadTests() {
+async function loadTests(){
 
   const container =
     document.getElementById(
       "testsContainer"
     );
 
-  const { data: enrollments } =
+  const {data:enrollments} =
     await supabaseClient
       .from("enrollments")
       .select("course_id")
-      .eq("student_id", currentUser.id);
+      .eq("student_id",currentUser.id);
 
-  const courseIds =
-    (enrollments || []).map(
-      e => e.course_id
+  const courseIds=
+    (enrollments||[]).map(
+      x=>x.course_id
     );
 
-  if (!courseIds.length) {
+  if(!courseIds.length){
 
     container.innerHTML =
       `<div class="empty">
-        No enrolled courses.
-      </div>`;
+       No enrolled courses.
+       </div>`;
 
     return;
   }
 
-  const { data: chapters } =
+  const {data:chapters} =
     await supabaseClient
       .from("chapters")
       .select("id")
-      .in("course_id", courseIds);
+      .in("course_id",courseIds);
 
-  const chapterIds =
-    (chapters || []).map(
-      c => c.id
+  const chapterIds=
+    (chapters||[]).map(
+      x=>x.id
     );
 
-  const { data: lessons } =
+  const {data:lessons} =
     await supabaseClient
       .from("lessons")
       .select("id,title")
-      .in("chapter_id", chapterIds);
+      .in("chapter_id",chapterIds);
 
-  const lessonIds =
-    (lessons || []).map(
-      l => l.id
+  const lessonIds=
+    (lessons||[]).map(
+      x=>x.id
     );
 
-  if (!lessonIds.length) {
+  if(!lessonIds.length){
 
     container.innerHTML =
       `<div class="empty">
-        No tests available yet.
-      </div>`;
+       No tests available yet.
+       </div>`;
 
     return;
   }
 
-  const { data: tests, error } =
+  const {data,error} =
     await supabaseClient
       .from("tests")
       .select(`
@@ -3360,35 +3312,33 @@ async function loadTests() {
         randomize_questions,
         lessons(title)
       `)
-      .in("lesson_id", lessonIds)
-      .eq("is_active", true);
+      .in("lesson_id",lessonIds)
+      .eq("is_active",true);
 
-  if (error) {
-
-    console.error(error);
+  if(error){
 
     container.innerHTML =
       `<div class="empty">
-        Unable to load tests.
-      </div>`;
+       ${escapeHtml(error.message)}
+       </div>`;
 
     return;
   }
 
-  if (!tests?.length) {
+  if(!data?.length){
 
     container.innerHTML =
       `<div class="empty">
-        No tests available yet.
-      </div>`;
+       No tests available yet.
+       </div>`;
 
     return;
   }
 
-  const testIds =
-    tests.map(t => t.id);
+  const testIds=
+    data.map(x=>x.id);
 
-  const { data: attempts } =
+  const {data:attempts} =
     await supabaseClient
       .from("test_attempts")
       .select(`
@@ -3399,26 +3349,25 @@ async function loadTests() {
         passed,
         attempted_at
       `)
-      .eq("student_id", currentUser.id)
-      .in("test_id", testIds)
-      .order("attempted_at", {
-        ascending: false
+      .eq("student_id",currentUser.id)
+      .in("test_id",testIds)
+      .order("attempted_at",{
+        ascending:false
       });
 
-  const attemptMap = {};
+  const attemptMap={};
 
-  (attempts || []).forEach(a => {
+  (attempts||[]).forEach(a=>{
 
-    if (!attemptMap[a.test_id]) {
-      attemptMap[a.test_id] = a;
-    }
+    if(!attemptMap[a.test_id])
+      attemptMap[a.test_id]=a;
 
   });
 
   container.innerHTML =
-    tests.map(test => {
+    data.map(test=>{
 
-      const attempt =
+      const a=
         attemptMap[test.id];
 
       return `
@@ -3426,48 +3375,48 @@ async function loadTests() {
         <div class="lesson-card">
 
           <h3>
-            ${escapeHtml(test.title)}
+          ${escapeHtml(test.title)}
           </h3>
 
           <p>
-            Lesson:
-            ${escapeHtml(
-              test.lessons?.title || ""
-            )}
+          Lesson:
+          ${escapeHtml(
+            test.lessons?.title||""
+          )}
           </p>
 
           <p>
-            Questions:
-            ${test.number_of_questions}
-            · Passing:
-            ${test.passing_percentage}%
+          Questions:
+          ${test.number_of_questions}
+          · Passing:
+          ${test.passing_percentage}%
           </p>
 
           <br>
 
           ${
-            attempt
+            a
               ? `
+
                 <span class="badge ${
-                  attempt.passed
-                    ? "badge-green"
-                    : "badge-red"
+                  a.passed
+                    ?"badge-green"
+                    :"badge-red"
                 }">
-                  ${
-                    attempt.passed
-                      ? "Passed"
-                      : "Not Passed"
-                  }
+                ${a.passed?"Passed":"Not Passed"}
                 </span>
 
                 <span class="badge">
-                  ${attempt.percentage}%
+                ${a.percentage}%
                 </span>
+
               `
-              : `
+              :`
+
                 <span class="badge badge-yellow">
-                  Not attempted
+                Not attempted
                 </span>
+
               `
           }
 
@@ -3476,63 +3425,51 @@ async function loadTests() {
       `;
 
     }).join("");
-
 }
 
 
 /* =========================================================
-   PAYMENT
+   PAYMENTS
 ========================================================= */
 
-async function submitPayment(e) {
+async function submitPayment(e){
 
   e.preventDefault();
 
   clearMessage("paymentMessage");
 
-  const amount =
+  const amount=
     Number(
       document.getElementById(
         "paymentAmount"
       ).value
     );
 
-  const reference =
+  const reference=
     document.getElementById(
       "transactionReference"
     ).value.trim();
 
-  const notes =
+  const notes=
     document.getElementById(
       "paymentNotes"
     ).value.trim();
 
-  if (!amount || !reference) {
-
-    showMessage(
-      "paymentMessage",
-      "Please enter amount and transaction reference.",
-      "error"
-    );
-
-    return;
-  }
-
-  const { error } =
+  const {error} =
     await supabaseClient
       .from("payments")
       .insert({
-        student_id: currentUser.id,
+
+        student_id:currentUser.id,
         amount,
-        payment_method: "JazzCash",
-        transaction_reference: reference,
+        payment_method:"JazzCash",
+        transaction_reference:reference,
         notes,
-        status: "pending"
+        status:"pending"
+
       });
 
-  if (error) {
-
-    console.error(error);
+  if(error){
 
     showMessage(
       "paymentMessage",
@@ -3545,7 +3482,7 @@ async function submitPayment(e) {
 
   showMessage(
     "paymentMessage",
-    "Payment submitted successfully. It is pending verification.",
+    "Payment submitted for verification.",
     "success"
   );
 
@@ -3554,165 +3491,136 @@ async function submitPayment(e) {
   ).reset();
 
   await loadPaymentHistory();
-
 }
 
 
-async function loadPaymentHistory() {
+async function loadPaymentHistory(){
 
-  const container =
+  const container=
     document.getElementById(
       "paymentHistory"
     );
 
-  const { data, error } =
+  const {data,error} =
     await supabaseClient
       .from("payments")
       .select(`
-        id,
         amount,
         payment_method,
         transaction_reference,
         payment_date,
-        status,
-        notes
+        status
       `)
-      .eq("student_id", currentUser.id)
-      .order("payment_date", {
-        ascending: false
+      .eq("student_id",currentUser.id)
+      .order("payment_date",{
+        ascending:false
       });
 
-  if (error) {
+  if(error){
 
     container.innerHTML =
       `<div class="empty">
-        Unable to load payment history.
-      </div>`;
+       ${escapeHtml(error.message)}
+       </div>`;
 
     return;
   }
 
-  if (!data?.length) {
+  if(!data?.length){
 
     container.innerHTML =
       `<div class="empty">
-        No payments submitted yet.
-      </div>`;
+       No payments submitted yet.
+       </div>`;
 
     return;
   }
 
-  container.innerHTML = `
+  container.innerHTML=`
 
     <h4 style="margin-bottom:10px">
-      Payment History
+    Payment History
     </h4>
 
     <div class="table-wrap">
 
-      <table>
+    <table>
 
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Amount</th>
-            <th>Method</th>
-            <th>Reference</th>
-            <th>Status</th>
-          </tr>
-        </thead>
+    <thead>
+    <tr>
+      <th>Date</th>
+      <th>Amount</th>
+      <th>Method</th>
+      <th>Reference</th>
+      <th>Status</th>
+    </tr>
+    </thead>
 
-        <tbody>
+    <tbody>
 
-          ${data.map(row => `
+    ${data.map(x=>`
 
-            <tr>
+      <tr>
 
-              <td>
-                ${formatDate(row.payment_date)}
-              </td>
+        <td>${formatDate(x.payment_date)}</td>
 
-              <td>
-                Rs. ${Number(row.amount).toLocaleString()}
-              </td>
+        <td>
+        Rs. ${Number(x.amount).toLocaleString()}
+        </td>
 
-              <td>
-                ${escapeHtml(row.payment_method)}
-              </td>
+        <td>
+        ${escapeHtml(x.payment_method)}
+        </td>
 
-              <td>
-                ${escapeHtml(row.transaction_reference)}
-              </td>
+        <td>
+        ${escapeHtml(
+          x.transaction_reference||"-"
+        )}
+        </td>
 
-              <td>
-                <span class="badge">
-                  ${escapeHtml(row.status)}
-                </span>
-              </td>
+        <td>
+        <span class="badge">
+        ${escapeHtml(x.status)}
+        </span>
+        </td>
 
-            </tr>
+      </tr>
 
-          `).join("")}
+    `).join("")}
 
-        </tbody>
+    </tbody>
 
-      </table>
+    </table>
 
     </div>
-
   `;
-
 }
 
 
 /* =========================================================
-   STAFF
+   STAFF DASHBOARD
 ========================================================= */
 
-function showStaffButtons() {
-
-  document.querySelectorAll(
-    ".staff-only"
-  ).forEach(button => {
-
-    button.classList.remove("hidden");
-
-  });
-
-}
-
-
-async function loadStaffDashboard() {
+async function loadStaffDashboard(){
 
   await loadStaffStudents();
-
   await loadStaffCourses();
-
   await loadStaffAssignments();
-
   await loadStaffPayments();
-
   await loadAttendance();
-
   await loadTeachers();
-
   await populateAssignmentCourses();
-
 }
 
 
-/* =========================================================
-   STAFF STUDENTS
-========================================================= */
+async function loadStaffStudents(){
 
-async function loadStaffStudents() {
-
-  const container =
+  const container=
     document.getElementById(
       "staffStudentsContainer"
     );
 
-  const { data, error } =
+  const {data,error} =
     await supabaseClient
       .from("students")
       .select(`
@@ -3720,199 +3628,172 @@ async function loadStaffStudents() {
         admission_number,
         account_status,
         trial_ends_at,
-        profiles(
-          full_name,
-          username,
-          phone
-        ),
+        profiles(full_name,username,phone),
         grades(name),
         boards(name)
       `)
-      .order("created_at", {
-        ascending: false
+      .order("created_at",{
+        ascending:false
       });
 
-  if (error) {
+  if(error){
 
     container.innerHTML =
       `<div class="empty">
-        ${escapeHtml(error.message)}
-      </div>`;
+       ${escapeHtml(error.message)}
+       </div>`;
 
     return;
   }
 
-  if (!data?.length) {
-
-    container.innerHTML =
-      `<div class="empty">
-        No students found.
-      </div>`;
-
-    return;
-  }
-
-  container.innerHTML = `
+  container.innerHTML=`
 
     <div class="table-wrap">
 
-      <table>
+    <table>
 
-        <thead>
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Grade</th>
+      <th>Board</th>
+      <th>Status</th>
+      <th>Trial End</th>
+    </tr>
+    </thead>
 
-          <tr>
-            <th>Name</th>
-            <th>Grade</th>
-            <th>Board</th>
-            <th>Status</th>
-            <th>Trial Ends</th>
-          </tr>
+    <tbody>
 
-        </thead>
+    ${(data||[]).map(x=>`
 
-        <tbody>
+      <tr>
 
-          ${data.map(row => `
+        <td>
+        ${escapeHtml(
+          x.profiles?.full_name||"-"
+        )}
+        </td>
 
-            <tr>
+        <td>
+        ${escapeHtml(
+          x.grades?.name||"-"
+        )}
+        </td>
 
-              <td>
-                ${escapeHtml(
-                  row.profiles?.full_name || "-"
-                )}
-              </td>
+        <td>
+        ${escapeHtml(
+          x.boards?.name||"-"
+        )}
+        </td>
 
-              <td>
-                ${escapeHtml(
-                  row.grades?.name || "-"
-                )}
-              </td>
+        <td>
+        <span class="badge">
+        ${escapeHtml(
+          x.account_status||"-"
+        )}
+        </span>
+        </td>
 
-              <td>
-                ${escapeHtml(
-                  row.boards?.name || "-"
-                )}
-              </td>
+        <td>
+        ${formatDate(x.trial_ends_at)}
+        </td>
 
-              <td>
-                ${escapeHtml(
-                  row.account_status || "-"
-                )}
-              </td>
+      </tr>
 
-              <td>
-                ${formatDate(row.trial_ends_at)}
-              </td>
+    `).join("")}
 
-            </tr>
+    </tbody>
 
-          `).join("")}
-
-        </tbody>
-
-      </table>
+    </table>
 
     </div>
-
   `;
-
 }
 
 
-/* =========================================================
-   STAFF COURSES
-========================================================= */
+async function loadStaffCourses(){
 
-async function loadStaffCourses() {
-
-  const container =
+  const container=
     document.getElementById(
       "staffCoursesContainer"
     );
 
-  const { data, error } =
+  const {data,error} =
     await supabaseClient
       .from("courses")
       .select(`
         id,
         title,
         monthly_price,
-        is_active,
         grades(name),
         boards(name),
         subjects(name)
       `)
-      .eq("is_active", true)
+      .eq("is_active",true)
       .order("id");
 
-  if (error) {
+  if(error){
 
     container.innerHTML =
       `<div class="empty">
-        ${escapeHtml(error.message)}
-      </div>`;
+       ${escapeHtml(error.message)}
+       </div>`;
 
     return;
   }
 
-  container.innerHTML = `
+  container.innerHTML=`
 
     <div class="table-wrap">
 
-      <table>
+    <table>
 
-        <thead>
+    <thead>
+    <tr>
+      <th>Course</th>
+      <th>Grade</th>
+      <th>Board</th>
+      <th>Subject</th>
+      <th>Price</th>
+    </tr>
+    </thead>
 
-          <tr>
-            <th>Course</th>
-            <th>Grade</th>
-            <th>Board</th>
-            <th>Subject</th>
-            <th>Price</th>
-          </tr>
+    <tbody>
 
-        </thead>
+    ${(data||[]).map(x=>`
 
-        <tbody>
+      <tr>
 
-          ${(data || []).map(row => `
+        <td>${escapeHtml(x.title)}</td>
 
-            <tr>
+        <td>
+        ${escapeHtml(x.grades?.name||"-")}
+        </td>
 
-              <td>
-                ${escapeHtml(row.title)}
-              </td>
+        <td>
+        ${escapeHtml(x.boards?.name||"-")}
+        </td>
 
-              <td>
-                ${escapeHtml(row.grades?.name || "-")}
-              </td>
+        <td>
+        ${escapeHtml(x.subjects?.name||"-")}
+        </td>
 
-              <td>
-                ${escapeHtml(row.boards?.name || "-")}
-              </td>
+        <td>
+        Rs. ${Number(
+          x.monthly_price||500
+        ).toLocaleString()}
+        </td>
 
-              <td>
-                ${escapeHtml(row.subjects?.name || "-")}
-              </td>
+      </tr>
 
-              <td>
-                Rs. ${Number(
-                  row.monthly_price || 500
-                ).toLocaleString()}
-              </td>
+    `).join("")}
 
-            </tr>
+    </tbody>
 
-          `).join("")}
-
-        </tbody>
-
-      </table>
+    </table>
 
     </div>
-
   `;
-
 }
 
 
@@ -3920,16 +3801,14 @@ async function loadStaffCourses() {
    STAFF ASSIGNMENTS
 ========================================================= */
 
-async function populateAssignmentCourses() {
+async function populateAssignmentCourses(){
 
-  const select =
+  const select=
     document.getElementById(
       "assignmentCourse"
     );
 
-  if (!select) return;
-
-  const { data } =
+  const {data} =
     await supabaseClient
       .from("courses")
       .select(`
@@ -3939,99 +3818,87 @@ async function populateAssignmentCourses() {
         boards(name),
         subjects(name)
       `)
-      .eq("is_active", true)
+      .eq("is_active",true)
       .order("id");
 
-  select.innerHTML =
-    `<option value="">Select Course</option>`;
+  select.innerHTML=
+    `<option value="">
+     Select Course
+     </option>`;
 
-  (data || []).forEach(course => {
+  (data||[]).forEach(x=>{
 
-    const option =
+    const option=
       document.createElement("option");
 
-    option.value = course.id;
+    option.value=x.id;
 
-    option.textContent =
-      `${course.grades?.name || ""} ·
-       ${course.boards?.name || ""} ·
-       ${course.subjects?.name || ""}`;
+    option.textContent=
+      `${x.grades?.name||""} ·
+       ${x.boards?.name||""} ·
+       ${x.subjects?.name||""}`;
 
     select.appendChild(option);
 
   });
-
 }
 
 
-async function createAssignment(e) {
+async function createAssignment(e){
 
   e.preventDefault();
 
-  clearMessage(
-    "assignmentAdminMessage"
-  );
-
-  const courseId =
+  const courseId=
     Number(
       document.getElementById(
         "assignmentCourse"
       ).value
     );
 
-  const weekStart =
+  const week=
     document.getElementById(
       "assignmentWeek"
     ).value;
 
-  const dueDate =
+  const due=
     document.getElementById(
       "assignmentDue"
-    ).value || null;
+    ).value||null;
 
-  const title =
+  const title=
     document.getElementById(
       "assignmentTitle"
     ).value.trim();
 
-  const description =
+  const description=
     document.getElementById(
       "assignmentDescription"
     ).value.trim();
 
-  const totalMarks =
+  const marks=
     Number(
       document.getElementById(
         "assignmentMarks"
       ).value
     );
 
-  if (!courseId || !weekStart || !title) {
-
-    showMessage(
-      "assignmentAdminMessage",
-      "Course, week and title are required.",
-      "error"
-    );
-
-    return;
-  }
-
-  const { error } =
+  const {error}=
     await supabaseClient
       .from("assignments")
       .insert({
-        course_id: courseId,
+
+        course_id:courseId,
         title,
         description,
-        week_start: weekStart,
-        due_date: dueDate,
-        total_marks: totalMarks || 100,
-        is_active: true,
-        created_by: currentUser.id
+        week_start:week,
+        due_date:due,
+        total_marks:marks||100,
+        is_active:true,
+        created_by:currentUser.id
+
       });
 
-  if (error) {
+  if(error){
 
     showMessage(
       "assignmentAdminMessage",
@@ -4054,84 +3921,77 @@ async function createAssignment(e) {
 
   document.getElementById(
     "assignmentWeek"
-  ).value = getMondayISO();
+  ).value=mondayDate();
 
   await loadStaffAssignments();
-
 }
 
 
-async function loadStaffAssignments() {
+async function loadStaffAssignments(){
 
-  const container =
+  const container=
     document.getElementById(
       "adminAssignmentsList"
     );
 
-  if (!container) return;
-
-  const { data, error } =
+  const {data,error}=
     await supabaseClient
       .from("assignments")
       .select(`
-        id,
-        title,
-        week_start,
-        due_date,
-        total_marks,
+        id,title,week_start,due_date,total_marks,
         courses(
-          subjects(name),
           grades(name),
-          boards(name)
+          boards(name),
+          subjects(name)
         )
       `)
-      .eq("is_active", true)
-      .order("week_start", {
-        ascending: false
+      .eq("is_active",true)
+      .order("week_start",{
+        ascending:false
       })
       .limit(100);
 
-  if (error) {
+  if(error){
 
-    container.innerHTML =
+    container.innerHTML=
       `<div class="empty">
-        ${escapeHtml(error.message)}
-      </div>`;
+       ${escapeHtml(error.message)}
+       </div>`;
 
     return;
   }
 
-  container.innerHTML =
+  container.innerHTML=
     data?.length
-      ? data.map(a => `
+      ?data.map(x=>`
 
-          <div class="lesson-card">
+        <div class="lesson-card">
 
-            <h3>
-              ${escapeHtml(a.title)}
-            </h3>
+          <h3>
+          ${escapeHtml(x.title)}
+          </h3>
 
-            <p>
-              ${escapeHtml(
-                a.courses?.subjects?.name || ""
-              )}
-            </p>
+          <p>
+          ${escapeHtml(
+            x.courses?.subjects?.name||""
+          )}
+          </p>
 
-            <p>
-              Week:
-              ${formatDate(a.week_start)}
-              · Due:
-              ${formatDate(a.due_date)}
-              · ${a.total_marks} marks
-            </p>
+          <p>
+          Week:
+          ${formatDate(x.week_start)}
+          · Due:
+          ${formatDate(x.due_date)}
+          · Marks:
+          ${x.total_marks}
+          </p>
 
-          </div>
+        </div>
 
-        `).join("")
-      : `<div class="empty">
-           No assignments created yet.
-         </div>`;
-
+      `).join("")
+      :`<div class="empty">
+        No assignments created.
+        </div>`;
 }
 
 
@@ -4139,14 +3999,14 @@ async function loadStaffAssignments() {
    STAFF PAYMENTS
 ========================================================= */
 
-async function loadStaffPayments() {
+async function loadStaffPayments(){
 
-  const container =
+  const container=
     document.getElementById(
       "staffPaymentsContainer"
     );
 
-  const { data, error } =
+  const {data,error}=
     await supabaseClient
       .from("payments")
       .select(`
@@ -4156,96 +4016,75 @@ async function loadStaffPayments() {
         payment_method,
         transaction_reference,
         payment_date,
-        status,
-        notes
+        status
       `)
-      .order("payment_date", {
-        ascending: false
+      .order("payment_date",{
+        ascending:false
       })
       .limit(100);
 
-  if (error) {
+  if(error){
 
-    container.innerHTML =
+    container.innerHTML=
       `<div class="empty">
-        ${escapeHtml(error.message)}
-      </div>`;
+       ${escapeHtml(error.message)}
+       </div>`;
 
     return;
   }
 
-  if (!data?.length) {
-
-    container.innerHTML =
-      `<div class="empty">
-        No payments found.
-      </div>`;
-
-    return;
-  }
-
-  container.innerHTML = `
+  container.innerHTML=`
 
     <div class="table-wrap">
 
-      <table>
+    <table>
 
-        <thead>
+    <thead>
+    <tr>
+      <th>Date</th>
+      <th>Student</th>
+      <th>Amount</th>
+      <th>Reference</th>
+      <th>Status</th>
+    </tr>
+    </thead>
 
-          <tr>
-            <th>Date</th>
-            <th>Student</th>
-            <th>Amount</th>
-            <th>Reference</th>
-            <th>Status</th>
-          </tr>
+    <tbody>
 
-        </thead>
+    ${(data||[]).map(x=>`
 
-        <tbody>
+      <tr>
 
-          ${data.map(row => `
+        <td>${formatDate(x.payment_date)}</td>
 
-            <tr>
+        <td>${escapeHtml(x.student_id)}</td>
 
-              <td>
-                ${formatDate(row.payment_date)}
-              </td>
+        <td>
+        Rs. ${Number(x.amount).toLocaleString()}
+        </td>
 
-              <td>
-                ${escapeHtml(
-                  row.student_id
-                )}
-              </td>
+        <td>
+        ${escapeHtml(
+          x.transaction_reference||"-"
+        )}
+        </td>
 
-              <td>
-                Rs. ${Number(row.amount).toLocaleString()}
-              </td>
+        <td>
+        <span class="badge">
+        ${escapeHtml(x.status)}
+        </span>
+        </td>
 
-              <td>
-                ${escapeHtml(
-                  row.transaction_reference || "-"
-                )}
-              </td>
+      </tr>
 
-              <td>
-                <span class="badge">
-                  ${escapeHtml(row.status)}
-                </span>
-              </td>
+    `).join("")}
 
-            </tr>
+    </tbody>
 
-          `).join("")}
-
-        </tbody>
-
-      </table>
+    </table>
 
     </div>
-
   `;
-
 }
 
 
@@ -4253,14 +4092,14 @@ async function loadStaffPayments() {
    ATTENDANCE
 ========================================================= */
 
-async function loadAttendance() {
+async function loadAttendance(){
 
-  const container =
+  const container=
     document.getElementById(
       "attendanceContainer"
     );
 
-  const { data, error } =
+  const {data,error}=
     await supabaseClient
       .from("attendance")
       .select(`
@@ -4270,80 +4109,78 @@ async function loadAttendance() {
         status,
         notes
       `)
-      .order("attendance_date", {
-        ascending: false
+      .order("attendance_date",{
+        ascending:false
       })
       .limit(100);
 
-  if (error) {
+  if(error){
 
-    container.innerHTML =
+    container.innerHTML=
       `<div class="empty">
-        ${escapeHtml(error.message)}
-      </div>`;
+       ${escapeHtml(error.message)}
+       </div>`;
 
     return;
   }
 
-  if (!data?.length) {
+  if(!data?.length){
 
-    container.innerHTML =
+    container.innerHTML=
       `<div class="empty">
-        No attendance records yet.
-      </div>`;
+       No attendance records yet.
+       </div>`;
 
     return;
   }
 
-  container.innerHTML = `
+  container.innerHTML=`
 
     <div class="table-wrap">
 
-      <table>
+    <table>
 
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Student</th>
-            <th>Status</th>
-            <th>Notes</th>
-          </tr>
-        </thead>
+    <thead>
+    <tr>
+      <th>Date</th>
+      <th>Student</th>
+      <th>Status</th>
+      <th>Notes</th>
+    </tr>
+    </thead>
 
-        <tbody>
+    <tbody>
 
-          ${data.map(row => `
+    ${data.map(x=>`
 
-            <tr>
+      <tr>
 
-              <td>
-                ${formatDate(row.attendance_date)}
-              </td>
+        <td>
+        ${formatDate(x.attendance_date)}
+        </td>
 
-              <td>
-                ${escapeHtml(row.student_id)}
-              </td>
+        <td>
+        ${escapeHtml(x.student_id)}
+        </td>
 
-              <td>
-                ${escapeHtml(row.status)}
-              </td>
+        <td>
+        ${escapeHtml(x.status)}
+        </td>
 
-              <td>
-                ${escapeHtml(row.notes || "-")}
-              </td>
+        <td>
+        ${escapeHtml(x.notes||"-")}
+        </td>
 
-            </tr>
+      </tr>
 
-          `).join("")}
+    `).join("")}
 
-        </tbody>
+    </tbody>
 
-      </table>
+    </table>
 
     </div>
-
   `;
-
 }
 
 
@@ -4351,14 +4188,14 @@ async function loadAttendance() {
    TEACHERS
 ========================================================= */
 
-async function loadTeachers() {
+async function loadTeachers(){
 
-  const container =
+  const container=
     document.getElementById(
       "teachersContainer"
     );
 
-  const { data, error } =
+  const {data,error}=
     await supabaseClient
       .from("teachers")
       .select(`
@@ -4372,84 +4209,388 @@ async function loadTeachers() {
           phone
         )
       `)
-      .order("is_active", {
-        ascending: false
+      .order("is_active",{
+        ascending:false
       });
 
-  if (error) {
+  if(error){
 
-    container.innerHTML =
+    container.innerHTML=
       `<div class="empty">
-        ${escapeHtml(error.message)}
-      </div>`;
+       ${escapeHtml(error.message)}
+       </div>`;
 
     return;
   }
 
-  container.innerHTML =
+  container.innerHTML=
     data?.length
-      ? `
+      ?`
 
-        <div class="table-wrap">
+      <div class="table-wrap">
 
-          <table>
+      <table>
 
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Qualification</th>
-                <th>Specialization</th>
-                <th>Status</th>
-              </tr>
-            </thead>
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Qualification</th>
+        <th>Specialization</th>
+        <th>Status</th>
+      </tr>
+      </thead>
 
-            <tbody>
+      <tbody>
 
-              ${data.map(row => `
+      ${data.map(x=>`
 
-                <tr>
+        <tr>
 
-                  <td>
-                    ${escapeHtml(
-                      row.profiles?.full_name || "-"
-                    )}
-                  </td>
+          <td>
+          ${escapeHtml(
+            x.profiles?.full_name||"-"
+          )}
+          </td>
 
-                  <td>
-                    ${escapeHtml(
-                      row.qualification || "-"
-                    )}
-                  </td>
+          <td>
+          ${escapeHtml(
+            x.qualification||"-"
+          )}
+          </td>
 
-                  <td>
-                    ${escapeHtml(
-                      row.specialization || "-"
-                    )}
-                  </td>
+          <td>
+          ${escapeHtml(
+            x.specialization||"-"
+          )}
+          </td>
 
-                  <td>
-                    ${
-                      row.is_active
-                        ? "Active"
-                        : "Inactive"
-                    }
-                  </td>
+          <td>
+          ${x.is_active?"Active":"Inactive"}
+          </td>
 
-                </tr>
+        </tr>
 
-              `).join("")}
+      `).join("")}
 
-            </tbody>
+      </tbody>
 
-          </table>
+      </table>
 
-        </div>
+      </div>
 
       `
-      : `<div class="empty">
-           No teachers found.
-         </div>`;
+      :`<div class="empty">
+        No teachers found.
+        </div>`;
+}
 
+
+/* =========================================================
+   PARENT PORTAL
+========================================================= */
+
+async function loadParentDashboard(){
+
+  await loadParentStudents();
+  await loadParentProgress();
+  await loadParentTimetable();
+}
+
+
+async function loadParentStudents(){
+
+  const container=
+    document.getElementById(
+      "parentStudentsContainer"
+    );
+
+  const {data,error}=
+    await supabaseClient
+      .from("parent_students")
+      .select(`
+        student_id,
+        relationship,
+        students(
+          id,
+          admission_number,
+          account_status,
+          grades(name),
+          boards(name),
+          profiles(full_name)
+        )
+      `)
+      .eq("parent_id",currentUser.id);
+
+  if(error){
+
+    container.innerHTML=
+      `<div class="empty">
+       ${escapeHtml(error.message)}
+       </div>`;
+
+    return;
+  }
+
+  if(!data?.length){
+
+    container.innerHTML=
+      `<div class="empty">
+       No students are linked to this parent account yet.
+       </div>`;
+
+    return;
+  }
+
+  container.innerHTML=
+    data.map(x=>`
+
+      <div class="lesson-card">
+
+        <h3>
+        ${escapeHtml(
+          x.students?.profiles?.full_name||
+          "Student"
+        )}
+        </h3>
+
+        <p>
+        ${escapeHtml(
+          x.students?.grades?.name||""
+        )}
+        ·
+        ${escapeHtml(
+          x.students?.boards?.name||""
+        )}
+        </p>
+
+        <p>
+        Relationship:
+        ${escapeHtml(x.relationship||"-")}
+        </p>
+
+        <span class="badge badge-blue">
+        ${escapeHtml(
+          x.students?.account_status||"-"
+        )}
+        </span>
+
+      </div>
+
+    `).join("");
+}
+
+
+async function loadParentProgress(){
+
+  const container=
+    document.getElementById(
+      "parentProgressContainer"
+    );
+
+  const {data:links,error}=
+    await supabaseClient
+      .from("parent_students")
+      .select("student_id")
+      .eq("parent_id",currentUser.id);
+
+  if(error||!links?.length){
+
+    container.innerHTML=
+      `<div class="empty">
+       No linked students.
+       </div>`;
+
+    return;
+  }
+
+  const ids=
+    links.map(x=>x.student_id);
+
+  const {data:progress}=
+    await supabaseClient
+      .from("student_progress")
+      .select(`
+        student_id,
+        video_progress,
+        video_completed,
+        lesson_completed
+      `)
+      .in("student_id",ids);
+
+  if(!progress?.length){
+
+    container.innerHTML=
+      `<div class="empty">
+       No learning progress recorded yet.
+       </div>`;
+
+    return;
+  }
+
+  const summary={};
+
+  progress.forEach(x=>{
+
+    if(!summary[x.student_id])
+      summary[x.student_id]={
+        total:0,
+        completed:0
+      };
+
+    summary[x.student_id].total++;
+
+    if(x.lesson_completed)
+      summary[x.student_id].completed++;
+
+  });
+
+  container.innerHTML=
+    Object.entries(summary).map(
+      ([id,s])=>{
+
+        const percentage=
+          s.total
+            ?Math.round(
+              s.completed/s.total*100
+            )
+            :0;
+
+        return `
+
+          <div class="lesson-card">
+
+            <strong>
+            Student ID
+            </strong>
+
+            <p>
+            ${escapeHtml(id)}
+            </p>
+
+            <div class="progress">
+              <div class="progress-bar"
+                   style="width:${percentage}%">
+              </div>
+            </div>
+
+            <span class="badge badge-blue">
+            ${percentage}% completed
+            </span>
+
+          </div>
+
+        `;
+
+      }
+    ).join("");
+}
+
+
+async function loadParentTimetable(){
+
+  const container=
+    document.getElementById(
+      "parentTimetableContainer"
+    );
+
+  const {data:links,error}=
+    await supabaseClient
+      .from("parent_students")
+      .select("student_id")
+      .eq("parent_id",currentUser.id);
+
+  if(error||!links?.length){
+
+    container.innerHTML=
+      `<div class="empty">
+       No linked students.
+       </div>`;
+
+    return;
+  }
+
+  const studentIds=
+    links.map(x=>x.student_id);
+
+  const {data:enrollments}=
+    await supabaseClient
+      .from("enrollments")
+      .select(`
+        student_id,
+        course_id,
+        courses(
+          subjects(name)
+        )
+      `)
+      .in("student_id",studentIds);
+
+  if(!enrollments?.length){
+
+    container.innerHTML=
+      `<div class="empty">
+       No timetable available.
+       </div>`;
+
+    return;
+  }
+
+  const courseIds=
+    enrollments.map(x=>x.course_id);
+
+  const {data:rows}=
+    await supabaseClient
+      .from("video_timetable")
+      .select(`
+        course_id,
+        day_of_week,
+        class_number
+      `)
+      .in("course_id",courseIds)
+      .eq("is_active",true);
+
+  if(!rows?.length){
+
+    container.innerHTML=
+      `<div class="empty">
+       No timetable available.
+       </div>`;
+
+    return;
+  }
+
+  const map={};
+
+  enrollments.forEach(x=>{
+    map[x.course_id]=
+      x.courses?.subjects?.name||
+      "Subject";
+  });
+
+  container.innerHTML=
+    rows.map(x=>`
+
+      <div class="class-row">
+
+        <div>
+        <strong>
+        ${escapeHtml(map[x.course_id])}
+        </strong>
+
+        <br>
+
+        <small>
+        ${escapeHtml(x.day_of_week)}
+        · Class ${x.class_number}
+        </small>
+        </div>
+
+        <span class="badge badge-green">
+        Scheduled
+        </span>
+
+      </div>
+
+    `).join("");
 }
 
 
@@ -4457,36 +4598,36 @@ async function loadTeachers() {
    FORGOT PASSWORD
 ========================================================= */
 
-async function sendPasswordReset() {
+async function sendPasswordReset(){
 
-  const email =
+  const email=
     document.getElementById(
       "forgotEmail"
     ).value.trim();
 
-  if (!email) {
+  if(!email){
 
     showMessage(
       "loginMessage",
-      "Enter your email address.",
+      "Enter your email.",
       "error"
     );
 
     return;
   }
 
-  const { error } =
+  const {error}=
     await supabaseClient.auth
       .resetPasswordForEmail(
         email,
         {
           redirectTo:
-            window.location.origin +
+            window.location.origin+
             window.location.pathname
         }
       );
 
-  if (error) {
+  if(error){
 
     showMessage(
       "loginMessage",
@@ -4499,133 +4640,70 @@ async function sendPasswordReset() {
 
   showMessage(
     "loginMessage",
-    "Password reset email sent. Check your email.",
+    "Password reset email sent.",
     "success"
   );
-
 }
 
 
 /* =========================================================
-   PASSWORD RECOVERY
+   TABS
 ========================================================= */
 
-async function checkRecoverySession() {
-
-  const { data } =
-    await supabaseClient.auth.getSession();
-
-  if (!data.session) return;
-
-  const hash =
-    window.location.hash;
-
-  if (!hash.includes("type=recovery")) {
-    return;
-  }
-
-  const newPassword =
-    prompt(
-      "Enter your new password:"
-    );
-
-  if (!newPassword) return;
-
-  if (newPassword.length < 6) {
-
-    alert(
-      "Password must be at least 6 characters."
-    );
-
-    return;
-  }
-
-  const { error } =
-    await supabaseClient.auth.updateUser({
-      password: newPassword
-    });
-
-  if (error) {
-
-    alert(error.message);
-
-    return;
-  }
-
-  alert(
-    "Password changed successfully. You can now log in."
-  );
-
-  window.location.hash = "";
-
-}
-
-
-/* =========================================================
-   DASHBOARD TABS
-========================================================= */
-
-function setupTabs() {
+function setupTabs(){
 
   document.querySelectorAll(
     ".side-btn[data-tab]"
-  ).forEach(button => {
+  ).forEach(button=>{
 
     button.addEventListener(
       "click",
-      async () => {
+      async()=>{
 
-        const tab =
+        const tab=
           button.dataset.tab;
 
         document.querySelectorAll(
           ".side-btn[data-tab]"
-        ).forEach(btn =>
-          btn.classList.remove("active")
+        ).forEach(x=>
+          x.classList.remove("active")
         );
 
         button.classList.add("active");
 
         document.querySelectorAll(
           ".dash-tab"
-        ).forEach(panel =>
-          panel.classList.remove("active")
+        ).forEach(x=>
+          x.classList.remove("active")
         );
 
-        const panel =
+        const panel=
           document.getElementById(
-            "tab-" + tab
+            "tab-"+tab
           );
 
-        if (panel) {
+        if(panel)
           panel.classList.add("active");
-        }
 
-        if (tab === "timetable") {
-          await loadTimetable();
-        }
-
-        if (tab === "subjects") {
+        if(tab==="subjects")
           await loadStudentSubjects();
-        }
 
-        if (tab === "assignments") {
-          await loadAssignments();
-        }
+        if(tab==="timetable")
+          await loadTimetable();
 
-        if (tab === "lessons") {
+        if(tab==="lessons")
           await loadLessons();
-        }
 
-        if (tab === "tests") {
+        if(tab==="assignments")
+          await loadAssignments();
+
+        if(tab==="tests")
           await loadTests();
-        }
 
       }
     );
 
   });
-
 }
 
 
@@ -4634,141 +4712,133 @@ function setupTabs() {
 ========================================================= */
 
 document.addEventListener(
-  "DOMContentLoaded",
-  async () => {
+"DOMContentLoaded",
+async()=>{
 
-    await loadPublicData();
+  await loadPublicData();
 
-    setupTabs();
+  setupTabs();
 
-    document.getElementById(
-      "publicGrade"
-    ).addEventListener(
-      "change",
-      loadPublicSubjects
-    );
+  document.getElementById(
+    "publicGrade"
+  ).addEventListener(
+    "change",
+    loadPublicSubjects
+  );
 
-    document.getElementById(
-      "publicBoard"
-    ).addEventListener(
-      "change",
-      loadPublicSubjects
-    );
+  document.getElementById(
+    "publicBoard"
+  ).addEventListener(
+    "change",
+    loadPublicSubjects
+  );
 
-    document.getElementById(
-      "publicSubject"
-    ).addEventListener(
-      "change",
-      showPublicCourse
-    );
+  document.getElementById(
+    "publicSubject"
+  ).addEventListener(
+    "change",
+    showPublicCourse
+  );
 
-    document.getElementById(
-      "registerForm"
-    ).addEventListener(
-      "submit",
-      registerStudent
-    );
+  document.getElementById(
+    "registerForm"
+  ).addEventListener(
+    "submit",
+    registerStudent
+  );
 
-    document.getElementById(
-      "loginForm"
-    ).addEventListener(
-      "submit",
-      loginStudent
-    );
+  document.getElementById(
+    "loginForm"
+  ).addEventListener(
+    "submit",
+    loginStudent
+  );
 
-    document.getElementById(
-      "logoutTop"
-    ).addEventListener(
-      "click",
-      logout
-    );
+  document.getElementById(
+    "logoutTop"
+  ).addEventListener(
+    "click",
+    logout
+  );
 
-    document.getElementById(
-      "logoutDashboard"
-    ).addEventListener(
-      "click",
-      logout
-    );
+  document.getElementById(
+    "logoutDashboard"
+  ).addEventListener(
+    "click",
+    logout
+  );
 
-    document.getElementById(
-      "forgotBtn"
-    ).addEventListener(
-      "click",
-      () => {
-
-        document.getElementById(
-          "forgotBox"
-        ).classList.toggle("hidden");
-
-      }
-    );
-
-    document.getElementById(
-      "sendResetBtn"
-    ).addEventListener(
-      "click",
-      sendPasswordReset
-    );
-
-    document.getElementById(
-      "studentGroupSelect"
-    ).addEventListener(
-      "change",
-      async e => {
-
-        await loadGroupSubjects(
-          Number(e.target.value)
-        );
-
-      }
-    );
-
-    document.getElementById(
-      "saveSubjectsBtn"
-    ).addEventListener(
-      "click",
-      saveSubjects
-    );
-
-    document.getElementById(
-      "paymentForm"
-    ).addEventListener(
-      "submit",
-      submitPayment
-    );
-
-    document.getElementById(
-      "assignmentCreateForm"
-    ).addEventListener(
-      "submit",
-      createAssignment
-    );
-
-    document.getElementById(
-      "assignmentWeek"
-    ).value =
-      getMondayISO();
-
-    await checkRecoverySession();
-
-    const { data } =
-      await supabaseClient.auth.getSession();
-
-    if (data.session) {
-
-      currentUser =
-        data.session.user;
-
-      await loadDashboard();
-
+  document.getElementById(
+    "forgotBtn"
+  ).addEventListener(
+    "click",
+    ()=>{
       document.getElementById(
-        "dashboard"
-      ).classList.remove("hidden");
-
+        "forgotBox"
+      ).classList.toggle("hidden");
     }
+  );
+
+  document.getElementById(
+    "sendResetBtn"
+  ).addEventListener(
+    "click",
+    sendPasswordReset
+  );
+
+  document.getElementById(
+    "studentGroupSelect"
+  ).addEventListener(
+    "change",
+    e=>
+      loadGroupSubjects(
+        Number(e.target.value)
+      )
+  );
+
+  document.getElementById(
+    "saveSubjectsBtn"
+  ).addEventListener(
+    "click",
+    saveSubjects
+  );
+
+  document.getElementById(
+    "paymentForm"
+  ).addEventListener(
+    "submit",
+    submitPayment
+  );
+
+  document.getElementById(
+    "assignmentCreateForm"
+  ).addEventListener(
+    "submit",
+    createAssignment
+  );
+
+  document.getElementById(
+    "assignmentWeek"
+  ).value=mondayDate();
+
+  const {data}=
+    await supabaseClient.auth
+      .getSession();
+
+  if(data.session){
+
+    currentUser=
+      data.session.user;
+
+    await loadDashboard();
+
+    document.getElementById(
+      "dashboard"
+    ).classList.remove("hidden");
 
   }
-);
+
+});
 
 
 /* =========================================================
@@ -4776,17 +4846,15 @@ document.addEventListener(
 ========================================================= */
 
 supabaseClient.auth.onAuthStateChange(
-  async (event, session) => {
+(event,session)=>{
 
-    if (event === "SIGNED_IN" && session) {
+  if(event==="SIGNED_IN"&&session){
 
-      currentUser =
-        session.user;
-
-    }
+    currentUser=session.user;
 
   }
-);
+
+});
 
 </script>
 
