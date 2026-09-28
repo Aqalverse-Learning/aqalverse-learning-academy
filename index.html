@@ -14,740 +14,560 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    * {
-      box-sizing: border-box;
+    :root{
+      --primary:#2563eb;
+      --primary-dark:#1d4ed8;
+      --secondary:#0f172a;
+      --success:#15803d;
+      --danger:#dc2626;
+      --warning:#b45309;
+      --light:#f8fafc;
+      --border:#e2e8f0;
+      --text:#0f172a;
+      --muted:#64748b;
+      --white:#fff;
+      --shadow:0 10px 30px rgba(15,23,42,.08);
+      --radius:16px;
     }
 
-    html {
-      scroll-behavior: smooth;
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
     }
 
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f5f7fb;
-      color: #172033;
-      line-height: 1.6;
+    body{
+      font-family:Arial,Helvetica,sans-serif;
+      background:#f8fafc;
+      color:var(--text);
+      line-height:1.6;
     }
 
-    a {
-      text-decoration: none;
-      color: inherit;
+    button,input,select,textarea{
+      font:inherit;
     }
 
-    button,
-    input,
-    select {
-      font: inherit;
+    button{
+      cursor:pointer;
     }
 
-    button {
-      cursor: pointer;
+    a{
+      color:inherit;
+      text-decoration:none;
     }
 
-    button:disabled {
-      opacity: 0.65;
-      cursor: not-allowed;
+    .container{
+      width:min(1180px,92%);
+      margin:auto;
     }
 
-    .hidden {
-      display: none !important;
+    header{
+      position:sticky;
+      top:0;
+      z-index:1000;
+      background:rgba(255,255,255,.97);
+      border-bottom:1px solid var(--border);
+      backdrop-filter:blur(10px);
     }
 
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      background: #ffffff;
-      border-bottom: 1px solid #e5e7eb;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    .nav{
+      min-height:72px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
     }
 
-    .nav-container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 15px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
+    .brand{
+      font-size:21px;
+      font-weight:800;
+      color:var(--primary);
     }
 
-    .logo {
-      font-size: 22px;
-      font-weight: 800;
-      color: #0f766e;
+    .nav-links{
+      display:flex;
+      gap:20px;
+      align-items:center;
+      flex-wrap:wrap;
     }
 
-    nav {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      align-items: center;
+    .nav-links a{
+      color:#334155;
+      font-weight:600;
+      font-size:14px;
     }
 
-    nav a {
-      font-weight: 600;
-      color: #334155;
+    .nav-links a:hover{
+      color:var(--primary);
     }
 
-    nav a:hover {
-      color: #0f766e;
+    .hero{
+      padding:75px 0;
+      background:
+        radial-gradient(circle at top right,#dbeafe,transparent 35%),
+        linear-gradient(180deg,#eff6ff,#f8fafc);
     }
 
-    .hero {
-      background: linear-gradient(135deg, #0f766e, #155e75);
-      color: white;
-      padding: 80px 20px;
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:40px;
+      align-items:center;
     }
 
-    .hero-container {
-      max-width: 1200px;
-      margin: auto;
-      display: grid;
-      grid-template-columns: 1.3fr 1fr;
-      gap: 40px;
-      align-items: center;
+    .eyebrow{
+      color:var(--primary);
+      font-weight:800;
+      letter-spacing:1px;
+      margin-bottom:12px;
     }
 
-    .tagline {
-      font-weight: 700;
-      letter-spacing: 2px;
-      font-size: 14px;
-      opacity: 0.9;
+    h1{
+      font-size:clamp(38px,5vw,62px);
+      line-height:1.05;
+      margin-bottom:20px;
     }
 
-    .hero h1 {
-      font-size: clamp(38px, 6vw, 64px);
-      line-height: 1.05;
-      margin: 15px 0;
+    .hero p{
+      font-size:18px;
+      color:var(--muted);
+      max-width:650px;
     }
 
-    .hero p {
-      font-size: 18px;
-      max-width: 650px;
+    .hero-buttons{
+      display:flex;
+      gap:12px;
+      margin-top:28px;
+      flex-wrap:wrap;
     }
 
-    .primary-button {
-      display: inline-block;
-      background: white;
-      color: #0f766e;
-      padding: 13px 22px;
-      border-radius: 10px;
-      font-weight: 800;
-      border: none;
-      margin-top: 15px;
+    .btn{
+      border:0;
+      border-radius:10px;
+      padding:12px 18px;
+      font-weight:700;
+      transition:.2s;
     }
 
-    .primary-button:hover {
-      background: #ecfeff;
+    .btn-primary{
+      background:var(--primary);
+      color:white;
     }
 
-    .hero-stats {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
+    .btn-primary:hover{
+      background:var(--primary-dark);
     }
 
-    .stat-card {
-      background: rgba(255,255,255,0.13);
-      border: 1px solid rgba(255,255,255,0.2);
-      padding: 22px;
-      border-radius: 15px;
+    .btn-secondary{
+      background:#e2e8f0;
+      color:#0f172a;
     }
 
-    .stat-card strong {
-      display: block;
-      font-size: 28px;
+    .btn-success{
+      background:var(--success);
+      color:#fff;
     }
 
-    section {
-      padding: 70px 20px;
+    .btn-danger{
+      background:var(--danger);
+      color:#fff;
     }
 
-    .section-container {
-      max-width: 1200px;
-      margin: auto;
+    .btn-warning{
+      background:#f59e0b;
+      color:#111827;
     }
 
-    .section-title {
-      text-align: center;
-      margin-bottom: 40px;
+    .btn-small{
+      padding:8px 12px;
+      font-size:13px;
     }
 
-    .section-title h2 {
-      font-size: 34px;
-      margin-bottom: 8px;
-      color: #102a43;
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
     }
 
-    .section-title p {
-      color: #64748b;
+    .stat{
+      background:#fff;
+      border:1px solid var(--border);
+      padding:20px;
+      border-radius:14px;
+      box-shadow:var(--shadow);
     }
 
-    .feature-grid,
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+    .stat strong{
+      display:block;
+      font-size:27px;
+      color:var(--primary);
     }
 
-    .feature-card,
-    .price-card,
-    .panel {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 18px;
-      padding: 25px;
-      box-shadow: 0 5px 20px rgba(15,23,42,0.05);
+    section{
+      padding:65px 0;
     }
 
-    .feature-card h3,
-    .price-card h3 {
-      color: #0f766e;
-      margin-top: 0;
+    .section-title{
+      text-align:center;
+      margin-bottom:35px;
     }
 
-    .price {
-      font-size: 35px;
-      font-weight: 800;
-      color: #102a43;
+    .section-title h2{
+      font-size:34px;
+      margin-bottom:8px;
     }
 
-    .price span {
-      font-size: 15px;
-      font-weight: normal;
-      color: #64748b;
+    .section-title p{
+      color:var(--muted);
     }
 
-    .course-panel {
-      background: white;
-      border-radius: 20px;
-      padding: 30px;
-      border: 1px solid #e5e7eb;
-      box-shadow: 0 5px 20px rgba(15,23,42,0.05);
+    .grid{
+      display:grid;
+      gap:20px;
     }
 
-    .stage {
-      margin-top: 30px;
-      padding-top: 20px;
-      border-top: 1px solid #e5e7eb;
+    .features-grid{
+      grid-template-columns:repeat(3,1fr);
     }
 
-    .stage h3 {
-      color: #102a43;
+    .card{
+      background:white;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:24px;
+      box-shadow:var(--shadow);
     }
 
-    .button-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 12px;
+    .card h3{
+      margin-bottom:8px;
     }
 
-    .select-button {
-      border: 1px solid #cbd5e1;
-      background: #ffffff;
-      color: #1e293b;
-      padding: 14px 16px;
-      border-radius: 10px;
-      text-align: left;
-      font-weight: 600;
-      transition: 0.2s;
+    .card p{
+      color:var(--muted);
     }
 
-    .select-button:hover {
-      border-color: #0f766e;
-      background: #f0fdfa;
-      transform: translateY(-1px);
+    .pricing-grid{
+      grid-template-columns:repeat(3,1fr);
     }
 
-    .select-button.selected {
-      background: #0f766e;
-      color: white;
-      border-color: #0f766e;
+    .price{
+      font-size:34px;
+      font-weight:800;
+      color:var(--primary);
+      margin:10px 0;
     }
 
-    .select-button.locked {
-      background: #f1f5f9;
-      color: #94a3b8;
-      border-color: #e2e8f0;
-      cursor: not-allowed;
+    .auth-section{
+      background:#eef2ff;
     }
 
-    .select-button.completed {
-      border-color: #16a34a;
-      background: #f0fdf4;
-      color: #166534;
+    .auth-grid{
+      max-width:850px;
+      margin:auto;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
     }
 
-    .message {
-      margin-top: 20px;
-      padding: 13px 15px;
-      border-radius: 10px;
-      background: #f0fdfa;
-      color: #115e59;
+    form{
+      display:grid;
+      gap:12px;
     }
 
-    .auth-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 25px;
+    label{
+      font-weight:700;
+      font-size:14px;
     }
 
-    .form-group {
-      margin-bottom: 15px;
+    input,select,textarea{
+      width:100%;
+      border:1px solid #cbd5e1;
+      border-radius:9px;
+      padding:11px 12px;
+      background:white;
+      color:var(--text);
     }
 
-    .form-group label {
-      display: block;
-      font-weight: 700;
-      margin-bottom: 6px;
+    textarea{
+      min-height:100px;
+      resize:vertical;
     }
 
-    .form-group input,
-    .form-group select {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #cbd5e1;
-      border-radius: 9px;
-      background: white;
+    .message{
+      margin-top:12px;
+      padding:11px 13px;
+      border-radius:9px;
+      display:none;
     }
 
-    .form-button {
-      width: 100%;
-      border: none;
-      padding: 13px;
-      background: #0f766e;
-      color: white;
-      border-radius: 9px;
-      font-weight: 800;
+    .message.show{
+      display:block;
     }
 
-    .form-button:hover {
-      background: #115e59;
+    .message.success{
+      background:#dcfce7;
+      color:#166534;
     }
 
-    .auth-message {
-      margin-top: 12px;
-      padding: 10px;
-      border-radius: 8px;
-      background: #f8fafc;
+    .message.error{
+      background:#fee2e2;
+      color:#991b1b;
     }
 
-    .dashboard {
-      background: #eef6f6;
+    .message.info{
+      background:#dbeafe;
+      color:#1e40af;
     }
 
-    .dashboard-header {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      align-items: center;
-      margin-bottom: 25px;
+    .hidden{
+      display:none !important;
     }
 
-    .dashboard-header h2 {
-      margin: 0;
-      color: #102a43;
+    #app{
+      padding:45px 0;
+      background:#f1f5f9;
+      min-height:500px;
     }
 
-    .logout-button {
-      border: none;
-      background: #dc2626;
-      color: white;
-      padding: 10px 18px;
-      border-radius: 9px;
-      font-weight: 700;
+    .dashboard-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:15px;
+      margin-bottom:22px;
+      flex-wrap:wrap;
     }
 
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-      margin-bottom: 25px;
+    .dashboard-header h2{
+      margin-bottom:3px;
     }
 
-    .dashboard-card {
-      background: white;
-      padding: 20px;
-      border-radius: 15px;
-      border: 1px solid #e5e7eb;
+    .user-meta{
+      color:var(--muted);
+      font-size:14px;
     }
 
-    .dashboard-card small {
-      color: #64748b;
-      display: block;
+    .dashboard-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:15px;
+      margin-bottom:22px;
     }
 
-    .dashboard-card strong {
-      display: block;
-      font-size: 22px;
-      margin-top: 5px;
-      color: #0f766e;
+    .dashboard-stat{
+      background:white;
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:18px;
     }
 
-    .status-active {
-      color: #15803d !important;
+    .dashboard-stat strong{
+      font-size:28px;
+      display:block;
+      color:var(--primary);
     }
 
-    .status-expired {
-      color: #dc2626 !important;
+    .dashboard-layout{
+      display:grid;
+      grid-template-columns:230px 1fr;
+      gap:20px;
     }
 
-    .status-trial {
-      color: #b45309 !important;
+    .sidebar{
+      background:white;
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+      height:max-content;
+      position:sticky;
+      top:90px;
     }
 
-    .status-pending {
-      color: #b45309 !important;
+    .sidebar button{
+      width:100%;
+      text-align:left;
+      border:0;
+      background:transparent;
+      padding:11px 12px;
+      border-radius:8px;
+      margin-bottom:4px;
+      font-weight:700;
+      color:#475569;
     }
 
-    .progress-bar {
-      width: 100%;
-      height: 15px;
-      background: #e2e8f0;
-      border-radius: 20px;
-      overflow: hidden;
-      margin-top: 10px;
+    .sidebar button:hover,
+    .sidebar button.active{
+      background:#dbeafe;
+      color:#1d4ed8;
     }
 
-    .progress-fill {
-      height: 100%;
-      width: 0%;
-      background: #0f766e;
-      transition: width 0.4s ease;
+    .panel{
+      background:white;
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:24px;
+      min-width:0;
     }
 
-    .quiz-container {
-      margin-top: 30px;
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      border-radius: 18px;
-      padding: 25px;
+    .panel h3{
+      margin-bottom:15px;
     }
 
-    .quiz-question {
-      padding: 20px;
-      border: 1px solid #e2e8f0;
-      border-radius: 13px;
-      margin-bottom: 18px;
+    .table-wrap{
+      overflow:auto;
     }
 
-    .quiz-question h4 {
-      margin-top: 0;
-      color: #102a43;
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:700px;
     }
 
-    .option {
-      display: block;
-      padding: 10px;
-      margin: 7px 0;
-      background: #f8fafc;
-      border-radius: 8px;
-      cursor: pointer;
+    th,td{
+      padding:11px;
+      border-bottom:1px solid var(--border);
+      text-align:left;
+      vertical-align:top;
     }
 
-    .option:hover {
-      background: #f0fdfa;
+    th{
+      background:#f8fafc;
+      font-size:13px;
     }
 
-    .quiz-submit {
-      border: none;
-      background: #0f766e;
-      color: white;
-      padding: 13px 22px;
-      border-radius: 9px;
-      font-weight: 800;
+    td{
+      font-size:14px;
     }
 
-    .result {
-      margin-top: 20px;
-      padding: 18px;
-      border-radius: 12px;
-      font-weight: 700;
+    .badge{
+      display:inline-block;
+      padding:4px 9px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
     }
 
-    .success {
-      background: #dcfce7;
-      color: #166534;
+    .badge-green{
+      background:#dcfce7;
+      color:#166534;
     }
 
-    .failure {
-      background: #fee2e2;
-      color: #991b1b;
+    .badge-red{
+      background:#fee2e2;
+      color:#991b1b;
     }
 
-    .lesson-content {
-      margin-top: 25px;
-      padding: 25px;
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 18px;
-      box-shadow: 0 5px 20px rgba(15,23,42,0.05);
+    .badge-yellow{
+      background:#fef3c7;
+      color:#92400e;
     }
 
-    .lesson-content h3 {
-      color: #102a43;
-      margin-bottom: 8px;
+    .badge-blue{
+      background:#dbeafe;
+      color:#1e40af;
     }
 
-    .lesson-description {
-      color: #6b7280;
-      margin-bottom: 20px;
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:14px;
     }
 
-    .video-wrapper {
-      width: 100%;
-      background: #000;
-      border-radius: 14px;
-      overflow: hidden;
-      margin: 20px 0;
+    .full{
+      grid-column:1/-1;
     }
 
-    .video-wrapper video {
-      display: block;
-      width: 100%;
-      max-height: 600px;
-      background: #000;
+    .course-picker{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+      margin-bottom:18px;
     }
 
-    .lesson-actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 18px;
+    .list{
+      display:grid;
+      gap:10px;
     }
 
-    .notes-button {
-      display: inline-block;
-      border: 1px solid #0f766e;
-      background: #fff;
-      color: #0f766e;
-      padding: 12px 18px;
-      border-radius: 9px;
-      font-weight: 700;
+    .list-item{
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:13px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
     }
 
-    .notes-button:hover {
-      background: #f0fdfa;
+    .login-required{
+      text-align:center;
+      padding:50px 20px;
     }
 
-    .content-status {
-      margin-top: 15px;
-      padding: 12px;
-      border-radius: 9px;
-      background: #ecfeff;
-      color: #155e75;
+    .login-required h2{
+      margin-bottom:10px;
     }
 
-    .trial-box {
-      margin-top: 15px;
-      padding: 18px;
-      border-radius: 10px;
-      background: #fffbeb;
-      color: #92400e;
+    footer{
+      background:#0f172a;
+      color:white;
+      padding:35px 0;
+      text-align:center;
     }
 
-    .access-box {
-      margin-top: 15px;
-      padding: 18px;
-      border-radius: 10px;
-      font-weight: 700;
+    footer p{
+      color:#cbd5e1;
     }
 
-    .access-active {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .access-expired {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    .registration-note {
-      margin-bottom: 15px;
-      padding: 12px;
-      background: #f0fdfa;
-      color: #115e59;
-      border-radius: 9px;
-      font-size: 14px;
-    }
-
-    .lock-message {
-      margin-top: 15px;
-      padding: 15px;
-      border-radius: 10px;
-      background: #fff7ed;
-      color: #9a3412;
-      border: 1px solid #fed7aa;
-    }
-
-    /* PAYMENT / RENEWAL */
-
-    .renewal-panel {
-      margin-top: 25px;
-    }
-
-    .renewal-header {
-      margin-bottom: 20px;
-    }
-
-    .renewal-header h3 {
-      margin-bottom: 6px;
-      color: #102a43;
-    }
-
-    .renewal-header p {
-      color: #64748b;
-    }
-
-    .payment-card {
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      border-radius: 15px;
-      padding: 20px;
-    }
-
-    .payment-card h4 {
-      margin-top: 0;
-      color: #0f766e;
-    }
-
-    .payment-price {
-      font-size: 28px;
-      font-weight: 800;
-      color: #102a43;
-      margin: 10px 0;
-    }
-
-    .payment-select-button {
-      width: 100%;
-      border: none;
-      background: #0f766e;
-      color: white;
-      padding: 12px;
-      border-radius: 9px;
-      font-weight: 800;
-      margin-top: 10px;
-    }
-
-    .payment-select-button:hover {
-      background: #115e59;
-    }
-
-    .payment-form-box {
-      margin-top: 25px;
-      padding: 20px;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 15px;
-    }
-
-    .payment-history {
-      margin-top: 25px;
-    }
-
-    .payment-history-item {
-      padding: 15px;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      margin-top: 10px;
-      background: #f8fafc;
-    }
-
-    .payment-pending {
-      color: #b45309;
-      font-weight: 800;
-    }
-
-    .payment-verified {
-      color: #15803d;
-      font-weight: 800;
-    }
-
-    .payment-rejected {
-      color: #dc2626;
-      font-weight: 800;
-    }
-
-    .payment-info-box {
-      margin-top: 15px;
-      padding: 15px;
-      border-radius: 10px;
-      background: #eff6ff;
-      color: #1e40af;
-      border: 1px solid #bfdbfe;
-    }
-
-    .payment-success-box {
-      margin-top: 15px;
-      padding: 15px;
-      border-radius: 10px;
-      background: #dcfce7;
-      color: #166534;
-      border: 1px solid #bbf7d0;
-    }
-
-    .payment-warning-box {
-      margin-top: 15px;
-      padding: 15px;
-      border-radius: 10px;
-      background: #fff7ed;
-      color: #9a3412;
-      border: 1px solid #fed7aa;
-    }
-
-    footer {
-      background: #102a43;
-      color: white;
-      text-align: center;
-      padding: 30px 20px;
-    }
-
-    @media (max-width: 900px) {
-      .hero-container,
-      .auth-grid {
-        grid-template-columns: 1fr;
+    @media(max-width:900px){
+      .hero-grid,
+      .auth-grid,
+      .dashboard-layout{
+        grid-template-columns:1fr;
       }
 
-      .feature-grid,
-      .pricing-grid {
-        grid-template-columns: repeat(2, 1fr);
+      .features-grid,
+      .pricing-grid{
+        grid-template-columns:1fr 1fr;
       }
 
-      .dashboard-grid {
-        grid-template-columns: repeat(2, 1fr);
+      .dashboard-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .sidebar{
+        position:static;
+      }
+
+      .course-picker{
+        grid-template-columns:1fr 1fr;
       }
     }
 
-    @media (max-width: 600px) {
-      nav {
-        display: none;
+    @media(max-width:600px){
+      .nav{
+        padding:12px 0;
+        align-items:flex-start;
       }
 
-      .feature-grid,
+      .nav-links{
+        gap:10px;
+      }
+
+      .features-grid,
       .pricing-grid,
-      .dashboard-grid {
-        grid-template-columns: 1fr;
+      .dashboard-grid,
+      .form-grid,
+      .course-picker{
+        grid-template-columns:1fr;
       }
 
-      .hero {
-        padding: 55px 20px;
+      section{
+        padding:45px 0;
       }
 
-      section {
-        padding: 50px 15px;
-      }
-
-      .course-panel,
-      .panel {
-        padding: 20px;
-      }
-
-      .dashboard-header {
-        flex-direction: column;
-        align-items: flex-start;
+      .hero{
+        padding:50px 0;
       }
     }
   </style>
@@ -756,5723 +576,3819 @@
 <body>
 
 <header>
-  <div class="nav-container">
-    <div class="logo">Aqalverse Learning Academy</div>
+  <div class="container nav">
+    <a href="#" class="brand">Aqalverse Learning Academy</a>
 
-    <nav>
+    <nav class="nav-links">
       <a href="#features">Features</a>
       <a href="#courses">Courses</a>
       <a href="#pricing">Pricing</a>
       <a href="#login">Login</a>
-      <a href="#dashboard">Dashboard</a>
+      <a href="#app" id="dashboardNav" class="hidden">Dashboard</a>
     </nav>
   </div>
 </header>
 
 
-<!-- =====================================================
-     HERO
-===================================================== -->
-
+<!-- HERO -->
 <section class="hero">
-  <div class="hero-container">
+  <div class="container hero-grid">
 
     <div>
-      <div class="tagline">
-        LEARN • PRACTICE • PROGRESS
-      </div>
+      <div class="eyebrow">LEARN • PRACTICE • PROGRESS</div>
 
-      <h1>
-        Smart learning for Pakistani students.
-      </h1>
+      <h1>Smart learning for Pakistani students.</h1>
 
       <p>
-        Board-specific online learning for Grades 9–12 with lessons,
-        assessments, progress tracking and student support.
+        Aqalverse Learning Academy provides structured board-based learning,
+        assessments, progress tracking and teacher support for Grades 9–12.
       </p>
 
-      <a href="#courses" class="primary-button">
-        Explore Courses
-      </a>
+      <div class="hero-buttons">
+        <a href="#courses" class="btn btn-primary">Explore Courses</a>
+        <a href="#login" class="btn btn-secondary">Student Login</a>
+      </div>
     </div>
 
-    <div class="hero-stats">
-
-      <div class="stat-card">
+    <div class="stats">
+      <div class="stat">
         <strong>9–12</strong>
         Grades
       </div>
 
-      <div class="stat-card">
+      <div class="stat">
         <strong>9+</strong>
         Subjects
       </div>
 
-      <div class="stat-card">
+      <div class="stat">
         <strong>10</strong>
-        Assessment Questions
+        Questions / Test
       </div>
 
-      <div class="stat-card">
+      <div class="stat">
         <strong>60%</strong>
         Passing Requirement
       </div>
-
     </div>
 
   </div>
 </section>
 
 
-<!-- =====================================================
-     FEATURES
-===================================================== -->
-
+<!-- FEATURES -->
 <section id="features">
-
-  <div class="section-container">
+  <div class="container">
 
     <div class="section-title">
-      <h2>Everything Students Need</h2>
-      <p>
-        A complete learning platform designed for Pakistani students.
-      </p>
+      <h2>Everything in one learning platform</h2>
+      <p>Designed for Pakistani students, parents and teachers.</p>
     </div>
 
-    <div class="feature-grid">
+    <div class="grid features-grid">
 
-      <div class="feature-card">
+      <div class="card">
         <h3>Board-Specific Learning</h3>
-        <p>
-          Courses organized according to Pakistani education boards.
-        </p>
+        <p>Courses organized by grade, board and subject.</p>
       </div>
 
-      <div class="feature-card">
+      <div class="card">
         <h3>Smart Assessments</h3>
-        <p>
-          Randomized assessments with a 60% passing requirement.
-        </p>
+        <p>Tests connected directly to lessons and question banks.</p>
       </div>
 
-      <div class="feature-card">
+      <div class="card">
         <h3>Parent Portal</h3>
-        <p>
-          Parents can monitor student progress and performance.
-        </p>
+        <p>Parents can monitor student progress.</p>
       </div>
 
-      <div class="feature-card">
+      <div class="card">
         <h3>Teacher Review</h3>
-        <p>
-          Teacher and administrator tools for managing learning.
-        </p>
+        <p>Teachers can manage lessons, questions and attendance.</p>
       </div>
 
-      <div class="feature-card">
+      <div class="card">
         <h3>Attendance & Fees</h3>
-        <p>
-          Track attendance, subscriptions and fee records.
-        </p>
+        <p>Student attendance and payment records are organized.</p>
       </div>
 
-      <div class="feature-card">
+      <div class="card">
         <h3>English + Urdu</h3>
-        <p>
-          Learning support for both English and Urdu.
-        </p>
+        <p>Learning content can support both languages.</p>
       </div>
 
     </div>
-
   </div>
-
 </section>
 
 
-<!-- =====================================================
-     COURSES
-===================================================== -->
-
+<!-- COURSES -->
 <section id="courses">
-
-  <div class="section-container">
+  <div class="container">
 
     <div class="section-title">
       <h2>Explore Courses</h2>
-      <p>
-        Select your grade, board and subject.
-      </p>
+      <p>Select your grade, board and subject.</p>
     </div>
 
-    <div class="course-panel">
+    <div class="card">
 
-      <div id="courseMessage" class="message hidden"></div>
+      <div class="course-picker">
 
-      <div id="accessLockMessage" class="lock-message hidden"></div>
+        <select id="publicGrade">
+          <option value="">Select Grade</option>
+        </select>
 
+        <select id="publicBoard">
+          <option value="">Select Board</option>
+        </select>
 
-      <!-- GRADE -->
+        <select id="publicSubject">
+          <option value="">Select Subject</option>
+        </select>
 
-      <div id="gradeStage" class="stage">
-
-        <h3>1. Select Grade</h3>
-
-        <div id="gradesContainer" class="button-grid">
-          <p>Loading grades...</p>
-        </div>
-
-      </div>
-
-
-      <!-- BOARD -->
-
-      <div id="boardStage" class="stage hidden">
-
-        <h3>2. Select Board</h3>
-
-        <div id="boardsContainer" class="button-grid"></div>
-
-      </div>
-
-
-      <!-- SUBJECT -->
-
-      <div id="subjectStage" class="stage hidden">
-
-        <h3>3. Select Subject</h3>
-
-        <div id="subjectsContainer" class="button-grid"></div>
-
-      </div>
-
-
-      <!-- CHAPTER -->
-
-      <div id="chapterStage" class="stage hidden">
-
-        <h3>4. Select Chapter</h3>
-
-        <div id="chaptersContainer" class="button-grid"></div>
-
-      </div>
-
-
-      <!-- LESSON -->
-
-      <div id="lessonStage" class="stage hidden">
-
-        <h3>5. Select Lesson</h3>
-
-        <div id="lessonsContainer" class="button-grid"></div>
-
-      </div>
-
-
-      <!-- LESSON CONTENT -->
-
-      <div id="lessonContent" class="lesson-content hidden">
-
-        <h3 id="lessonContentTitle">
-          Lesson Content
-        </h3>
-
-        <p id="lessonContentDescription" class="lesson-description"></p>
-
-        <div id="videoContainer" class="video-wrapper hidden">
-
-          <video
-            id="lessonVideo"
-            controls
-            controlsList="nodownload"
-            preload="metadata"
-          >
-            Your browser does not support video playback.
-          </video>
-
-        </div>
-
-        <div id="notesContainer" class="lesson-actions"></div>
-
-        <div id="contentStatus" class="content-status hidden"></div>
-
-      </div>
-
-
-      <!-- ASSESSMENT -->
-
-      <div id="testStage" class="stage hidden">
-
-        <h3>6. Assessment</h3>
-
-        <div id="testsContainer" class="button-grid"></div>
-
-      </div>
-
-
-      <!-- QUIZ -->
-
-      <div id="quizContainer" class="quiz-container hidden">
-
-        <h3 id="quizTitle">
-          Assessment
-        </h3>
-
-        <div id="quizQuestions"></div>
-
-        <button id="submitQuiz" class="quiz-submit">
-          Submit Assessment
+        <button
+          class="btn btn-primary"
+          id="findCoursesBtn">
+          Find Course
         </button>
 
-        <div id="quizResult" class="hidden"></div>
-
       </div>
 
+      <div id="publicCourseResults"></div>
+
     </div>
-
   </div>
-
 </section>
 
 
-<!-- =====================================================
-     PRICING
-===================================================== -->
-
+<!-- PRICING -->
 <section id="pricing">
-
-  <div class="section-container">
+  <div class="container">
 
     <div class="section-title">
       <h2>Simple Pricing</h2>
-      <p>
-        Start learning with affordable monthly access.
-      </p>
+      <p>Start with the 2-day free trial.</p>
     </div>
 
-    <div class="pricing-grid">
+    <div class="grid pricing-grid">
 
-      <div class="price-card">
+      <div class="card">
         <h3>Individual Subject</h3>
-
-        <div class="price">
-          Rs. 500
-          <span>/ month</span>
-        </div>
-
-        <p>
-          One subject of your choice.
-        </p>
+        <div class="price">Rs. 500</div>
+        <p>Per subject / month</p>
       </div>
 
-      <div class="price-card">
+      <div class="card">
         <h3>All Subjects</h3>
-
-        <div class="price">
-          Rs. 2,000
-          <span>/ month</span>
-        </div>
-
-        <p>
-          Access all available subjects.
-        </p>
+        <div class="price">Rs. 2,000</div>
+        <p>All available subjects / month</p>
       </div>
 
-      <div class="price-card">
+      <div class="card">
         <h3>Free Trial</h3>
-
-        <div class="price">
-          2 Days
-        </div>
-
-        <p>
-          Try the platform before subscribing.
-        </p>
+        <div class="price">2 Days</div>
+        <p>Try the platform before payment.</p>
       </div>
 
     </div>
 
   </div>
-
 </section>
 
 
-<!-- =====================================================
-     LOGIN / REGISTER
-===================================================== -->
-
-<section id="login">
-
-  <div class="section-container">
+<!-- LOGIN / REGISTER -->
+<section id="login" class="auth-section">
+  <div class="container">
 
     <div class="section-title">
-      <h2>Student Account</h2>
-      <p>
-        Login or create your learning account.
-      </p>
+      <h2>Account Access</h2>
+      <p>Students, teachers and administrators use the same login.</p>
     </div>
 
     <div class="auth-grid">
 
-
-      <!-- LOGIN -->
-
-      <div class="panel">
-
+      <div class="card">
         <h3>Login</h3>
 
         <form id="loginForm">
 
-          <div class="form-group">
-
-            <label for="loginEmail">
-              Email
-            </label>
-
+          <div>
+            <label>Email</label>
             <input
-              id="loginEmail"
               type="email"
+              id="loginEmail"
               required
-              placeholder="Enter your email"
+              placeholder="Enter email"
             />
-
           </div>
 
-          <div class="form-group">
-
-            <label for="loginPassword">
-              Password
-            </label>
-
+          <div>
+            <label>Password</label>
             <input
-              id="loginPassword"
               type="password"
+              id="loginPassword"
               required
-              placeholder="Enter your password"
+              placeholder="Enter password"
             />
-
           </div>
 
-          <button type="submit" class="form-button">
+          <button class="btn btn-primary" type="submit">
             Login
           </button>
 
         </form>
 
-        <div id="loginMessage" class="auth-message"></div>
-
+        <div id="loginMessage" class="message"></div>
       </div>
 
 
-      <!-- REGISTER -->
+      <div class="card">
 
-      <div class="panel">
-
-        <h3>Create Student Account</h3>
-
-        <div class="registration-note">
-          Select your grade and board. These will be saved to your student profile.
-        </div>
+        <h3>Student Registration</h3>
 
         <form id="registerForm">
 
-          <div class="form-group">
-
-            <label for="registerName">
-              Full Name
-            </label>
-
+          <div>
+            <label>Full Name</label>
             <input
-              id="registerName"
               type="text"
+              id="registerName"
               required
-              placeholder="Student full name"
             />
-
           </div>
 
-          <div class="form-group">
-
-            <label for="registerEmail">
-              Email
-            </label>
-
+          <div>
+            <label>Email</label>
             <input
-              id="registerEmail"
               type="email"
+              id="registerEmail"
               required
-              placeholder="Student email"
             />
-
           </div>
 
-          <div class="form-group">
-
-            <label for="registerPassword">
-              Password
-            </label>
-
+          <div>
+            <label>Password</label>
             <input
-              id="registerPassword"
               type="password"
+              id="registerPassword"
               minlength="6"
               required
-              placeholder="At least 6 characters"
             />
-
           </div>
 
-          <div class="form-group">
-
-            <label for="registerGrade">
-              Grade
-            </label>
-
+          <div>
+            <label>Grade</label>
             <select id="registerGrade" required>
-
-              <option value="">
-                Select Grade
-              </option>
-
+              <option value="">Select Grade</option>
             </select>
-
           </div>
 
-          <div class="form-group">
-
-            <label for="registerBoard">
-              Board
-            </label>
-
+          <div>
+            <label>Board</label>
             <select id="registerBoard" required>
-
-              <option value="">
-                Select Board
-              </option>
-
+              <option value="">Select Board</option>
             </select>
-
           </div>
 
-          <div class="form-group">
-
-            <label for="registerLanguage">
-              Preferred Language
-            </label>
-
+          <div>
+            <label>Preferred Language</label>
             <select id="registerLanguage">
-
-              <option value="both">
-                English + Urdu
-              </option>
-
-              <option value="english">
-                English
-              </option>
-
-              <option value="urdu">
-                Urdu
-              </option>
-
+              <option value="both">English + Urdu</option>
+              <option value="english">English</option>
+              <option value="urdu">Urdu</option>
             </select>
-
           </div>
 
-          <button type="submit" class="form-button">
-            Create Account
+          <button class="btn btn-success" type="submit">
+            Create Student Account
           </button>
 
         </form>
 
-        <div id="registerMessage" class="auth-message"></div>
+        <div id="registerMessage" class="message"></div>
 
       </div>
 
     </div>
-
   </div>
-
 </section>
 
 
-<!-- =====================================================
-     DASHBOARD
-===================================================== -->
+<!-- APPLICATION -->
+<section id="app">
+  <div class="container">
 
-<section id="dashboard" class="dashboard">
-
-  <div class="section-container">
-
-    <div class="dashboard-header">
-
-      <div>
-
-        <h2>Student Dashboard</h2>
-
-        <p id="dashboardWelcome">
-          Please login to view your dashboard.
-        </p>
-
-      </div>
-
-      <button id="logoutButton" class="logout-button hidden">
-        Logout
-      </button>
-
+    <div id="loggedOutView" class="card login-required">
+      <h2>Login required</h2>
+      <p>
+        Please login to access your student, teacher or administrator dashboard.
+      </p>
     </div>
 
 
-    <div id="dashboardLoginNotice" class="panel">
-      Login to see your student dashboard.
-    </div>
+    <!-- STUDENT DASHBOARD -->
+    <div id="studentDashboard" class="hidden">
 
+      <div class="dashboard-header">
+        <div>
+          <h2>Student Dashboard</h2>
+          <div class="user-meta" id="studentWelcome"></div>
+        </div>
 
-    <div id="dashboardContent" class="hidden">
-
+        <button class="btn btn-danger btn-small" id="studentLogout">
+          Logout
+        </button>
+      </div>
 
       <div class="dashboard-grid">
 
-        <div class="dashboard-card">
-
-          <small>Grade</small>
-
-          <strong id="dashboardGrade">
-            —
-          </strong>
-
+        <div class="dashboard-stat">
+          <strong id="studentGradeStat">-</strong>
+          Grade
         </div>
 
-
-        <div class="dashboard-card">
-
-          <small>Board</small>
-
-          <strong id="dashboardBoard">
-            —
-          </strong>
-
+        <div class="dashboard-stat">
+          <strong id="studentBoardStat">-</strong>
+          Board
         </div>
 
-
-        <div class="dashboard-card">
-
-          <small>Lessons Completed</small>
-
-          <strong id="dashboardCompleted">
-            0
-          </strong>
-
+        <div class="dashboard-stat">
+          <strong id="studentProgressStat">0%</strong>
+          Progress
         </div>
 
-
-        <div class="dashboard-card">
-
-          <small>Overall Progress</small>
-
-          <strong id="dashboardProgressText">
-            0%
-          </strong>
-
+        <div class="dashboard-stat">
+          <strong id="studentAccessStat">Trial</strong>
+          Access
         </div>
 
       </div>
-
-
-      <div class="dashboard-grid">
-
-        <div class="dashboard-card">
-
-          <small>Account Status</small>
-
-          <strong id="dashboardStatus">
-            —
-          </strong>
-
-        </div>
-
-
-        <div class="dashboard-card">
-
-          <small>Access Until</small>
-
-          <strong id="dashboardAccessEnd">
-            —
-          </strong>
-
-        </div>
-
-
-        <div class="dashboard-card">
-
-          <small>Subjects Available</small>
-
-          <strong>
-            9+
-          </strong>
-
-        </div>
-
-
-        <div class="dashboard-card">
-
-          <small>Passing Requirement</small>
-
-          <strong>
-            60%
-          </strong>
-
-        </div>
-
-      </div>
-
 
       <div class="panel">
 
-        <h3>Learning Progress</h3>
+        <h3>My Learning</h3>
 
-        <div class="progress-bar">
+        <div id="studentLearning"></div>
 
-          <div
-            id="dashboardProgressBar"
-            class="progress-fill"
-          ></div>
+      </div>
 
+      <div class="panel" style="margin-top:20px;">
+
+        <h3>Payment / Subscription</h3>
+
+        <p style="color:#64748b;margin-bottom:15px;">
+          Submit your JazzCash transaction reference after payment.
+          The academy will verify it before activating the subscription.
+        </p>
+
+        <form id="paymentForm">
+
+          <div class="form-grid">
+
+            <div>
+              <label>Plan</label>
+
+              <select id="paymentPlan" required>
+                <option value="">Select Plan</option>
+              </select>
+            </div>
+
+            <div>
+              <label>JazzCash Transaction Reference</label>
+
+              <input
+                type="text"
+                id="paymentReference"
+                placeholder="Enter transaction ID"
+                required
+              />
+            </div>
+
+          </div>
+
+          <button class="btn btn-primary" type="submit">
+            Submit Payment Reference
+          </button>
+
+        </form>
+
+        <div id="paymentMessage" class="message"></div>
+
+      </div>
+
+    </div>
+
+
+    <!-- STAFF DASHBOARD -->
+    <div id="staffDashboard" class="hidden">
+
+      <div class="dashboard-header">
+
+        <div>
+          <h2 id="staffDashboardTitle">Teacher Portal</h2>
+          <div class="user-meta" id="staffWelcome"></div>
         </div>
 
-        <p id="dashboardProgressDetails">
-          No lesson progress recorded yet.
-        </p>
+        <button class="btn btn-danger btn-small" id="staffLogout">
+          Logout
+        </button>
 
       </div>
 
 
-      <div id="trialBox" class="trial-box hidden"></div>
+      <div class="dashboard-grid">
 
-      <div id="accessBox" class="access-box hidden"></div>
-
-
-      <!-- =================================================
-           RENEWAL / PAYMENT
-      ================================================= -->
-
-      <div
-        id="renewalPanel"
-        class="panel renewal-panel hidden"
-      >
-
-        <div class="renewal-header">
-
-          <h3>Renew Learning Access</h3>
-
-          <p>
-            Choose a monthly plan and submit your JazzCash
-            transaction reference for verification.
-          </p>
-
+        <div class="dashboard-stat">
+          <strong id="staffStudentCount">0</strong>
+          Students
         </div>
 
-
-        <div
-          id="renewalMessage"
-          class="message hidden"
-        ></div>
-
-
-        <div class="payment-info-box">
-
-          <strong>JazzCash Payment</strong>
-
-          <p>
-            Select a plan below. After making the payment
-            through the academy's JazzCash account, enter
-            your transaction/reference number.
-          </p>
-
-          <p>
-            Your payment will remain <strong>Pending</strong>
-            until it is verified by the academy administrator.
-          </p>
-
+        <div class="dashboard-stat">
+          <strong id="staffCourseCount">0</strong>
+          Courses
         </div>
 
-
-        <div
-          id="renewalPlans"
-          class="pricing-grid"
-          style="margin-top:20px;"
-        >
-          <p>Loading subscription plans...</p>
+        <div class="dashboard-stat">
+          <strong id="staffPaymentCount">0</strong>
+          Pending Payments
         </div>
 
+        <div class="dashboard-stat">
+          <strong id="staffQuestionCount">0</strong>
+          Questions
+        </div>
 
-        <div
-          id="paymentFormBox"
-          class="payment-form-box hidden"
-        >
-
-          <h3>Submit JazzCash Payment</h3>
-
-
-          <div class="form-group">
-
-            <label for="selectedPaymentPlan">
-              Selected Plan
-            </label>
-
-            <input
-              id="selectedPaymentPlan"
-              type="text"
-              readonly
-            />
-
-          </div>
+      </div>
 
 
-          <div class="form-group">
+      <div class="dashboard-layout">
 
-            <label for="selectedPaymentAmount">
-              Amount
-            </label>
+        <aside class="sidebar">
 
-            <input
-              id="selectedPaymentAmount"
-              type="text"
-              readonly
-            />
-
-          </div>
-
-
-          <div class="form-group">
-
-            <label for="jazzCashReference">
-              JazzCash Transaction / Reference Number
-            </label>
-
-            <input
-              id="jazzCashReference"
-              type="text"
-              placeholder="Enter transaction/reference number"
-            />
-
-          </div>
-
-
-          <button
-            id="submitPaymentButton"
-            type="button"
-            class="form-button"
-          >
-            Submit Payment for Verification
+          <button class="staff-tab active" data-tab="overview">
+            📊 Overview
           </button>
 
+          <button class="staff-tab" data-tab="students">
+            👨‍🎓 Students
+          </button>
 
-          <div class="payment-warning-box">
+          <button class="staff-tab" data-tab="courses">
+            📚 Courses
+          </button>
 
-            <strong>Important:</strong>
+          <button class="staff-tab" data-tab="content">
+            📝 Content
+          </button>
 
-            Enter the reference number exactly as shown
-            in your JazzCash transaction record.
+          <button class="staff-tab" data-tab="payments">
+            💳 Payments
+          </button>
+
+          <button class="staff-tab" data-tab="attendance">
+            📅 Attendance
+          </button>
+
+          <button
+            class="staff-tab admin-only"
+            data-tab="teachers">
+            👩‍🏫 Teachers
+          </button>
+
+        </aside>
+
+
+        <main>
+
+          <!-- OVERVIEW -->
+          <div id="tab-overview" class="staff-panel panel">
+
+            <h3>Portal Overview</h3>
+
+            <p style="color:#64748b;margin-bottom:20px;">
+              Manage the academy from this dashboard.
+            </p>
+
+            <div id="overviewContent"></div>
 
           </div>
 
-        </div>
+
+          <!-- STUDENTS -->
+          <div id="tab-students" class="staff-panel panel hidden">
+
+            <h3>Students</h3>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Grade</th>
+                    <th>Board</th>
+                    <th>Status</th>
+                    <th>Trial Ends</th>
+                  </tr>
+                </thead>
+
+                <tbody id="studentsTable"></tbody>
+              </table>
+            </div>
+
+          </div>
 
 
-        <div
-          id="paymentHistoryBox"
-          class="payment-history"
-        ></div>
+          <!-- COURSES -->
+          <div id="tab-courses" class="staff-panel panel hidden">
+
+            <h3>Courses</h3>
+
+            <div id="coursesTableWrap" class="table-wrap">
+
+              <table>
+
+                <thead>
+                  <tr>
+                    <th>Course</th>
+                    <th>Board</th>
+                    <th>Grade</th>
+                    <th>Subject</th>
+                    <th>Price</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+
+                <tbody id="staffCoursesTable"></tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+
+          <!-- CONTENT -->
+          <div id="tab-content" class="staff-panel panel hidden">
+
+            <h3>Course Content</h3>
+
+            <div class="form-grid">
+
+              <div class="full">
+                <label>Select Course</label>
+
+                <select id="contentCourseSelect">
+                  <option value="">Select Course</option>
+                </select>
+              </div>
+
+              <div>
+                <label>Chapter Title</label>
+
+                <input
+                  id="chapterTitle"
+                  placeholder="e.g. Chapter 2 - Cell Biology"
+                />
+              </div>
+
+              <div>
+                <label>Chapter Number</label>
+
+                <input
+                  id="chapterNumber"
+                  type="number"
+                  min="1"
+                  placeholder="2"
+                />
+              </div>
+
+              <div class="full">
+                <label>Chapter Description</label>
+
+                <textarea id="chapterDescription"></textarea>
+              </div>
+
+            </div>
+
+            <button
+              class="btn btn-primary"
+              id="addChapterBtn"
+              style="margin-top:12px;">
+              Add Chapter
+            </button>
+
+            <div id="contentMessage" class="message"></div>
+
+            <hr style="margin:25px 0;border:0;border-top:1px solid #e2e8f0;" />
+
+            <h3>Existing Chapters</h3>
+
+            <div id="chapterList"></div>
+
+          </div>
+
+
+          <!-- PAYMENTS -->
+          <div id="tab-payments" class="staff-panel panel hidden">
+
+            <h3>Payment Verification</h3>
+
+            <div class="table-wrap">
+
+              <table>
+
+                <thead>
+                  <tr>
+                    <th>Student</th>
+                    <th>Amount</th>
+                    <th>Method</th>
+                    <th>Reference</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+
+                <tbody id="paymentsTable"></tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+
+          <!-- ATTENDANCE -->
+          <div id="tab-attendance" class="staff-panel panel hidden">
+
+            <h3>Attendance</h3>
+
+            <form id="attendanceForm">
+
+              <div class="form-grid">
+
+                <div>
+                  <label>Student</label>
+
+                  <select id="attendanceStudent" required>
+                    <option value="">Select Student</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label>Date</label>
+
+                  <input
+                    type="date"
+                    id="attendanceDate"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label>Status</label>
+
+                  <select id="attendanceStatus" required>
+                    <option value="present">Present</option>
+                    <option value="absent">Absent</option>
+                    <option value="late">Late</option>
+                    <option value="leave">Leave</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label>Notes</label>
+
+                  <input
+                    id="attendanceNotes"
+                    placeholder="Optional"
+                  />
+                </div>
+
+              </div>
+
+              <button
+                class="btn btn-primary"
+                type="submit"
+                style="margin-top:12px;">
+                Save Attendance
+              </button>
+
+            </form>
+
+            <div id="attendanceMessage" class="message"></div>
+
+          </div>
+
+
+          <!-- TEACHERS -->
+          <div id="tab-teachers" class="staff-panel panel hidden">
+
+            <h3>Teacher Management</h3>
+
+            <p style="color:#64748b;margin-bottom:15px;">
+              Enter the email of an existing account to promote it to teacher.
+              The user must already have registered.
+            </p>
+
+            <form id="teacherPromotionForm">
+
+              <div class="form-grid">
+
+                <div>
+                  <label>User Email</label>
+
+                  <input
+                    type="email"
+                    id="teacherEmail"
+                    required
+                    placeholder="existing@email.com"
+                  />
+                </div>
+
+                <div>
+                  <label>Qualification</label>
+
+                  <input
+                    id="teacherQualification"
+                    placeholder="e.g. MSc Chemistry, M.Ed"
+                  />
+                </div>
+
+                <div>
+                  <label>Specialization</label>
+
+                  <input
+                    id="teacherSpecialization"
+                    placeholder="e.g. Chemistry"
+                  />
+                </div>
+
+              </div>
+
+              <button
+                class="btn btn-primary"
+                type="submit"
+                style="margin-top:12px;">
+                Promote to Teacher
+              </button>
+
+            </form>
+
+            <div id="teacherMessage" class="message"></div>
+
+            <hr style="margin:25px 0;border:0;border-top:1px solid #e2e8f0;" />
+
+            <h3>Teachers</h3>
+
+            <div class="table-wrap">
+
+              <table>
+
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Qualification</th>
+                    <th>Specialization</th>
+                    <th>Active</th>
+                  </tr>
+                </thead>
+
+                <tbody id="teachersTable"></tbody>
+
+              </table>
+
+            </div>
+
+          </div>
+
+        </main>
 
       </div>
 
     </div>
 
   </div>
-
 </section>
 
 
 <footer>
-
-  <p>
-    © 2026 Aqalverse Learning Academy.
-    Learn • Practice • Progress
-  </p>
-
+  <div class="container">
+    <h3>Aqalverse Learning Academy</h3>
+    <p>Smart learning for Pakistani students.</p>
+  </div>
 </footer>
 
 
 <script>
-
-/* =========================================================
-   SUPABASE
-========================================================= */
-
-const SUPABASE_URL =
-  "https://lmfkrykuxspddjfcwpuf.supabase.co";
-
-const SUPABASE_KEY =
-  "sb_publishable_4mtcQW0b7WZzuCAnfrBpcA_KCp-F7Oc";
-
-const aqalverseSupabase =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
-
-
-/* =========================================================
-   STORAGE
-========================================================= */
-
-const STORAGE_BUCKET =
-  "academt videos";
-
-
-function getStorageUrl(fileValue) {
-
-  if (!fileValue) {
-    return "";
-  }
-
-  const value =
-    String(fileValue).trim();
-
-  if (
-    value.startsWith("http://") ||
-    value.startsWith("https://")
-  ) {
-    return value;
-  }
-
-  const {
-    data
-  } =
-    aqalverseSupabase
-      .storage
-      .from(STORAGE_BUCKET)
-      .getPublicUrl(value);
-
-  return data?.publicUrl || "";
-}
-
-
-/* =========================================================
-   GLOBAL STATE
-========================================================= */
-
-let selectedGrade = null;
-let selectedBoard = null;
-let selectedSubject = null;
-let selectedCourse = null;
-let selectedChapter = null;
-let selectedLesson = null;
-let selectedTest = null;
-
-let currentUser = null;
-let currentProfile = null;
-let currentStudent = null;
-
-let studentProgressRows = [];
-
-let accessAllowed = false;
-
-let activeSubscription = null;
-
-let selectedPaymentPlan = null;
-
-
-/* =========================================================
-   DOM
-========================================================= */
-
-const gradesContainer =
-  document.getElementById("gradesContainer");
-
-const boardsContainer =
-  document.getElementById("boardsContainer");
-
-const subjectsContainer =
-  document.getElementById("subjectsContainer");
-
-const chaptersContainer =
-  document.getElementById("chaptersContainer");
-
-const lessonsContainer =
-  document.getElementById("lessonsContainer");
-
-const testsContainer =
-  document.getElementById("testsContainer");
-
-const quizContainer =
-  document.getElementById("quizContainer");
-
-const quizQuestions =
-  document.getElementById("quizQuestions");
-
-const quizTitle =
-  document.getElementById("quizTitle");
-
-const quizResult =
-  document.getElementById("quizResult");
-
-const courseMessage =
-  document.getElementById("courseMessage");
-
-const accessLockMessage =
-  document.getElementById("accessLockMessage");
-
-const renewalPanel =
-  document.getElementById("renewalPanel");
-
-const renewalPlans =
-  document.getElementById("renewalPlans");
-
-const renewalMessage =
-  document.getElementById("renewalMessage");
-
-const paymentFormBox =
-  document.getElementById("paymentFormBox");
-
-const selectedPaymentPlanInput =
-  document.getElementById("selectedPaymentPlan");
-
-const selectedPaymentAmountInput =
-  document.getElementById("selectedPaymentAmount");
-
-const jazzCashReference =
-  document.getElementById("jazzCashReference");
-
-const submitPaymentButton =
-  document.getElementById("submitPaymentButton");
-
-const paymentHistoryBox =
-  document.getElementById("paymentHistoryBox");
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function showStage(id) {
-
-  const element =
-    document.getElementById(id);
-
-  if (element) {
-    element.classList.remove("hidden");
-  }
-
-}
-
-
-function hideStage(id) {
-
-  const element =
-    document.getElementById(id);
-
-  if (element) {
-    element.classList.add("hidden");
-  }
-
-}
-
-
-function hideQuiz() {
-
-  quizContainer.classList.add("hidden");
-
-  quizQuestions.innerHTML = "";
-
-  quizResult.className = "hidden";
-
-  quizResult.textContent = "";
-
-}
-
-
-function showCourseMessage(message) {
-
-  courseMessage.textContent =
-    message;
-
-  courseMessage.classList.remove("hidden");
-
-}
-
-
-function hideCourseMessage() {
-
-  courseMessage.classList.add("hidden");
-
-  courseMessage.textContent = "";
-
-}
-
-
-function randomizeArray(array) {
-
-  const result =
-    [...array];
-
-  for (
-    let i = result.length - 1;
-    i > 0;
-    i--
-  ) {
-
-    const j =
-      Math.floor(
-        Math.random() * (i + 1)
-      );
-
-    [
-      result[i],
-      result[j]
-    ] =
-    [
-      result[j],
-      result[i]
-    ];
-
-  }
-
-  return result;
-
-}
-
-
-function formatDate(dateValue) {
-
-  if (!dateValue) {
-    return "—";
-  }
-
-  const date =
-    new Date(dateValue);
-
-  if (Number.isNaN(date.getTime())) {
-    return "—";
-  }
-
-  return date.toLocaleDateString(
-    "en-PK",
-    {
-      year: "numeric",
-      month: "short",
-      day: "numeric"
-    }
-  );
-
-}
-
-
-function isDateActive(dateValue) {
-
-  if (!dateValue) {
-    return false;
-  }
-
-  return new Date(dateValue) > new Date();
-
-}
-
-
-/* =========================================================
-   ACCESS CONTROL
-========================================================= */
-
-function calculateAccessStatus() {
-
-  accessAllowed = false;
-
-  if (!currentStudent) {
-    return;
-  }
-
-
-  if (
-    currentStudent.account_status ===
-    "suspended"
-  ) {
-
-    return;
-
-  }
-
-
-  if (
-    currentStudent.account_status ===
-    "trial" &&
-    isDateActive(
-      currentStudent.trial_ends_at
-    )
-  ) {
-
-    accessAllowed = true;
-
-    return;
-
-  }
-
-
-  if (
-    currentStudent.account_status ===
-    "expired"
-  ) {
-
-    accessAllowed = false;
-
-    return;
-
-  }
-
-
-  if (
-    isDateActive(
-      currentStudent.trial_ends_at
-    )
-  ) {
-
-    accessAllowed = true;
-
-  }
-
-}
-
-
-async function refreshAccessStatus() {
-
-  accessAllowed = false;
-
-  activeSubscription = null;
-
-
-  if (!currentStudent) {
-    return;
-  }
-
-
-  if (
-    currentStudent.account_status ===
-    "suspended"
-  ) {
-
-    return;
-
-  }
-
-
-  /*
-     Check active trial first.
-  */
-
-  if (
-    currentStudent.account_status ===
-    "trial" &&
-    isDateActive(
-      currentStudent.trial_ends_at
-    )
-  ) {
-
-    accessAllowed = true;
-
-    return;
-
-  }
-
-
-  /*
-     Check active subscription.
-  */
-
-  const {
-    data: subscriptions,
-    error
-  } =
-    await aqalverseSupabase
-      .from("student_subscriptions")
-      .select(
-        "id, student_id, fee_plan_id, start_date, end_date, status"
-      )
-      .eq(
-        "student_id",
-        currentUser.id
-      )
-      .eq(
-        "status",
-        "active"
-      )
-      .order(
-        "end_date",
-        {
-          ascending: false
-        }
-      )
-      .limit(1);
-
-
-  if (error) {
-
-    console.error(
-      "Subscription check error:",
-      error
+  /* =========================================================
+     SUPABASE
+  ========================================================= */
+
+  const SUPABASE_URL =
+    "https://lmfkrykuxspddjfcwpuf.supabase.co";
+
+  const SUPABASE_KEY =
+    "sb_publishable_4mtcQW0b7WZzuCAnfrBpcA_KCp-F7Oc";
+
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
     );
 
-    calculateAccessStatus();
 
-    return;
+  /* =========================================================
+     GLOBAL STATE
+  ========================================================= */
 
+  let currentUser = null;
+  let currentProfile = null;
+  let currentStudent = null;
+
+  let grades = [];
+  let boards = [];
+  let subjects = [];
+  let courses = [];
+  let feePlans = [];
+
+  let staffStudents = [];
+  let staffCourses = [];
+
+
+  /* =========================================================
+     HELPERS
+  ========================================================= */
+
+  function escapeHtml(value) {
+    if (value === null || value === undefined) return "";
+
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
 
-  if (
-    subscriptions &&
-    subscriptions.length > 0
+  function showMessage(elementId, text, type = "info") {
+    const el = document.getElementById(elementId);
+
+    if (!el) return;
+
+    el.textContent = text;
+    el.className = "message show " + type;
+  }
+
+
+  function clearMessage(elementId) {
+    const el = document.getElementById(elementId);
+
+    if (!el) return;
+
+    el.textContent = "";
+    el.className = "message";
+  }
+
+
+  function formatDate(value) {
+    if (!value) return "-";
+
+    return new Date(value).toLocaleDateString();
+  }
+
+
+  function formatDateTime(value) {
+    if (!value) return "-";
+
+    return new Date(value).toLocaleString();
+  }
+
+
+  function badge(text, type = "blue") {
+    return `<span class="badge badge-${type}">
+      ${escapeHtml(text)}
+    </span>`;
+  }
+
+
+  function accessBadge(status) {
+    if (status === "active") {
+      return badge("Active", "green");
+    }
+
+    if (status === "expired") {
+      return badge("Expired", "red");
+    }
+
+    if (status === "suspended") {
+      return badge("Suspended", "red");
+    }
+
+    return badge("Trial", "yellow");
+  }
+
+
+  /* =========================================================
+     LOAD BASIC DATA
+  ========================================================= */
+
+  async function loadBasicData() {
+
+    const [
+      gradeResult,
+      boardResult,
+      subjectResult,
+      courseResult,
+      feeResult
+    ] = await Promise.all([
+
+      supabaseClient
+        .from("grades")
+        .select("*")
+        .eq("is_active", true)
+        .order("grade_number"),
+
+      supabaseClient
+        .from("boards")
+        .select("*")
+        .eq("is_active", true)
+        .order("name"),
+
+      supabaseClient
+        .from("subjects")
+        .select("*")
+        .eq("is_active", true)
+        .order("name"),
+
+      supabaseClient
+        .from("courses")
+        .select(`
+          id,
+          title,
+          description,
+          monthly_price,
+          board_id,
+          grade_id,
+          subject_id,
+          boards(name),
+          grades(name,grade_number),
+          subjects(name)
+        `)
+        .eq("is_active", true)
+        .order("id"),
+
+      supabaseClient
+        .from("fee_plans")
+        .select("*")
+        .eq("is_active", true)
+        .order("price")
+    ]);
+
+
+    grades = gradeResult.data || [];
+    boards = boardResult.data || [];
+    subjects = subjectResult.data || [];
+    courses = courseResult.data || [];
+    feePlans = feeResult.data || [];
+
+
+    populateSelect(
+      "publicGrade",
+      grades,
+      "grade_number",
+      "name"
+    );
+
+    populateSelect(
+      "registerGrade",
+      grades,
+      "id",
+      "name"
+    );
+
+    populateSelect(
+      "publicBoard",
+      boards,
+      "id",
+      "name"
+    );
+
+    populateSelect(
+      "registerBoard",
+      boards,
+      "id",
+      "name"
+    );
+
+    populateSelect(
+      "publicSubject",
+      subjects,
+      "id",
+      "name"
+    );
+
+
+    const paymentPlan = document.getElementById("paymentPlan");
+
+    if (paymentPlan) {
+
+      paymentPlan.innerHTML =
+        `<option value="">Select Plan</option>` +
+        feePlans.map(plan => `
+          <option value="${plan.id}">
+            ${escapeHtml(plan.name)} - Rs. ${escapeHtml(plan.price)}
+          </option>
+        `).join("");
+    }
+  }
+
+
+  function populateSelect(
+    elementId,
+    data,
+    valueField,
+    textField
   ) {
 
-    const subscription =
-      subscriptions[0];
+    const select = document.getElementById(elementId);
 
-    const today =
-      new Date();
+    if (!select) return;
 
-    const endDate =
-      new Date(
-        subscription.end_date +
-        "T23:59:59"
-      );
+    const firstOption =
+      select.querySelector("option:first-child");
+
+    select.innerHTML =
+      firstOption
+        ? firstOption.outerHTML
+        : `<option value="">Select</option>`;
+
+    data.forEach(item => {
+
+      const option =
+        document.createElement("option");
+
+      option.value = item[valueField];
+
+      option.textContent =
+        item[textField];
+
+      select.appendChild(option);
+    });
+  }
 
 
-    if (
-      endDate >= today
-    ) {
+  /* =========================================================
+     AUTH
+  ========================================================= */
 
-      activeSubscription =
-        subscription;
+  async function loadCurrentUser() {
 
-      accessAllowed = true;
+    const {
+      data: { user }
+    } = await supabaseClient.auth.getUser();
 
-      if (
-        currentStudent.account_status !==
-        "active"
-      ) {
+    currentUser = user || null;
 
-        currentStudent.account_status =
-          "active";
+    if (!currentUser) {
 
-      }
+      showLoggedOut();
 
       return;
-
     }
 
+    await loadProfile();
   }
 
 
-  /*
-     No active subscription.
-  */
-
-  accessAllowed = false;
-
-  if (
-    currentStudent.account_status ===
-    "trial"
-  ) {
-
-    currentStudent.account_status =
-      "expired";
-
-  }
-
-}
-
-
-function showAccessLock(message) {
-
-  accessLockMessage.textContent =
-    message;
-
-  accessLockMessage.classList.remove(
-    "hidden"
-  );
-
-}
-
-
-function hideAccessLock() {
-
-  accessLockMessage.classList.add(
-    "hidden"
-  );
-
-  accessLockMessage.textContent = "";
-
-}
-
-
-/* =========================================================
-   LESSON PROGRESS
-========================================================= */
-
-function getProgressForLesson(
-  lessonId
-) {
-
-  return (
-    studentProgressRows || []
-  ).find(
-    row =>
-      Number(row.lesson_id) ===
-      Number(lessonId)
-  );
-
-}
-
-
-function isLessonCompleted(
-  lessonId
-) {
-
-  const row =
-    getProgressForLesson(
-      lessonId
-    );
-
-  return Boolean(
-    row &&
-    row.lesson_completed === true
-  );
-
-}
-
-
-function isLessonUnlocked(
-  lesson,
-  lessons
-) {
-
-  if (!accessAllowed) {
-    return false;
-  }
-
-
-  if (
-    Number(
-      lesson.lesson_number
-    ) === 1
-  ) {
-
-    return true;
-
-  }
-
-
-  const previousLesson =
-    lessons.find(
-      item =>
-        Number(
-          item.lesson_number
-        ) ===
-        Number(
-          lesson.lesson_number
-        ) - 1
-    );
-
-
-  if (!previousLesson) {
-    return false;
-  }
-
-
-  return isLessonCompleted(
-    previousLesson.id
-  );
-
-}
-
-
-/* =========================================================
-   LESSON CONTENT
-========================================================= */
-
-function hideLessonContent() {
-
-  const lessonContent =
-    document.getElementById(
-      "lessonContent"
-    );
-
-  if (lessonContent) {
-
-    lessonContent.classList.add(
-      "hidden"
-    );
-
-  }
-
-}
-
-
-async function showLessonContent(
-  lesson
-) {
-
-  if (!accessAllowed) {
-
-    showAccessLock(
-      "Your learning access has expired. Please renew your subscription to continue."
-    );
-
-    return;
-
-  }
-
-
-  const lessonContent =
-    document.getElementById(
-      "lessonContent"
-    );
-
-  const lessonTitle =
-    document.getElementById(
-      "lessonContentTitle"
-    );
-
-  const lessonDescription =
-    document.getElementById(
-      "lessonContentDescription"
-    );
-
-  const videoContainer =
-    document.getElementById(
-      "videoContainer"
-    );
-
-  const lessonVideo =
-    document.getElementById(
-      "lessonVideo"
-    );
-
-  const notesContainer =
-    document.getElementById(
-      "notesContainer"
-    );
-
-  const contentStatus =
-    document.getElementById(
-      "contentStatus"
-    );
-
-
-  lessonContent.classList.remove(
-    "hidden"
-  );
-
-
-  lessonTitle.textContent =
-    "Lesson " +
-    lesson.lesson_number +
-    ": " +
-    lesson.title;
-
-
-  lessonDescription.textContent =
-    lesson.description ||
-    "Study this lesson carefully before attempting the assessment.";
-
-
-  videoContainer.classList.add(
-    "hidden"
-  );
-
-  lessonVideo.pause();
-
-  lessonVideo.removeAttribute(
-    "src"
-  );
-
-  lessonVideo.load();
-
-  notesContainer.innerHTML = "";
-
-  contentStatus.classList.add(
-    "hidden"
-  );
-
-  contentStatus.textContent = "";
-
-
-  /*
-     VIDEO
-  */
-
-  if (lesson.video_url) {
-
-    const videoUrl =
-      getStorageUrl(
-        lesson.video_url
+  async function loadProfile() {
+
+    const { data, error } =
+      await supabaseClient
+        .from("profiles")
+        .select("*")
+        .eq("id", currentUser.id)
+        .single();
+
+    if (error || !data) {
+
+      showMessage(
+        "loginMessage",
+        "Your account profile could not be loaded.",
+        "error"
       );
 
-    if (videoUrl) {
-
-      lessonVideo.src =
-        videoUrl;
-
-      videoContainer.classList.remove(
-        "hidden"
-      );
-
+      return;
     }
 
-  }
+    currentProfile = data;
 
+    document
+      .getElementById("dashboardNav")
+      .classList.remove("hidden");
 
-  /*
-     PDF
-  */
+    if (data.role === "admin" || data.role === "teacher") {
 
-  if (lesson.notes_url) {
+      await showStaffDashboard();
 
-    const notesUrl =
-      getStorageUrl(
-        lesson.notes_url
-      );
+    } else {
 
-    if (notesUrl) {
-
-      const notesButton =
-        document.createElement("a");
-
-      notesButton.href =
-        notesUrl;
-
-      notesButton.target =
-        "_blank";
-
-      notesButton.rel =
-        "noopener noreferrer";
-
-      notesButton.className =
-        "notes-button";
-
-      notesButton.textContent =
-        "📄 Open PDF Notes";
-
-      notesContainer.appendChild(
-        notesButton
-      );
-
+      await showStudentDashboard();
     }
 
-  }
-
-
-  /*
-     CONTENT STATUS
-  */
-
-  if (
-    !lesson.video_url &&
-    !lesson.notes_url
-  ) {
-
-    contentStatus.classList.remove(
-      "hidden"
-    );
-
-    contentStatus.textContent =
-      "Lesson content has not been uploaded yet. The assessment is available when ready.";
-
-  } else if (
-    lesson.video_url &&
-    lesson.notes_url
-  ) {
-
-    contentStatus.classList.remove(
-      "hidden"
-    );
-
-    contentStatus.textContent =
-      "Video and PDF notes are available. Study the lesson before taking the assessment.";
-
-  } else if (
-    lesson.video_url
-  ) {
-
-    contentStatus.classList.remove(
-      "hidden"
-    );
-
-    contentStatus.textContent =
-      "Video lesson is available. PDF notes have not been uploaded yet.";
-
-  } else {
-
-    contentStatus.classList.remove(
-      "hidden"
-    );
-
-    contentStatus.textContent =
-      "PDF notes are available. Video has not been uploaded yet.";
-
-  }
-
-
-  lessonContent.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
-
-}
-
-
-/* =========================================================
-   LOAD GRADES
-========================================================= */
-
-async function loadGrades() {
-
-  gradesContainer.innerHTML =
-    "<p>Loading grades...</p>";
-
-
-  const {
-    data,
-    error
-  } =
-    await aqalverseSupabase
-      .from("grades")
-      .select(
-        "id, name, grade_number"
-      )
-      .eq(
-        "is_active",
-        true
-      )
-      .order(
-        "grade_number"
-      );
-
-
-  if (error) {
-
-    console.error(
-      "Grades error:",
-      error
-    );
-
-    gradesContainer.innerHTML =
-      "<p>Unable to load grades.</p>";
-
-    return;
-
-  }
-
-
-  gradesContainer.innerHTML = "";
-
-
-  const registerGrade =
-    document.getElementById(
-      "registerGrade"
-    );
-
-  registerGrade.innerHTML =
-    '<option value="">Select Grade</option>';
-
-
-  data.forEach(
-    grade => {
-
-      const button =
-        document.createElement(
-          "button"
-        );
-
-      button.type = "button";
-
-      button.className =
-        "select-button";
-
-      button.textContent =
-        grade.name ||
-        "Grade " +
-        grade.grade_number;
-
-
-      button.addEventListener(
-        "click",
-        async () => {
-
-          if (!currentUser) {
-
-            showCourseMessage(
-              "Please login first to access lessons and assessments."
-            );
-
-            document
-              .getElementById(
-                "login"
-              )
-              .scrollIntoView({
-                behavior: "smooth"
-              });
-
-            return;
-
-          }
-
-
-          if (!accessAllowed) {
-
-            showAccessLock(
-              "Your learning access is not active. Please renew your subscription."
-            );
-
-            document
-              .getElementById(
-                "dashboard"
-              )
-              .scrollIntoView({
-                behavior: "smooth"
-              });
-
-            return;
-
-          }
-
-
-          selectedGrade =
-            grade;
-
-          selectedBoard = null;
-          selectedSubject = null;
-          selectedCourse = null;
-          selectedChapter = null;
-          selectedLesson = null;
-          selectedTest = null;
-
-
-          document
-            .querySelectorAll(
-              "#gradesContainer .select-button"
-            )
-            .forEach(
-              item =>
-                item.classList.remove(
-                  "selected"
-                )
-            );
-
-
-          button.classList.add(
-            "selected"
-          );
-
-
-          await loadBoards();
-
-        }
-      );
-
-
-      gradesContainer.appendChild(
-        button
-      );
-
-
-      const option =
-        document.createElement(
-          "option"
-        );
-
-      option.value =
-        grade.id;
-
-      option.textContent =
-        grade.name ||
-        "Grade " +
-        grade.grade_number;
-
-      registerGrade.appendChild(
-        option
-      );
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   LOAD BOARDS
-========================================================= */
-
-async function loadBoards() {
-
-  boardsContainer.innerHTML =
-    "<p>Loading boards...</p>";
-
-  showStage("boardStage");
-
-  hideStage("subjectStage");
-  hideStage("chapterStage");
-  hideStage("lessonStage");
-  hideStage("testStage");
-
-  hideLessonContent();
-  hideQuiz();
-
-
-  const {
-    data,
-    error
-  } =
-    await aqalverseSupabase
-      .from("boards")
-      .select(
-        "id, name, code"
-      )
-      .eq(
-        "is_active",
-        true
-      )
-      .order(
-        "name"
-      );
-
-
-  if (error) {
-
-    console.error(
-      "Boards error:",
-      error
-    );
-
-    boardsContainer.innerHTML =
-      "<p>Unable to load boards.</p>";
-
-    return;
-
-  }
-
-
-  boardsContainer.innerHTML = "";
-
-
-  const registerBoard =
-    document.getElementById(
-      "registerBoard"
-    );
-
-  registerBoard.innerHTML =
-    '<option value="">Select Board</option>';
-
-
-  data.forEach(
-    board => {
-
-      const button =
-        document.createElement(
-          "button"
-        );
-
-      button.type = "button";
-
-      button.className =
-        "select-button";
-
-      button.textContent =
-        board.name;
-
-
-      button.addEventListener(
-        "click",
-        async () => {
-
-          selectedBoard =
-            board;
-
-          selectedSubject = null;
-          selectedCourse = null;
-          selectedChapter = null;
-          selectedLesson = null;
-          selectedTest = null;
-
-
-          document
-            .querySelectorAll(
-              "#boardsContainer .select-button"
-            )
-            .forEach(
-              item =>
-                item.classList.remove(
-                  "selected"
-                )
-            );
-
-
-          button.classList.add(
-            "selected"
-          );
-
-
-          await loadSubjects();
-
-        }
-      );
-
-
-      boardsContainer.appendChild(
-        button
-      );
-
-
-      const option =
-        document.createElement(
-          "option"
-        );
-
-      option.value =
-        board.id;
-
-      option.textContent =
-        board.name;
-
-      registerBoard.appendChild(
-        option
-      );
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   LOAD SUBJECTS
-========================================================= */
-
-async function loadSubjects() {
-
-  subjectsContainer.innerHTML =
-    "<p>Loading subjects...</p>";
-
-  showStage("subjectStage");
-
-  hideStage("chapterStage");
-  hideStage("lessonStage");
-  hideStage("testStage");
-
-  hideLessonContent();
-  hideQuiz();
-
-
-  const {
-    data,
-    error
-  } =
-    await aqalverseSupabase
-      .from("subjects")
-      .select(
-        "id, name, code"
-      )
-      .eq(
-        "is_active",
-        true
-      )
-      .order(
-        "name"
-      );
-
-
-  if (error) {
-
-    console.error(
-      "Subjects error:",
-      error
-    );
-
-    subjectsContainer.innerHTML =
-      "<p>Unable to load subjects.</p>";
-
-    return;
-
-  }
-
-
-  subjectsContainer.innerHTML = "";
-
-
-  data.forEach(
-    subject => {
-
-      const button =
-        document.createElement(
-          "button"
-        );
-
-      button.type = "button";
-
-      button.className =
-        "select-button";
-
-      button.textContent =
-        subject.name;
-
-
-      button.addEventListener(
-        "click",
-        async () => {
-
-          selectedSubject =
-            subject;
-
-          selectedCourse = null;
-          selectedChapter = null;
-          selectedLesson = null;
-          selectedTest = null;
-
-
-          document
-            .querySelectorAll(
-              "#subjectsContainer .select-button"
-            )
-            .forEach(
-              item =>
-                item.classList.remove(
-                  "selected"
-                )
-            );
-
-
-          button.classList.add(
-            "selected"
-          );
-
-
-          await loadCourse();
-
-        }
-      );
-
-
-      subjectsContainer.appendChild(
-        button
-      );
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   LOAD COURSE
-========================================================= */
-
-async function loadCourse() {
-
-  hideStage("chapterStage");
-  hideStage("lessonStage");
-  hideStage("testStage");
-
-  hideLessonContent();
-  hideQuiz();
-
-
-  const {
-    data,
-    error
-  } =
-    await aqalverseSupabase
-      .from("courses")
-      .select(
-        "id, board_id, grade_id, subject_id, title, description, monthly_price"
-      )
-      .eq(
-        "board_id",
-        selectedBoard.id
-      )
-      .eq(
-        "grade_id",
-        selectedGrade.id
-      )
-      .eq(
-        "subject_id",
-        selectedSubject.id
-      )
-      .eq(
-        "is_active",
-        true
-      )
-      .maybeSingle();
-
-
-  if (error) {
-
-    console.error(
-      "Course error:",
-      error
-    );
-
-    showCourseMessage(
-      "Unable to load this course."
-    );
-
-    return;
-
-  }
-
-
-  if (!data) {
-
-    showCourseMessage(
-      "This course is not available yet."
-    );
-
-    return;
-
-  }
-
-
-  selectedCourse =
-    data;
-
-
-  showCourseMessage(
-    selectedCourse.title
-  );
-
-
-  await loadChapters();
-
-}
-
-
-/* =========================================================
-   LOAD CHAPTERS
-========================================================= */
-
-async function loadChapters() {
-
-  chaptersContainer.innerHTML =
-    "<p>Loading chapters...</p>";
-
-  showStage("chapterStage");
-
-  hideStage("lessonStage");
-  hideStage("testStage");
-
-  hideLessonContent();
-  hideQuiz();
-
-
-  const {
-    data,
-    error
-  } =
-    await aqalverseSupabase
-      .from("chapters")
-      .select(
-        "id, course_id, title, chapter_number, description"
-      )
-      .eq(
-        "course_id",
-        selectedCourse.id
-      )
-      .eq(
-        "is_active",
-        true
-      )
-      .order(
-        "chapter_number"
-      );
-
-
-  if (error) {
-
-    console.error(
-      "Chapters error:",
-      error
-    );
-
-    chaptersContainer.innerHTML =
-      "<p>Unable to load chapters.</p>";
-
-    return;
-
-  }
-
-
-  chaptersContainer.innerHTML = "";
-
-
-  if (
-    !data ||
-    data.length === 0
-  ) {
-
-    chaptersContainer.innerHTML =
-      "<p>No chapters are available yet.</p>";
-
-    return;
-
-  }
-
-
-  data.forEach(
-    chapter => {
-
-      const button =
-        document.createElement(
-          "button"
-        );
-
-      button.type = "button";
-
-      button.className =
-        "select-button";
-
-      button.textContent =
-        "Chapter " +
-        chapter.chapter_number +
-        " - " +
-        chapter.title;
-
-
-      button.addEventListener(
-        "click",
-        async () => {
-
-          selectedChapter =
-            chapter;
-
-          selectedLesson = null;
-          selectedTest = null;
-
-
-          document
-            .querySelectorAll(
-              "#chaptersContainer .select-button"
-            )
-            .forEach(
-              item =>
-                item.classList.remove(
-                  "selected"
-                )
-            );
-
-
-          button.classList.add(
-            "selected"
-          );
-
-
-          await loadLessons();
-
-        }
-      );
-
-
-      chaptersContainer.appendChild(
-        button
-      );
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   LOAD LESSONS
-========================================================= */
-
-async function loadLessons() {
-
-  if (!selectedChapter) {
-    return;
-  }
-
-
-  lessonsContainer.innerHTML =
-    "<p>Loading lessons...</p>";
-
-  showStage("lessonStage");
-
-  hideStage("testStage");
-
-  hideLessonContent();
-  hideQuiz();
-
-
-  if (!accessAllowed) {
-
-    lessonsContainer.innerHTML =
-      "<p>Your learning access has expired. Please renew your subscription.</p>";
-
-    showAccessLock(
-      "Your learning access is not active. Please renew your subscription from the Dashboard."
-    );
-
-    return;
-
-  }
-
-
-  const {
-    data,
-    error
-  } =
-    await aqalverseSupabase
-      .from("lessons")
-      .select(
-        "id, chapter_id, title, lesson_number, description, video_url, notes_url, passing_percentage"
-      )
-      .eq(
-        "chapter_id",
-        selectedChapter.id
-      )
-      .eq(
-        "is_active",
-        true
-      )
-      .order(
-        "lesson_number"
-      );
-
-
-  if (error) {
-
-    console.error(
-      "Lessons error:",
-      error
-    );
-
-    lessonsContainer.innerHTML =
-      "<p>Unable to load lessons.</p>";
-
-    return;
-
-  }
-
-
-  lessonsContainer.innerHTML = "";
-
-
-  if (
-    !data ||
-    data.length === 0
-  ) {
-
-    lessonsContainer.innerHTML =
-      "<p>No lessons are available yet.</p>";
-
-    return;
-
-  }
-
-
-  data.forEach(
-    lesson => {
-
-      const unlocked =
-        isLessonUnlocked(
-          lesson,
-          data
-        );
-
-      const completed =
-        isLessonCompleted(
-          lesson.id
-        );
-
-
-      const button =
-        document.createElement(
-          "button"
-        );
-
-
-      button.type = "button";
-
-      button.className =
-        "select-button lesson-button";
-
-
-      if (completed) {
-
-        button.classList.add(
-          "completed"
-        );
-
-      }
-
-
-      if (!unlocked) {
-
-        button.classList.add(
-          "locked"
-        );
-
-      }
-
-
-      if (completed) {
-
-        button.textContent =
-          "✓ Lesson " +
-          lesson.lesson_number +
-          " - " +
-          lesson.title +
-          " (Completed)";
-
-      } else if (!unlocked) {
-
-        button.textContent =
-          "🔒 Lesson " +
-          lesson.lesson_number +
-          " - " +
-          lesson.title +
-          " (Locked)";
-
-      } else {
-
-        button.textContent =
-          "Lesson " +
-          lesson.lesson_number +
-          " - " +
-          lesson.title;
-
-      }
-
-
-      button.addEventListener(
-        "click",
-        async () => {
-
-          if (!unlocked) {
-
-            showCourseMessage(
-              "This lesson is locked. Pass the previous lesson assessment with at least 60% to unlock it."
-            );
-
-            return;
-
-          }
-
-
-          document
-            .querySelectorAll(
-              ".lesson-button"
-            )
-            .forEach(
-              item =>
-                item.classList.remove(
-                  "selected"
-                )
-            );
-
-
-          button.classList.add(
-            "selected"
-          );
-
-
-          selectedLesson =
-            lesson;
-
-          selectedTest = null;
-
-
-          hideQuiz();
-
-
-          await showLessonContent(
-            lesson
-          );
-
-
-          showCourseMessage(
-            lesson.title +
-            " selected. Study the lesson content, then complete the assessment."
-          );
-
-
-          await loadTests();
-
-        }
-      );
-
-
-      lessonsContainer.appendChild(
-        button
-      );
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   LOAD TESTS
-========================================================= */
-
-async function loadTests() {
-
-  if (!selectedLesson) {
-    return;
-  }
-
-
-  testsContainer.innerHTML =
-    "<p>Loading assessments...</p>";
-
-  showStage("testStage");
-
-
-  if (!accessAllowed) {
-
-    testsContainer.innerHTML =
-      "<p>Your learning access has expired.</p>";
-
-    return;
-
-  }
-
-
-  const {
-    data,
-    error
-  } =
-    await aqalverseSupabase
-      .from("tests")
-      .select(
-        "id, lesson_id, title, number_of_questions, passing_percentage, randomize_questions"
-      )
-      .eq(
-        "lesson_id",
-        selectedLesson.id
-      )
-      .eq(
-        "is_active",
-        true
-      )
-      .order(
-        "id"
-      );
-
-
-  if (error) {
-
-    console.error(
-      "Tests error:",
-      error
-    );
-
-    testsContainer.innerHTML =
-      "<p>Unable to load assessments.</p>";
-
-    return;
-
-  }
-
-
-  testsContainer.innerHTML = "";
-
-
-  if (
-    !data ||
-    data.length === 0
-  ) {
-
-    testsContainer.innerHTML =
-      "<p>No assessment is available for this lesson yet.</p>";
-
-    return;
-
-  }
-
-
-  data.forEach(
-    test => {
-
-      const button =
-        document.createElement(
-          "button"
-        );
-
-      button.type = "button";
-
-      button.className =
-        "select-button";
-
-      button.textContent =
-        test.title +
-        " (" +
-        test.number_of_questions +
-        " Questions)";
-
-
-      button.addEventListener(
-        "click",
-        async () => {
-
-          document
-            .querySelectorAll(
-              "#testsContainer .select-button"
-            )
-            .forEach(
-              item =>
-                item.classList.remove(
-                  "selected"
-                )
-            );
-
-
-          button.classList.add(
-            "selected"
-          );
-
-
-          selectedTest =
-            test;
-
-
-          await startDatabaseTest();
-
-        }
-      );
-
-
-      testsContainer.appendChild(
-        button
-      );
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   START DATABASE TEST
-========================================================= */
-
-async function startDatabaseTest() {
-
-  if (
-    !selectedTest ||
-    !selectedLesson
-  ) {
-    return;
-  }
-
-
-  if (!currentUser) {
-
-    quizResult.className =
-      "result failure";
-
-    quizResult.textContent =
-      "Please login before starting the assessment.";
-
-    quizResult.classList.remove(
-      "hidden"
-    );
-
-    return;
-
-  }
-
-
-  if (!accessAllowed) {
-
-    showAccessLock(
-      "Your learning access has expired. Please renew your subscription."
-    );
-
-    return;
-
-  }
-
-
-  hideQuiz();
-
-
-  quizTitle.textContent =
-    selectedTest.title;
-
-
-  quizQuestions.innerHTML =
-    "<p>Loading questions...</p>";
-
-
-  quizContainer.classList.remove(
-    "hidden"
-  );
-
-
-  quizContainer.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
-
-
-  const {
-    data: testQuestionRows,
-    error: testQuestionsError
-  } =
-    await aqalverseSupabase
-      .from("test_questions")
-      .select(
-        "id, test_id, question_id, question_order"
-      )
-      .eq(
-        "test_id",
-        selectedTest.id
-      )
-      .order(
-        "question_order"
-      );
-
-
-  if (testQuestionsError) {
-
-    console.error(
-      "Test questions error:",
-      testQuestionsError
-    );
-
-    quizQuestions.innerHTML =
-      "<p>Unable to load assessment questions.</p>";
-
-    return;
-
-  }
-
-
-  if (
-    !testQuestionRows ||
-    testQuestionRows.length === 0
-  ) {
-
-    quizQuestions.innerHTML =
-      "<p>No questions have been connected to this assessment yet.</p>";
-
-    return;
-
-  }
-
-
-  const questionIds =
-    [
-      ...new Set(
-        testQuestionRows.map(
-          row =>
-            row.question_id
-        )
-      )
-    ];
-
-
-  const {
-    data: questions,
-    error: questionsError
-  } =
-    await aqalverseSupabase
-      .from("question_bank")
-      .select(
-        "id, lesson_id, question_text, option_a, option_b, option_c, option_d, correct_option, explanation, difficulty, language"
-      )
-      .in(
-        "id",
-        questionIds
-      )
-      .eq(
-        "approved",
-        true
-      );
-
-
-  if (questionsError) {
-
-    console.error(
-      "Question bank error:",
-      questionsError
-    );
-
-    quizQuestions.innerHTML =
-      "<p>Unable to load questions.</p>";
-
-    return;
-
-  }
-
-
-  const questionMap =
-    new Map(
-      questions.map(
-        question => [
-          question.id,
-          question
-        ]
-      )
-    );
-
-
-  let finalQuestions =
-    testQuestionRows
-      .map(
-        row =>
-          questionMap.get(
-            row.question_id
-          )
-      )
-      .filter(Boolean);
-
-
-  const seenIds =
-    new Set();
-
-
-  finalQuestions =
-    finalQuestions.filter(
-      question => {
-
-        if (
-          seenIds.has(
-            question.id
-          )
-        ) {
-
-          return false;
-
-        }
-
-
-        seenIds.add(
-          question.id
-        );
-
-        return true;
-
-      }
-    );
-
-
-  const seenTexts =
-    new Set();
-
-
-  finalQuestions =
-    finalQuestions.filter(
-      question => {
-
-        const text =
-          String(
-            question.question_text
-          )
-            .trim()
-            .toLowerCase();
-
-
-        if (
-          seenTexts.has(
-            text
-          )
-        ) {
-
-          return false;
-
-        }
-
-
-        seenTexts.add(
-          text
-        );
-
-        return true;
-
-      }
-    );
-
-
-  if (
-    selectedTest.randomize_questions
-  ) {
-
-    finalQuestions =
-      randomizeArray(
-        finalQuestions
-      );
-
-  }
-
-
-  finalQuestions =
-    finalQuestions.slice(
-      0,
-      selectedTest.number_of_questions
-    );
-
-
-  if (
-    finalQuestions.length === 0
-  ) {
-
-    quizQuestions.innerHTML =
-      "<p>No usable questions are available.</p>";
-
-    return;
-
-  }
-
-
-  quizQuestions.innerHTML = "";
-
-
-  finalQuestions.forEach(
-    (question, index) => {
-
-      const wrapper =
-        document.createElement(
-          "div"
-        );
-
-
-      wrapper.className =
-        "quiz-question";
-
-
-      const heading =
-        document.createElement(
-          "h4"
-        );
-
-
-      heading.textContent =
-        (index + 1) +
-        ". " +
-        question.question_text;
-
-
-      wrapper.appendChild(
-        heading
-      );
-
-
-      const options = [
-        ["A", question.option_a],
-        ["B", question.option_b],
-        ["C", question.option_c],
-        ["D", question.option_d]
-      ];
-
-
-      options.forEach(
-        ([letter, text]) => {
-
-          const label =
-            document.createElement(
-              "label"
-            );
-
-
-          label.className =
-            "option";
-
-
-          const radio =
-            document.createElement(
-              "input"
-            );
-
-
-          radio.type =
-            "radio";
-
-          radio.name =
-            "question_" +
-            question.id;
-
-          radio.value =
-            letter;
-
-          radio.dataset.questionId =
-            question.id;
-
-
-          label.appendChild(
-            radio
-          );
-
-
-          label.appendChild(
-            document.createTextNode(
-              " " +
-              letter +
-              ". " +
-              text
-            )
-          );
-
-
-          wrapper.appendChild(
-            label
-          );
-
-        }
-      );
-
-
-      quizQuestions.appendChild(
-        wrapper
-      );
-
-    }
-  );
-
-
-  quizContainer.dataset.questions =
-    JSON.stringify(
-      finalQuestions
-    );
-
-}
-
-
-/* =========================================================
-   SUBMIT QUIZ
-========================================================= */
-
-document
-  .getElementById("submitQuiz")
-  .addEventListener(
-    "click",
-    submitQuiz
-  );
-
-
-async function submitQuiz() {
-
-  if (
-    !selectedTest ||
-    !currentUser
-  ) {
-
-    quizResult.className =
-      "result failure";
-
-    quizResult.textContent =
-      "Please login before submitting the assessment.";
-
-    quizResult.classList.remove(
-      "hidden"
-    );
-
-    return;
-
-  }
-
-
-  if (!accessAllowed) {
-
-    quizResult.className =
-      "result failure";
-
-    quizResult.textContent =
-      "Your learning access has expired.";
-
-    quizResult.classList.remove(
-      "hidden"
-    );
-
-    return;
-
-  }
-
-
-  let questions = [];
-
-
-  try {
-
-    questions =
-      JSON.parse(
-        quizContainer.dataset.questions ||
-        "[]"
-      );
-
-  } catch (error) {
-
-    console.error(error);
-
-    questions = [];
-
-  }
-
-
-  if (
-    questions.length === 0
-  ) {
-
-    quizResult.className =
-      "result failure";
-
-    quizResult.textContent =
-      "No questions are available.";
-
-    quizResult.classList.remove(
-      "hidden"
-    );
-
-    return;
-
-  }
-
-
-  let score = 0;
-
-
-  questions.forEach(
-    question => {
-
-      const selected =
-        document.querySelector(
-          'input[name="question_' +
-          question.id +
-          '"]:checked'
-        );
-
-
-      if (
-        selected &&
-        selected.value ===
-        question.correct_option
-      ) {
-
-        score++;
-
-      }
-
-    }
-  );
-
-
-  const total =
-    questions.length;
-
-
-  const percentage =
-    total > 0
-      ? (score / total) * 100
-      : 0;
-
-
-  const passed =
-    percentage >=
-    selectedTest.passing_percentage;
-
-
-  const {
-    error: attemptError
-  } =
-    await aqalverseSupabase
-      .from("test_attempts")
-      .insert({
-        student_id:
-          currentUser.id,
-
-        test_id:
-          selectedTest.id,
-
-        score:
-          score,
-
-        total_questions:
-          total,
-
-        percentage:
-          percentage,
-
-        passed:
-          passed
+    document
+      .getElementById("app")
+      .scrollIntoView({
+        behavior: "smooth"
       });
-
-
-  if (attemptError) {
-
-    console.error(
-      "Attempt save error:",
-      attemptError
-    );
-
-    quizResult.className =
-      "result failure";
-
-    quizResult.textContent =
-      "Your result was calculated, but it could not be saved. Please try again.";
-
-    quizResult.classList.remove(
-      "hidden"
-    );
-
-    return;
-
   }
 
 
-  if (passed) {
+  async function registerStudent(event) {
 
-    await completeLessonProgress();
+    event.preventDefault();
 
+    clearMessage("registerMessage");
 
-    quizResult.className =
-      "result success";
+    const name =
+      document.getElementById("registerName").value.trim();
 
+    const email =
+      document.getElementById("registerEmail").value.trim();
 
-    quizResult.innerHTML =
-      "<strong>Passed!</strong><br>" +
-      "Score: " +
-      score +
-      "/" +
-      total +
-      " (" +
-      percentage.toFixed(0) +
-      "%)<br>" +
-      "The lesson has been marked as completed.<br><br>" +
-      "The next lesson is now unlocked.";
+    const password =
+      document.getElementById("registerPassword").value;
 
+    const gradeId =
+      document.getElementById("registerGrade").value;
 
-  } else {
+    const boardId =
+      document.getElementById("registerBoard").value;
 
-    quizResult.className =
-      "result failure";
+    const language =
+      document.getElementById("registerLanguage").value;
 
 
-    quizResult.innerHTML =
-      "<strong>Not passed yet.</strong><br>" +
-      "Score: " +
-      score +
-      "/" +
-      total +
-      " (" +
-      percentage.toFixed(0) +
-      "%)<br>" +
-      "You need at least " +
-      selectedTest.passing_percentage +
-      "% to pass. You can try again.";
+    if (!gradeId || !boardId) {
 
-  }
-
-
-  quizResult.classList.remove(
-    "hidden"
-  );
-
-
-  if (passed) {
-
-    await reloadStudentProgress();
-
-    await loadDashboard();
-
-    await loadLessons();
-
-  }
-
-}
-
-
-/* =========================================================
-   COMPLETE LESSON PROGRESS
-========================================================= */
-
-async function completeLessonProgress() {
-
-  if (
-    !currentUser ||
-    !selectedLesson
-  ) {
-    return;
-  }
-
-
-  const {
-    error
-  } =
-    await aqalverseSupabase
-      .from("student_progress")
-      .upsert(
-        {
-          student_id:
-            currentUser.id,
-
-          lesson_id:
-            selectedLesson.id,
-
-          video_completed:
-            true,
-
-          video_progress:
-            100,
-
-          lesson_unlocked:
-            true,
-
-          lesson_completed:
-            true,
-
-          completed_at:
-            new Date().toISOString()
-        },
-        {
-          onConflict:
-            "student_id,lesson_id"
-        }
+      showMessage(
+        "registerMessage",
+        "Please select your grade and board.",
+        "error"
       );
 
+      return;
+    }
 
-  if (error) {
 
-    console.error(
-      "Progress save error:",
+    const {
+      data,
       error
-    );
+    } = await supabaseClient.auth.signUp({
 
-    return;
-
-  }
-
-
-  console.log(
-    "Lesson progress saved successfully."
-  );
-
-}
-
-
-/* =========================================================
-   LOAD STUDENT PROGRESS
-========================================================= */
-
-async function reloadStudentProgress() {
-
-  if (!currentUser) {
-
-    studentProgressRows = [];
-
-    return;
-
-  }
-
-
-  const {
-    data,
-    error
-  } =
-    await aqalverseSupabase
-      .from("student_progress")
-      .select(
-        "id, lesson_id, video_completed, video_progress, lesson_unlocked, lesson_completed, completed_at"
-      )
-      .eq(
-        "student_id",
-        currentUser.id
-      );
-
-
-  if (error) {
-
-    console.error(
-      "Progress reload error:",
-      error
-    );
-
-    return;
-
-  }
-
-
-  studentProgressRows =
-    data || [];
-
-}
-
-
-/* =========================================================
-   REGISTER
-========================================================= */
-
-document
-  .getElementById("registerForm")
-  .addEventListener(
-    "submit",
-    registerStudent
-  );
-
-
-async function registerStudent(event) {
-
-  event.preventDefault();
-
-
-  const name =
-    document
-      .getElementById("registerName")
-      .value
-      .trim();
-
-
-  const email =
-    document
-      .getElementById("registerEmail")
-      .value
-      .trim();
-
-
-  const password =
-    document
-      .getElementById("registerPassword")
-      .value;
-
-
-  const gradeId =
-    document
-      .getElementById("registerGrade")
-      .value;
-
-
-  const boardId =
-    document
-      .getElementById("registerBoard")
-      .value;
-
-
-  const language =
-    document
-      .getElementById("registerLanguage")
-      .value;
-
-
-  const message =
-    document.getElementById(
-      "registerMessage"
-    );
-
-
-  if (
-    !gradeId ||
-    !boardId
-  ) {
-
-    message.textContent =
-      "Please select your grade and board.";
-
-    return;
-
-  }
-
-
-  message.textContent =
-    "Creating account...";
-
-
-  const {
-    data,
-    error
-  } =
-    await aqalverseSupabase.auth.signUp({
-      email:
-        email,
-
-      password:
-        password,
+      email,
+      password,
 
       options: {
         data: {
-          full_name:
-            name,
-
-          role:
-            "student",
-
-          preferred_language:
-            language
+          full_name: name
         }
       }
     });
 
 
-  if (error) {
+    if (error) {
 
-    console.error(
-      "Registration error:",
-      error
-    );
-
-    message.textContent =
-      error.message;
-
-    return;
-
-  }
-
-
-  if (!data.user) {
-
-    message.textContent =
-      "Account could not be created.";
-
-    return;
-
-  }
-
-
-  /*
-     Profile
-  */
-
-  const {
-    error: profileError
-  } =
-    await aqalverseSupabase
-      .from("profiles")
-      .upsert(
-        {
-          id:
-            data.user.id,
-
-          full_name:
-            name,
-
-          role:
-            "student",
-
-          preferred_language:
-            language
-        },
-        {
-          onConflict:
-            "id"
-        }
+      showMessage(
+        "registerMessage",
+        error.message,
+        "error"
       );
 
-
-  if (profileError) {
-
-    console.error(
-      "Profile creation error:",
-      profileError
-    );
-
-  }
-
-
-  /*
-     Trial
-  */
-
-  const trialStart =
-    new Date();
-
-
-  const trialEnd =
-    new Date(
-      trialStart.getTime() +
-      2 *
-      24 *
-      60 *
-      60 *
-      1000
-    );
-
-
-  /*
-     Student record
-  */
-
-  const {
-    error: studentError
-  } =
-    await aqalverseSupabase
-      .from("students")
-      .upsert(
-        {
-          id:
-            data.user.id,
-
-          board_id:
-            Number(boardId),
-
-          grade_id:
-            Number(gradeId),
-
-          trial_started_at:
-            trialStart.toISOString(),
-
-          trial_ends_at:
-            trialEnd.toISOString(),
-
-          account_status:
-            "trial"
-        },
-        {
-          onConflict:
-            "id"
-        }
-      );
-
-
-  if (studentError) {
-
-    console.error(
-      "Student creation error:",
-      studentError
-    );
-
-    message.textContent =
-      "Account created, but student profile could not be completed. Please contact administrator.";
-
-    return;
-
-  }
-
-
-  if (data.session) {
-
-    message.textContent =
-      "Account created successfully. Your 2-day free trial has started.";
-
-    currentUser =
-      data.user;
-
-    await initializeUser();
-
-  } else {
-
-    message.textContent =
-      "Account created. Please check your email if email confirmation is enabled, then login.";
-
-  }
-
-}
-
-
-/* =========================================================
-   LOGIN
-========================================================= */
-
-document
-  .getElementById("loginForm")
-  .addEventListener(
-    "submit",
-    loginStudent
-  );
-
-
-async function loginStudent(event) {
-
-  event.preventDefault();
-
-
-  const email =
-    document
-      .getElementById("loginEmail")
-      .value
-      .trim();
-
-
-  const password =
-    document
-      .getElementById("loginPassword")
-      .value;
-
-
-  const message =
-    document.getElementById(
-      "loginMessage"
-    );
-
-
-  message.textContent =
-    "Logging in...";
-
-
-  const {
-    data,
-    error
-  } =
-    await aqalverseSupabase.auth.signInWithPassword({
-      email:
-        email,
-
-      password:
-        password
-    });
-
-
-  if (error) {
-
-    console.error(
-      "Login error:",
-      error
-    );
-
-    message.textContent =
-      error.message;
-
-    return;
-
-  }
-
-
-  currentUser =
-    data.user;
-
-
-  message.textContent =
-    "Login successful.";
-
-
-  await initializeUser();
-
-
-  document
-    .getElementById("dashboard")
-    .scrollIntoView({
-      behavior: "smooth"
-    });
-
-}
-
-
-/* =========================================================
-   AUTH STATE
-========================================================= */
-
-aqalverseSupabase.auth.onAuthStateChange(
-  async (
-    event,
-    session
-  ) => {
-
-    if (session?.user) {
-
-      currentUser =
-        session.user;
-
-      await initializeUser();
-
-    } else {
-
-      currentUser = null;
-
-      currentProfile = null;
-
-      currentStudent = null;
-
-      studentProgressRows = [];
-
-      accessAllowed = false;
-
-      activeSubscription = null;
-
-      resetDashboard();
-
+      return;
     }
 
-  }
-);
+
+    const user = data.user;
+
+    if (!user) {
+
+      showMessage(
+        "registerMessage",
+        "Registration was not completed.",
+        "error"
+      );
+
+      return;
+    }
 
 
-/* =========================================================
-   INITIALIZE USER
-========================================================= */
+    /*
+      Profile creation.
+      This assumes email confirmation is disabled,
+      or the profile can be inserted after authentication.
+    */
 
-async function initializeUser() {
-
-  if (!currentUser) {
-    return;
-  }
-
-
-  /*
-     Profile
-  */
-
-  const {
-    data: profile,
-    error: profileError
-  } =
-    await aqalverseSupabase
-      .from("profiles")
-      .select("*")
-      .eq(
-        "id",
-        currentUser.id
-      )
-      .maybeSingle();
+    const { error: profileError } =
+      await supabaseClient
+        .from("profiles")
+        .upsert({
+          id: user.id,
+          full_name: name,
+          username: email.split("@")[0],
+          role: "student",
+          preferred_language: language
+        });
 
 
-  if (profileError) {
+    if (profileError) {
 
-    console.error(
-      "Profile load error:",
-      profileError
-    );
+      showMessage(
+        "registerMessage",
+        profileError.message,
+        "error"
+      );
 
-  }
-
-
-  currentProfile =
-    profile;
+      return;
+    }
 
 
-  /*
-     Student
-  */
+    const trialStart = new Date();
 
-  const {
-    data: student,
-    error: studentError
-  } =
-    await aqalverseSupabase
-      .from("students")
-      .select("*")
-      .eq(
-        "id",
-        currentUser.id
-      )
-      .maybeSingle();
+    const trialEnd =
+      new Date(
+        trialStart.getTime() +
+        2 * 24 * 60 * 60 * 1000
+      );
 
-
-  if (studentError) {
-
-    console.error(
-      "Student load error:",
-      studentError
-    );
-
-  }
-
-
-  currentStudent =
-    student;
-
-
-  /*
-     Progress
-  */
-
-  await reloadStudentProgress();
-
-
-  /*
-     Access
-  */
-
-  await refreshAccessStatus();
-
-
-  updateDashboardHeader();
-
-  await loadDashboard();
-
-}
-
-
-/* =========================================================
-   DASHBOARD
-========================================================= */
-
-async function loadDashboard() {
-
-  if (!currentUser) {
-    return;
-  }
-
-
-  document
-    .getElementById(
-      "dashboardLoginNotice"
-    )
-    .classList.add(
-      "hidden"
-    );
-
-
-  document
-    .getElementById(
-      "dashboardContent"
-    )
-    .classList.remove(
-      "hidden"
-    );
-
-
-  document
-    .getElementById(
-      "logoutButton"
-    )
-    .classList.remove(
-      "hidden"
-    );
-
-
-  updateDashboardHeader();
-
-
-  const progressRows =
-    studentProgressRows || [];
-
-
-  const completed =
-    progressRows.filter(
-      row =>
-        row.lesson_completed === true
-    ).length;
-
-
-  const started =
-    progressRows.filter(
-      row =>
-        row.video_progress > 0 ||
-        row.lesson_completed === true
-    ).length;
-
-
-  /*
-     Count lessons belonging to
-     student's grade and board.
-  */
-
-  let totalLessons = 0;
-
-
-  if (
-    currentStudent &&
-    currentStudent.grade_id &&
-    currentStudent.board_id
-  ) {
 
     const {
-      data: courses,
-      error: coursesError
-    } =
-    await aqalverseSupabase
-      .from("courses")
-      .select("id")
-      .eq(
-        "grade_id",
-        currentStudent.grade_id
-      )
-      .eq(
-        "board_id",
-        currentStudent.board_id
-      )
-      .eq(
-        "is_active",
-        true
-      );
-
-
-    if (
-      !coursesError &&
-      courses &&
-      courses.length > 0
-    ) {
-
-      const courseIds =
-        courses.map(
-          course =>
-            course.id
-        );
-
-
-      const {
-        data: chapters,
-        error: chaptersError
-      } =
-      await aqalverseSupabase
-        .from("chapters")
-        .select("id")
-        .in(
-          "course_id",
-          courseIds
-        )
-        .eq(
-          "is_active",
-          true
-        );
-
-
-      if (
-        !chaptersError &&
-        chapters &&
-        chapters.length > 0
-      ) {
-
-        const chapterIds =
-          chapters.map(
-            chapter =>
-              chapter.id
-          );
-
-
-        const {
-          data: lessons,
-          error: lessonsError
-        } =
-        await aqalverseSupabase
-          .from("lessons")
-          .select("id")
-          .in(
-            "chapter_id",
-            chapterIds
-          )
-          .eq(
-            "is_active",
-            true
-          );
-
-
-        if (
-          !lessonsError &&
-          lessons
-        ) {
-
-          totalLessons =
-            lessons.length;
-
-        }
-
-      }
-
-    }
-
-  }
-
-
-  let progressPercentage =
-    0;
-
-
-  if (
-    totalLessons > 0
-  ) {
-
-    progressPercentage =
-      Math.round(
-        (
-          completed /
-          totalLessons
-        ) *
-        100
-      );
-
-  }
-
-
-  if (
-    progressPercentage > 100
-  ) {
-
-    progressPercentage =
-      100;
-
-  }
-
-
-  document
-    .getElementById(
-      "dashboardCompleted"
-    )
-    .textContent =
-    completed;
-
-
-  document
-    .getElementById(
-      "dashboardProgressText"
-    )
-    .textContent =
-    progressPercentage +
-    "%";
-
-
-  document
-    .getElementById(
-      "dashboardProgressBar"
-    )
-    .style.width =
-    progressPercentage +
-    "%";
-
-
-  document
-    .getElementById(
-      "dashboardProgressDetails"
-    )
-    .textContent =
-    completed +
-    " completed lesson(s), " +
-    started +
-    " started lesson(s) out of " +
-    totalLessons +
-    " available lesson(s).";
-
-
-  updateTrialBox();
-
-  updateAccessBox();
-
-  updateRenewalVisibility();
-
-}
-
-
-/* =========================================================
-   DASHBOARD HEADER
-========================================================= */
-
-function updateDashboardHeader() {
-
-  const welcome =
-    document.getElementById(
-      "dashboardWelcome"
-    );
-
-
-  if (currentProfile) {
-
-    welcome.textContent =
-      "Welcome, " +
-      (
-        currentProfile.full_name ||
-        "Student"
-      ) +
-      ".";
-
-  } else {
-
-    welcome.textContent =
-      "Welcome to your student dashboard.";
-
-  }
-
-
-  const gradeElement =
-    document.getElementById(
-      "dashboardGrade"
-    );
-
-
-  const boardElement =
-    document.getElementById(
-      "dashboardBoard"
-    );
-
-
-  if (currentStudent) {
-
-    if (
-      currentStudent.grade_id
-    ) {
-
-      loadDashboardGrade(
-        currentStudent.grade_id
-      );
-
-    } else {
-
-      gradeElement.textContent =
-        "Not selected";
-
-    }
-
-
-    if (
-      currentStudent.board_id
-    ) {
-
-      loadDashboardBoard(
-        currentStudent.board_id
-      );
-
-    } else {
-
-      boardElement.textContent =
-        "Not selected";
-
-    }
-
-  } else {
-
-    gradeElement.textContent =
-      "—";
-
-    boardElement.textContent =
-      "—";
-
-  }
-
-}
-
-
-/* =========================================================
-   DASHBOARD GRADE
-========================================================= */
-
-async function loadDashboardGrade(
-  gradeId
-) {
-
-  const {
-    data,
-    error
-  } =
-    await aqalverseSupabase
-      .from("grades")
-      .select(
-        "name, grade_number"
-      )
-      .eq(
-        "id",
-        gradeId
-      )
-      .maybeSingle();
-
-
-  if (
-    error ||
-    !data
-  ) {
-
-    document
-      .getElementById(
-        "dashboardGrade"
-      )
-      .textContent =
-      "—";
-
-    return;
-
-  }
-
-
-  document
-    .getElementById(
-      "dashboardGrade"
-    )
-    .textContent =
-    data.name ||
-    "Grade " +
-    data.grade_number;
-
-}
-
-
-/* =========================================================
-   DASHBOARD BOARD
-========================================================= */
-
-async function loadDashboardBoard(
-  boardId
-) {
-
-  const {
-    data,
-    error
-  } =
-    await aqalverseSupabase
-      .from("boards")
-      .select(
-        "name"
-      )
-      .eq(
-        "id",
-        boardId
-      )
-      .maybeSingle();
-
-
-  if (
-    error ||
-    !data
-  ) {
-
-    document
-      .getElementById(
-        "dashboardBoard"
-      )
-      .textContent =
-      "—";
-
-    return;
-
-  }
-
-
-  document
-    .getElementById(
-      "dashboardBoard"
-    )
-    .textContent =
-    data.name;
-
-}
-
-
-/* =========================================================
-   TRIAL BOX
-========================================================= */
-
-function updateTrialBox() {
-
-  const box =
-    document.getElementById(
-      "trialBox"
-    );
-
-
-  if (
-    !currentStudent ||
-    !currentStudent.trial_ends_at
-  ) {
-
-    box.classList.add(
-      "hidden"
-    );
-
-    return;
-
-  }
-
-
-  const trialEnd =
-    new Date(
-      currentStudent.trial_ends_at
-    );
-
-
-  const now =
-    new Date();
-
-
-  if (
-    trialEnd > now &&
-    currentStudent.account_status ===
-    "trial"
-  ) {
-
-    const difference =
-      trialEnd.getTime() -
-      now.getTime();
-
-
-    const hours =
-      Math.ceil(
-        difference /
-        (
-          1000 *
-          60 *
-          60
-        )
-      );
-
-
-    const days =
-      Math.floor(
-        hours / 24
-      );
-
-
-    const remainingHours =
-      hours % 24;
-
-
-    box.classList.remove(
-      "hidden"
-    );
-
-
-    if (days > 0) {
-
-      box.textContent =
-        "🎓 Your free trial is active. " +
-        days +
-        " day(s) and " +
-        remainingHours +
-        " hour(s) remaining.";
-
-    } else {
-
-      box.textContent =
-        "🎓 Your free trial is active. " +
-        hours +
-        " hour(s) remaining.";
-
-    }
-
-
-    return;
-
-  }
-
-
-  if (
-    currentStudent.account_status ===
-    "trial"
-  ) {
-
-    box.classList.remove(
-      "hidden"
-    );
-
-
-    box.textContent =
-      "Your 2-day free trial has ended. Please subscribe to continue learning.";
-
-    return;
-
-  }
-
-
-  box.classList.add(
-    "hidden"
-  );
-
-}
-
-
-/* =========================================================
-   ACCESS BOX
-========================================================= */
-
-function updateAccessBox() {
-
-  const box =
-    document.getElementById(
-      "accessBox"
-    );
-
-
-  const status =
-    document.getElementById(
-      "dashboardStatus"
-    );
-
-
-  const accessEnd =
-    document.getElementById(
-      "dashboardAccessEnd"
-    );
-
-
-  if (!currentStudent) {
-
-    box.classList.add(
-      "hidden"
-    );
-
-    status.textContent =
-      "—";
-
-    accessEnd.textContent =
-      "—";
-
-    return;
-
-  }
-
-
-  /*
-     Active subscription
-  */
-
-  if (
-    accessAllowed &&
-    currentStudent.account_status ===
-    "active"
-  ) {
-
-    status.textContent =
-      "Active";
-
-    status.className =
-      "status-active";
-
-
-    if (activeSubscription) {
-
-      accessEnd.textContent =
-        formatDate(
-          activeSubscription.end_date
-        );
-
-    } else {
-
-      loadSubscriptionEndDate();
-
-    }
-
-
-    box.className =
-      "access-box access-active";
-
-
-    box.textContent =
-      "Your subscription is active. You have access to your learning courses.";
-
-
-    return;
-
-  }
-
-
-  /*
-     Active trial
-  */
-
-  if (
-    accessAllowed &&
-    currentStudent.account_status ===
-    "trial"
-  ) {
-
-    status.textContent =
-      "Free Trial";
-
-    status.className =
-      "status-trial";
-
-
-    accessEnd.textContent =
-      formatDate(
-        currentStudent.trial_ends_at
-      );
-
-
-    box.className =
-      "access-box access-active";
-
-
-    box.textContent =
-      "Your 2-day free trial is active. You can access your lessons and assessments.";
-
-
-    return;
-
-  }
-
-
-  /*
-     Expired
-  */
-
-  status.textContent =
-    "Expired";
-
-  status.className =
-    "status-expired";
-
-
-  accessEnd.textContent =
-    currentStudent.trial_ends_at
-      ? formatDate(
-          currentStudent.trial_ends_at
-        )
-      : "—";
-
-
-  box.className =
-    "access-box access-expired";
-
-
-  box.textContent =
-    "Your learning access has expired. Subscription renewal will be required to continue.";
-
-}
-
-
-async function loadSubscriptionEndDate() {
-
-  if (!currentUser) {
-    return;
-  }
-
-
-  const {
-    data,
-    error
-  } =
-    await aqalverseSupabase
-      .from("student_subscriptions")
-      .select(
-        "id, end_date"
-      )
-      .eq(
-        "student_id",
-        currentUser.id
-      )
-      .eq(
-        "status",
-        "active"
-      )
-      .order(
-        "end_date",
-        {
-          ascending: false
-        }
-      )
-      .limit(1);
-
-
-  if (
-    error ||
-    !data ||
-    data.length === 0
-  ) {
-
-    document
-      .getElementById(
-        "dashboardAccessEnd"
-      )
-      .textContent =
-      "Subscription date pending";
-
-    return;
-
-  }
-
-
-  document
-    .getElementById(
-      "dashboardAccessEnd"
-    )
-    .textContent =
-    formatDate(
-      data[0].end_date
-    );
-
-}
-
-
-/* =========================================================
-   RENEWAL SYSTEM
-========================================================= */
-
-function showRenewalMessage(message) {
-
-  if (!renewalMessage) {
-    return;
-  }
-
-  renewalMessage.textContent =
-    message;
-
-  renewalMessage.classList.remove(
-    "hidden"
-  );
-
-}
-
-
-function hideRenewalMessage() {
-
-  if (!renewalMessage) {
-    return;
-  }
-
-  renewalMessage.textContent =
-    "";
-
-  renewalMessage.classList.add(
-    "hidden"
-  );
-
-}
-
-
-/* ---------------------------------------------------------
-   LOAD PLANS
---------------------------------------------------------- */
-
-async function loadRenewalPlans() {
-
-  if (!renewalPlans) {
-    return;
-  }
-
-
-  renewalPlans.innerHTML =
-    "<p>Loading subscription plans...</p>";
-
-
-  const {
-    data,
-    error
-  } =
-    await aqalverseSupabase
-      .from("fee_plans")
-      .select(
-        "id, name, price, duration_days, plan_type, description"
-      )
-      .eq(
-        "is_active",
-        true
-      )
-      .order(
-        "price"
-      );
-
-
-  if (error) {
-
-    console.error(
-      "Fee plans error:",
-      error
-    );
-
-    renewalPlans.innerHTML =
-      "<p>Unable to load subscription plans.</p>";
-
-    return;
-
-  }
-
-
-  renewalPlans.innerHTML =
-    "";
-
-
-  if (
-    !data ||
-    data.length === 0
-  ) {
-
-    renewalPlans.innerHTML =
-      "<p>No subscription plans are available.</p>";
-
-    return;
-
-  }
-
-
-  data.forEach(
-    plan => {
-
-      const card =
-        document.createElement(
-          "div"
-        );
-
-      card.className =
-        "payment-card";
-
-
-      const title =
-        document.createElement(
-          "h4"
-        );
-
-      title.textContent =
-        plan.name;
-
-
-      const price =
-        document.createElement(
-          "div"
-        );
-
-      price.className =
-        "payment-price";
-
-      price.textContent =
-        "Rs. " +
-        Number(
-          plan.price
-        ).toLocaleString();
-
-
-      const duration =
-        document.createElement(
-          "p"
-        );
-
-      duration.textContent =
-        plan.duration_days +
-        " days access";
-
-
-      const description =
-        document.createElement(
-          "p"
-        );
-
-      description.textContent =
-        plan.description ||
-        "";
-
-
-      const button =
-        document.createElement(
-          "button"
-        );
-
-      button.type =
-        "button";
-
-      button.className =
-        "payment-select-button";
-
-      button.textContent =
-        "Select Plan";
-
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          selectPaymentPlan(
-            plan
-          );
-
-        }
-      );
-
-
-      card.appendChild(
-        title
-      );
-
-      card.appendChild(
-        price
-      );
-
-      card.appendChild(
-        duration
-      );
-
-      card.appendChild(
-        description
-      );
-
-      card.appendChild(
-        button
-      );
-
-
-      renewalPlans.appendChild(
-        card
-      );
-
-    }
-  );
-
-}
-
-
-/* ---------------------------------------------------------
-   SELECT PLAN
---------------------------------------------------------- */
-
-function selectPaymentPlan(plan) {
-
-  selectedPaymentPlan =
-    plan;
-
-
-  selectedPaymentPlanInput.value =
-    plan.name;
-
-
-  selectedPaymentAmountInput.value =
-    "Rs. " +
-    Number(
-      plan.price
-    ).toLocaleString();
-
-
-  jazzCashReference.value =
-    "";
-
-
-  paymentFormBox.classList.remove(
-    "hidden"
-  );
-
-
-  hideRenewalMessage();
-
-
-  paymentFormBox.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
-
-}
-
-
-/* ---------------------------------------------------------
-   PAYMENT SUBMISSION
---------------------------------------------------------- */
-
-submitPaymentButton.addEventListener(
-  "click",
-  submitJazzCashPayment
-);
-
-
-async function submitJazzCashPayment() {
-
-  if (!currentUser) {
-
-    showRenewalMessage(
-      "Please login before submitting a payment."
-    );
-
-    return;
-
-  }
-
-
-  if (!selectedPaymentPlan) {
-
-    showRenewalMessage(
-      "Please select a subscription plan first."
-    );
-
-    return;
-
-  }
-
-
-  const reference =
-    jazzCashReference.value.trim();
-
-
-  if (!reference) {
-
-    showRenewalMessage(
-      "Please enter your JazzCash transaction/reference number."
-    );
-
-    return;
-
-  }
-
-
-  submitPaymentButton.disabled =
-    true;
-
-  submitPaymentButton.textContent =
-    "Submitting...";
-
-
-  /*
-     Save payment request.
-
-     subscription_id is intentionally null
-     because the administrator will verify
-     the payment first and create/activate
-     the subscription.
-  */
-
-  const {
-    error
-  } =
-    await aqalverseSupabase
-      .from("payments")
-      .insert({
-        student_id:
-          currentUser.id,
-
-        subscription_id:
-          null,
-
-        amount:
-          Number(
-            selectedPaymentPlan.price
-          ),
-
-        payment_method:
-          "JazzCash",
-
-        transaction_reference:
-          reference,
-
-        status:
-          "pending",
-
-        notes:
-          selectedPaymentPlan.name +
-          " renewal request"
+      error: studentError
+    } = await supabaseClient
+      .from("students")
+      .upsert({
+        id: user.id,
+        board_id: Number(boardId),
+        grade_id: Number(gradeId),
+        trial_started_at: trialStart.toISOString(),
+        trial_ends_at: trialEnd.toISOString(),
+        account_status: "trial"
       });
 
 
-  if (error) {
+    if (studentError) {
 
-    console.error(
-      "Payment submission error:",
+      showMessage(
+        "registerMessage",
+        studentError.message,
+        "error"
+      );
+
+      return;
+    }
+
+
+    showMessage(
+      "registerMessage",
+      "Student account created successfully. You can now login.",
+      "success"
+    );
+
+    document.getElementById("registerForm").reset();
+  }
+
+
+  async function loginUser(event) {
+
+    event.preventDefault();
+
+    clearMessage("loginMessage");
+
+    const email =
+      document.getElementById("loginEmail").value.trim();
+
+    const password =
+      document.getElementById("loginPassword").value;
+
+
+    const {
       error
+    } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+
+
+    if (error) {
+
+      showMessage(
+        "loginMessage",
+        error.message,
+        "error"
+      );
+
+      return;
+    }
+
+
+    showMessage(
+      "loginMessage",
+      "Login successful.",
+      "success"
     );
 
-
-    showRenewalMessage(
-      "Payment could not be submitted. Please try again."
-    );
-
-
-    submitPaymentButton.disabled =
-      false;
-
-    submitPaymentButton.textContent =
-      "Submit Payment for Verification";
-
-    return;
-
+    await loadCurrentUser();
   }
 
 
-  showRenewalMessage(
-    "Payment submitted successfully. Your payment is now pending administrator verification."
-  );
+  async function logout() {
 
+    await supabaseClient.auth.signOut();
 
-  paymentFormBox.classList.add(
-    "hidden"
-  );
+    currentUser = null;
+    currentProfile = null;
+    currentStudent = null;
 
+    showLoggedOut();
 
-  jazzCashReference.value =
-    "";
-
-
-  selectedPaymentPlan =
-    null;
-
-
-  await loadPaymentHistory();
-
-
-  submitPaymentButton.disabled =
-    false;
-
-  submitPaymentButton.textContent =
-    "Submit Payment for Verification";
-
-}
-
-
-/* ---------------------------------------------------------
-   PAYMENT HISTORY
---------------------------------------------------------- */
-
-async function loadPaymentHistory() {
-
-  if (
-    !currentUser ||
-    !paymentHistoryBox
-  ) {
-    return;
+    window.location.hash = "login";
   }
 
 
-  paymentHistoryBox.innerHTML =
-    "<p>Loading payment history...</p>";
+  function showLoggedOut() {
+
+    document
+      .getElementById("loggedOutView")
+      .classList.remove("hidden");
+
+    document
+      .getElementById("studentDashboard")
+      .classList.add("hidden");
+
+    document
+      .getElementById("staffDashboard")
+      .classList.add("hidden");
+
+    document
+      .getElementById("dashboardNav")
+      .classList.add("hidden");
+  }
 
 
-  const {
-    data,
-    error
-  } =
-    await aqalverseSupabase
-      .from("payments")
-      .select(
-        "id, amount, payment_method, transaction_reference, payment_date, status, notes"
-      )
-      .eq(
-        "student_id",
-        currentUser.id
-      )
-      .order(
-        "payment_date",
-        {
-          ascending: false
+  /* =========================================================
+     PUBLIC COURSE SEARCH
+  ========================================================= */
+
+  async function findPublicCourses() {
+
+    const gradeNumber =
+      document.getElementById("publicGrade").value;
+
+    const boardId =
+      document.getElementById("publicBoard").value;
+
+    const subjectId =
+      document.getElementById("publicSubject").value;
+
+
+    const results =
+      courses.filter(course => {
+
+        const gradeMatch =
+          !gradeNumber ||
+          String(course.grades?.grade_number) ===
+          String(gradeNumber);
+
+        const boardMatch =
+          !boardId ||
+          String(course.board_id) ===
+          String(boardId);
+
+        const subjectMatch =
+          !subjectId ||
+          String(course.subject_id) ===
+          String(subjectId);
+
+        return gradeMatch &&
+          boardMatch &&
+          subjectMatch;
+      });
+
+
+    const container =
+      document.getElementById("publicCourseResults");
+
+
+    if (!results.length) {
+
+      container.innerHTML =
+        `<div class="message show info">
+          No course found for the selected options.
+        </div>`;
+
+      return;
+    }
+
+
+    container.innerHTML = `
+      <div class="list">
+
+        ${results.slice(0,20).map(course => `
+
+          <div class="list-item">
+
+            <div>
+              <strong>
+                ${escapeHtml(course.title)}
+              </strong>
+
+              <div style="color:#64748b;font-size:13px;">
+                ${escapeHtml(course.boards?.name || "")}
+                •
+                Grade ${escapeHtml(course.grades?.grade_number || "")}
+                •
+                ${escapeHtml(course.subjects?.name || "")}
+              </div>
+            </div>
+
+            <strong>
+              Rs. ${escapeHtml(course.monthly_price)}
+            </strong>
+
+          </div>
+
+        `).join("")}
+
+      </div>
+    `;
+  }
+
+
+  /* =========================================================
+     STUDENT DASHBOARD
+  ========================================================= */
+
+  async function showStudentDashboard() {
+
+    document
+      .getElementById("loggedOutView")
+      .classList.add("hidden");
+
+    document
+      .getElementById("staffDashboard")
+      .classList.add("hidden");
+
+    document
+      .getElementById("studentDashboard")
+      .classList.remove("hidden");
+
+
+    const { data, error } =
+      await supabaseClient
+        .from("students")
+        .select(`
+          *,
+          grades(name,grade_number),
+          boards(name)
+        `)
+        .eq("id", currentUser.id)
+        .single();
+
+
+    if (error || !data) {
+
+      document.getElementById(
+        "studentLearning"
+      ).innerHTML =
+        `<div class="message show error">
+          Student record not found.
+        </div>`;
+
+      return;
+    }
+
+
+    currentStudent = data;
+
+
+    document.getElementById(
+      "studentWelcome"
+    ).textContent =
+      `Welcome, ${currentProfile.full_name}`;
+
+
+    document.getElementById(
+      "studentGradeStat"
+    ).textContent =
+      data.grades?.grade_number || "-";
+
+
+    document.getElementById(
+      "studentBoardStat"
+    ).textContent =
+      data.boards?.name || "-";
+
+
+    await loadStudentAccess();
+
+    await loadStudentLearning();
+  }
+
+
+  async function loadStudentAccess() {
+
+    const now = new Date();
+
+    let accessText = "Trial";
+
+
+    if (
+      currentStudent.account_status === "suspended"
+    ) {
+
+      accessText = "Suspended";
+
+    } else {
+
+      const { data: subscriptions } =
+        await supabaseClient
+          .from("student_subscriptions")
+          .select("*")
+          .eq("student_id", currentUser.id)
+          .eq("status", "active")
+          .gte("end_date", now.toISOString().slice(0,10))
+          .lte("start_date", now.toISOString().slice(0,10))
+          .order("end_date", { ascending:false });
+
+
+      if (subscriptions && subscriptions.length) {
+
+        accessText = "Active";
+
+      } else if (
+        currentStudent.trial_ends_at &&
+        new Date(currentStudent.trial_ends_at) > now
+      ) {
+
+        accessText = "Trial";
+
+      } else {
+
+        accessText = "Expired";
+      }
+    }
+
+
+    document.getElementById(
+      "studentAccessStat"
+    ).textContent = accessText;
+  }
+
+
+  async function loadStudentLearning() {
+
+    const container =
+      document.getElementById("studentLearning");
+
+
+    const { data: courseRows } =
+      await supabaseClient
+        .from("courses")
+        .select(`
+          *,
+          boards(name),
+          grades(name,grade_number),
+          subjects(name)
+        `)
+        .eq("board_id", currentStudent.board_id)
+        .eq("grade_id", currentStudent.grade_id)
+        .eq("is_active", true)
+        .order("id");
+
+
+    if (!courseRows || !courseRows.length) {
+
+      container.innerHTML =
+        `<div class="message show info">
+          No courses are available yet for your selected grade and board.
+        </div>`;
+
+      return;
+    }
+
+
+    const { data: chapters } =
+      await supabaseClient
+        .from("chapters")
+        .select(`
+          id,
+          title,
+          chapter_number,
+          course_id
+        `)
+        .in(
+          "course_id",
+          courseRows.map(c => c.id)
+        )
+        .eq("is_active", true)
+        .order("chapter_number");
+
+
+    const chapterIds =
+      (chapters || []).map(c => c.id);
+
+
+    let lessons = [];
+
+
+    if (chapterIds.length) {
+
+      const { data } =
+        await supabaseClient
+          .from("lessons")
+          .select(`
+            id,
+            title,
+            lesson_number,
+            chapter_id,
+            passing_percentage
+          `)
+          .in("chapter_id", chapterIds)
+          .eq("is_active", true)
+          .order("lesson_number");
+
+      lessons = data || [];
+    }
+
+
+    const lessonIds =
+      lessons.map(l => l.id);
+
+
+    let progress = [];
+
+
+    if (lessonIds.length) {
+
+      const { data } =
+        await supabaseClient
+          .from("student_progress")
+          .select("*")
+          .eq("student_id", currentUser.id)
+          .in("lesson_id", lessonIds);
+
+      progress = data || [];
+    }
+
+
+    const completedCount =
+      progress.filter(
+        p => p.lesson_completed
+      ).length;
+
+
+    const totalLessons =
+      lessons.length;
+
+
+    const percentage =
+      totalLessons
+        ? Math.round(
+            completedCount /
+            totalLessons *
+            100
+          )
+        : 0;
+
+
+    document.getElementById(
+      "studentProgressStat"
+    ).textContent =
+      percentage + "%";
+
+
+    const now = new Date();
+
+
+    const hasActiveSubscription =
+      await studentHasActiveSubscription();
+
+
+    const trialActive =
+      currentStudent.trial_ends_at &&
+      new Date(currentStudent.trial_ends_at) > now;
+
+
+    const accessAllowed =
+      hasActiveSubscription ||
+      trialActive;
+
+
+    container.innerHTML =
+      courseRows.map(course => {
+
+        const courseChapters =
+          (chapters || [])
+            .filter(c => c.course_id === course.id);
+
+
+        return `
+          <div class="card" style="margin-bottom:15px;">
+
+            <h3>
+              ${escapeHtml(course.subjects?.name || course.title)}
+            </h3>
+
+            <p style="margin-bottom:15px;">
+              ${escapeHtml(course.title)}
+            </p>
+
+            ${
+              !accessAllowed
+              ? `
+                <div class="message show error">
+                  Your trial/subscription has expired.
+                  Please submit your payment reference below.
+                </div>
+              `
+              : ""
+            }
+
+            <div class="list">
+
+              ${
+                courseChapters.length
+                ? courseChapters.map(chapter => {
+
+                    const chapterLessons =
+                      lessons.filter(
+                        l => l.chapter_id === chapter.id
+                      );
+
+                    return `
+                      <div class="list-item">
+
+                        <div>
+                          <strong>
+                            ${escapeHtml(chapter.title)}
+                          </strong>
+
+                          <div style="color:#64748b;font-size:13px;">
+                            ${chapterLessons.length}
+                            lesson(s)
+                          </div>
+                        </div>
+
+                        ${
+                          accessAllowed
+                          ? `<button
+                              class="btn btn-primary btn-small"
+                              onclick="openChapter(${chapter.id})">
+                              Open
+                            </button>`
+                          : badge("Locked","red")
+                        }
+
+                      </div>
+                    `;
+
+                  }).join("")
+                : `
+                  <div class="message show info">
+                    Content will be added by the teacher.
+                  </div>
+                `
+              }
+
+            </div>
+
+          </div>
+        `;
+
+      }).join("");
+  }
+
+
+  async function studentHasActiveSubscription() {
+
+    const today =
+      new Date()
+        .toISOString()
+        .slice(0,10);
+
+
+    const { data } =
+      await supabaseClient
+        .from("student_subscriptions")
+        .select("id")
+        .eq("student_id", currentUser.id)
+        .eq("status", "active")
+        .lte("start_date", today)
+        .gte("end_date", today)
+        .limit(1);
+
+
+    return !!(
+      data &&
+      data.length
+    );
+  }
+
+
+  async function openChapter(chapterId) {
+
+    const { data: lessons } =
+      await supabaseClient
+        .from("lessons")
+        .select("*")
+        .eq("chapter_id", chapterId)
+        .eq("is_active", true)
+        .order("lesson_number");
+
+
+    if (!lessons || !lessons.length) {
+
+      alert("No lessons have been added yet.");
+
+      return;
+    }
+
+
+    let html = `
+      <div class="card">
+
+        <h3>Chapter Lessons</h3>
+
+        <div class="list">
+    `;
+
+
+    for (let i = 0; i < lessons.length; i++) {
+
+      const lesson = lessons[i];
+
+
+      let unlocked = i === 0;
+
+
+      if (i > 0) {
+
+        const previousLesson =
+          lessons[i - 1];
+
+
+        const { data: previousProgress } =
+          await supabaseClient
+            .from("student_progress")
+            .select("lesson_completed")
+            .eq("student_id", currentUser.id)
+            .eq("lesson_id", previousLesson.id)
+            .maybeSingle();
+
+
+        unlocked =
+          previousProgress?.lesson_completed === true;
+      }
+
+
+      const { data: tests } =
+        await supabaseClient
+          .from("tests")
+          .select("id,title,number_of_questions,passing_percentage")
+          .eq("lesson_id", lesson.id)
+          .eq("is_active", true)
+          .order("id");
+
+
+      html += `
+
+        <div class="list-item">
+
+          <div>
+
+            <strong>
+              Lesson ${escapeHtml(lesson.lesson_number)}:
+              ${escapeHtml(lesson.title)}
+            </strong>
+
+            <div style="color:#64748b;font-size:13px;">
+              Passing: ${lesson.passing_percentage}%
+            </div>
+
+          </div>
+
+          ${
+            unlocked
+            ? `
+              <button
+                class="btn btn-primary btn-small"
+                onclick="startLesson(${lesson.id})">
+                Open
+              </button>
+            `
+            : badge("Locked","red")
+          }
+
+        </div>
+      `;
+    }
+
+
+    html += `
+        </div>
+      </div>
+    `;
+
+
+    const modal =
+      document.createElement("div");
+
+    modal.style.position = "fixed";
+    modal.style.inset = "0";
+    modal.style.background = "rgba(0,0,0,.5)";
+    modal.style.zIndex = "5000";
+    modal.style.overflow = "auto";
+    modal.style.padding = "30px";
+
+
+    modal.innerHTML = `
+      <div style="
+        max-width:850px;
+        margin:auto;
+        background:white;
+        border-radius:16px;
+        padding:25px;
+      ">
+
+        <div style="
+          display:flex;
+          justify-content:space-between;
+          gap:15px;
+          margin-bottom:20px;
+        ">
+
+          <h2>Chapter</h2>
+
+          <button
+            class="btn btn-secondary btn-small"
+            id="closeChapterModal">
+            Close
+          </button>
+
+        </div>
+
+        ${html}
+
+      </div>
+    `;
+
+
+    document.body.appendChild(modal);
+
+
+    document
+      .getElementById("closeChapterModal")
+      .onclick = () => modal.remove();
+  }
+
+
+  async function startLesson(lessonId) {
+
+    const { data: lesson } =
+      await supabaseClient
+        .from("lessons")
+        .select("*")
+        .eq("id", lessonId)
+        .single();
+
+
+    if (!lesson) return;
+
+
+    const { data: tests } =
+      await supabaseClient
+        .from("tests")
+        .select("*")
+        .eq("lesson_id", lessonId)
+        .eq("is_active", true)
+        .order("id");
+
+
+    const modal =
+      document.createElement("div");
+
+    modal.style.position = "fixed";
+    modal.style.inset = "0";
+    modal.style.background = "rgba(0,0,0,.5)";
+    modal.style.zIndex = "6000";
+    modal.style.overflow = "auto";
+    modal.style.padding = "30px";
+
+
+    modal.innerHTML = `
+      <div style="
+        max-width:800px;
+        margin:auto;
+        background:white;
+        border-radius:16px;
+        padding:25px;
+      ">
+
+        <div style="
+          display:flex;
+          justify-content:space-between;
+          gap:15px;
+          margin-bottom:20px;
+        ">
+
+          <div>
+            <h2>${escapeHtml(lesson.title)}</h2>
+
+            <p style="color:#64748b;">
+              Lesson ${lesson.lesson_number}
+            </p>
+          </div>
+
+          <button
+            class="btn btn-secondary btn-small"
+            id="closeLesson">
+            Close
+          </button>
+
+        </div>
+
+
+        <div class="card">
+
+          <h3>Lesson Content</h3>
+
+          <p style="color:#64748b;">
+            Video and PDF content will be connected here after
+            the website's main portal is completed.
+          </p>
+
+        </div>
+
+
+        <div style="margin-top:20px;">
+
+          <h3>Assessment</h3>
+
+          ${
+            tests?.length
+            ? tests.map(test => `
+              <div class="list-item">
+
+                <div>
+                  <strong>
+                    ${escapeHtml(test.title)}
+                  </strong>
+
+                  <div style="color:#64748b;font-size:13px;">
+                    ${test.number_of_questions}
+                    questions •
+                    ${test.passing_percentage}% passing
+                  </div>
+                </div>
+
+                <button
+                  class="btn btn-primary btn-small"
+                  onclick="startTest(${test.id},${lesson.id})">
+                  Start Test
+                </button>
+
+              </div>
+            `).join("")
+            : `
+              <div class="message show info">
+                No assessment has been added yet.
+              </div>
+            `
+          }
+
+        </div>
+
+      </div>
+    `;
+
+
+    document.body.appendChild(modal);
+
+
+    document
+      .getElementById("closeLesson")
+      .onclick = () => modal.remove();
+  }
+
+
+  async function startTest(testId, lessonId) {
+
+    const { data: test } =
+      await supabaseClient
+        .from("tests")
+        .select("*")
+        .eq("id", testId)
+        .single();
+
+
+    if (!test) return;
+
+
+    const { data: links } =
+      await supabaseClient
+        .from("test_questions")
+        .select(`
+          question_order,
+          question_bank(*)
+        `)
+        .eq("test_id", testId)
+        .order("question_order");
+
+
+    if (!links || !links.length) {
+
+      alert("No questions have been connected to this test.");
+
+      return;
+    }
+
+
+    let questions =
+      links
+        .map(row => row.question_bank)
+        .filter(Boolean);
+
+
+    if (test.randomize_questions) {
+
+      questions =
+        questions.sort(
+          () => Math.random() - 0.5
+        );
+    }
+
+
+    questions =
+      questions.slice(
+        0,
+        test.number_of_questions
+      );
+
+
+    const modal =
+      document.createElement("div");
+
+    modal.style.position = "fixed";
+    modal.style.inset = "0";
+    modal.style.background = "rgba(0,0,0,.5)";
+    modal.style.zIndex = "7000";
+    modal.style.overflow = "auto";
+    modal.style.padding = "30px";
+
+
+    modal.innerHTML = `
+      <div style="
+        max-width:850px;
+        margin:auto;
+        background:white;
+        border-radius:16px;
+        padding:25px;
+      ">
+
+        <h2>
+          ${escapeHtml(test.title)}
+        </h2>
+
+        <p style="color:#64748b;margin-bottom:20px;">
+          Passing requirement:
+          ${test.passing_percentage}%
+        </p>
+
+        <form id="testForm">
+
+          ${questions.map((q,index) => `
+
+            <div class="card" style="margin-bottom:15px;">
+
+              <strong>
+                ${index + 1}.
+                ${escapeHtml(q.question_text)}
+              </strong>
+
+              <div style="margin-top:12px;display:grid;gap:7px;">
+
+                ${["A","B","C","D"].map(letter => `
+
+                  <label style="
+                    font-weight:normal;
+                    display:flex;
+                    gap:8px;
+                    align-items:flex-start;
+                  ">
+
+                    <input
+                      type="radio"
+                      name="q_${q.id}"
+                      value="${letter}"
+                      required
+                    />
+
+                    <span>
+                      <strong>${letter}.</strong>
+                      ${escapeHtml(
+                        q["option_" + letter.toLowerCase()]
+                      )}
+                    </span>
+
+                  </label>
+
+                `).join("")}
+
+              </div>
+
+            </div>
+
+          `).join("")}
+
+
+          <button
+            type="submit"
+            class="btn btn-success">
+            Submit Test
+          </button>
+
+        </form>
+
+        <div id="testResult" class="message"></div>
+
+      </div>
+    `;
+
+
+    document.body.appendChild(modal);
+
+
+    document
+      .getElementById("testForm")
+      .addEventListener(
+        "submit",
+        async event => {
+
+          event.preventDefault();
+
+
+          let score = 0;
+
+
+          questions.forEach(q => {
+
+            const selected =
+              document.querySelector(
+                `input[name="q_${q.id}"]:checked`
+              );
+
+
+            if (
+              selected &&
+              selected.value === q.correct_option
+            ) {
+
+              score++;
+            }
+          });
+
+
+          const percentage =
+            questions.length
+              ? (score / questions.length) * 100
+              : 0;
+
+
+          const passed =
+            percentage >=
+            Number(test.passing_percentage);
+
+
+          const { error: attemptError } =
+            await supabaseClient
+              .from("test_attempts")
+              .insert({
+                student_id: currentUser.id,
+                test_id: test.id,
+                score,
+                total_questions: questions.length,
+                percentage,
+                passed
+              });
+
+
+          if (attemptError) {
+
+            const result =
+              document.getElementById("testResult");
+
+            result.className =
+              "message show error";
+
+            result.textContent =
+              attemptError.message;
+
+            return;
+          }
+
+
+          if (passed) {
+
+            const { error } =
+              await supabaseClient
+                .from("student_progress")
+                .upsert({
+                  student_id: currentUser.id,
+                  lesson_id: lessonId,
+                  video_completed: true,
+                  video_progress: 100,
+                  lesson_unlocked: true,
+                  lesson_completed: true,
+                  completed_at: new Date().toISOString()
+                }, {
+                  onConflict:
+                    "student_id,lesson_id"
+                });
+
+
+            const result =
+              document.getElementById("testResult");
+
+
+            if (error) {
+
+              result.className =
+                "message show error";
+
+              result.textContent =
+                error.message;
+
+              return;
+            }
+
+
+            result.className =
+              "message show success";
+
+            result.innerHTML =
+              `
+                <strong>Passed!</strong>
+                Score: ${score}/${questions.length}
+                (${Math.round(percentage)}%).
+                The next lesson is now unlocked.
+              `;
+
+
+            await loadStudentLearning();
+
+          } else {
+
+            const result =
+              document.getElementById("testResult");
+
+            result.className =
+              "message show error";
+
+            result.innerHTML =
+              `
+                <strong>Not passed.</strong>
+                Score: ${score}/${questions.length}
+                (${Math.round(percentage)}%).
+                You need ${test.passing_percentage}% to continue.
+              `;
+          }
+
         }
       );
-
-
-  if (error) {
-
-    console.error(
-      "Payment history error:",
-      error
-    );
-
-    paymentHistoryBox.innerHTML =
-      "<p>Unable to load payment history.</p>";
-
-    return;
-
   }
 
 
-  paymentHistoryBox.innerHTML =
-    "<h3>Payment History</h3>";
+  /* =========================================================
+     PAYMENT
+  ========================================================= */
+
+  async function submitPayment(event) {
+
+    event.preventDefault();
+
+    clearMessage("paymentMessage");
 
 
-  if (
-    !data ||
-    data.length === 0
-  ) {
-
-    paymentHistoryBox.innerHTML +=
-      "<p>No payment requests submitted yet.</p>";
-
-    return;
-
-  }
-
-
-  data.forEach(
-    payment => {
-
-      const item =
-        document.createElement(
-          "div"
-        );
-
-      item.className =
-        "payment-history-item";
-
-
-      const amount =
-        document.createElement(
-          "div"
-        );
-
-      amount.innerHTML =
-        "<strong>Amount:</strong> Rs. " +
-        Number(
-          payment.amount
-        ).toLocaleString();
-
-
-      const method =
-        document.createElement(
-          "div"
-        );
-
-      method.innerHTML =
-        "<strong>Method:</strong> " +
-        (
-          payment.payment_method ||
-          "JazzCash"
-        );
-
-
-      const reference =
-        document.createElement(
-          "div"
-        );
-
-      reference.innerHTML =
-        "<strong>Reference:</strong> " +
-        (
-          payment.transaction_reference ||
-          "—"
-        );
-
-
-      const date =
-        document.createElement(
-          "div"
-        );
-
-      date.innerHTML =
-        "<strong>Date:</strong> " +
-        formatDate(
-          payment.payment_date
-        );
-
-
-      const status =
-        document.createElement(
-          "div"
-        );
-
-
-      const statusValue =
-        String(
-          payment.status ||
-          "pending"
-        ).toLowerCase();
-
-
-      status.innerHTML =
-        "<strong>Status:</strong> ";
-
-
-      const statusSpan =
-        document.createElement(
-          "span"
-        );
-
-
-      statusSpan.textContent =
-        statusValue
-          .charAt(0)
-          .toUpperCase() +
-        statusValue.slice(1);
-
-
-      if (
-        statusValue ===
-        "pending"
-      ) {
-
-        statusSpan.className =
-          "payment-pending";
-
-      } else if (
-        statusValue ===
-        "verified"
-      ) {
-
-        statusSpan.className =
-          "payment-verified";
-
-      } else if (
-        statusValue ===
-        "rejected"
-      ) {
-
-        statusSpan.className =
-          "payment-rejected";
-
-      }
-
-
-      status.appendChild(
-        statusSpan
+    const feePlanId =
+      Number(
+        document.getElementById("paymentPlan").value
       );
 
-
-      item.appendChild(
-        amount
-      );
-
-      item.appendChild(
-        method
-      );
-
-      item.appendChild(
-        reference
-      );
-
-      item.appendChild(
-        date
-      );
-
-      item.appendChild(
-        status
-      );
-
-
-      if (payment.notes) {
-
-        const notes =
-          document.createElement(
-            "div"
-          );
-
-        notes.innerHTML =
-          "<strong>Notes:</strong> " +
-          payment.notes;
-
-        item.appendChild(
-          notes
-        );
-
-      }
-
-
-      paymentHistoryBox.appendChild(
-        item
-      );
-
-    }
-  );
-
-}
-
-
-/* ---------------------------------------------------------
-   RENEWAL VISIBILITY
---------------------------------------------------------- */
-
-function updateRenewalVisibility() {
-
-  if (
-    !currentUser ||
-    !currentStudent
-  ) {
-
-    renewalPanel.classList.add(
-      "hidden"
-    );
-
-    return;
-
-  }
-
-
-  /*
-     Show renewal area to every
-     logged-in student.
-
-     Expired students need it
-     immediately, while active
-     students can also renew early.
-  */
-
-  renewalPanel.classList.remove(
-    "hidden"
-  );
-
-
-  loadRenewalPlans();
-
-  loadPaymentHistory();
-
-}
-
-
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-document
-  .getElementById(
-    "logoutButton"
-  )
-  .addEventListener(
-    "click",
-    async () => {
-
-      const {
-        error
-      } =
-        await aqalverseSupabase.auth.signOut();
-
-
-      if (error) {
-
-        console.error(
-          "Logout error:",
-          error
-        );
-
-        return;
-
-      }
-
-
-      currentUser = null;
-
-      currentProfile = null;
-
-      currentStudent = null;
-
-      studentProgressRows = [];
-
-      accessAllowed = false;
-
-      activeSubscription = null;
-
-      selectedPaymentPlan = null;
-
-
-      resetDashboard();
-
-
+    const reference =
       document
-        .getElementById(
-          "login"
-        )
-        .scrollIntoView({
-          behavior: "smooth"
+        .getElementById("paymentReference")
+        .value
+        .trim();
+
+
+    if (!feePlanId || !reference) {
+
+      showMessage(
+        "paymentMessage",
+        "Please select a plan and enter the transaction reference.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    const plan =
+      feePlans.find(
+        p => Number(p.id) === feePlanId
+      );
+
+
+    if (!plan) {
+
+      showMessage(
+        "paymentMessage",
+        "Selected payment plan was not found.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    const { error } =
+      await supabaseClient
+        .from("payments")
+        .insert({
+          student_id: currentUser.id,
+          amount: plan.price,
+          subscription_id: null,
+          payment_method: "JazzCash",
+          transaction_reference: reference,
+          status: "pending"
         });
 
-    }
-  );
 
+    if (error) {
 
-/* =========================================================
-   RESET DASHBOARD
-========================================================= */
-
-function resetDashboard() {
-
-  document
-    .getElementById(
-      "dashboardLoginNotice"
-    )
-    .classList.remove(
-      "hidden"
-    );
-
-
-  document
-    .getElementById(
-      "dashboardContent"
-    )
-    .classList.add(
-      "hidden"
-    );
-
-
-  document
-    .getElementById(
-      "logoutButton"
-    )
-    .classList.add(
-      "hidden"
-    );
-
-
-  document
-    .getElementById(
-      "dashboardGrade"
-    )
-    .textContent =
-    "—";
-
-
-  document
-    .getElementById(
-      "dashboardBoard"
-    )
-    .textContent =
-    "—";
-
-
-  document
-    .getElementById(
-      "dashboardCompleted"
-    )
-    .textContent =
-    "0";
-
-
-  document
-    .getElementById(
-      "dashboardProgressText"
-    )
-    .textContent =
-    "0%";
-
-
-  document
-    .getElementById(
-      "dashboardProgressBar"
-    )
-    .style.width =
-    "0%";
-
-
-  document
-    .getElementById(
-      "dashboardProgressDetails"
-    )
-    .textContent =
-    "No lesson progress recorded yet.";
-
-
-  document
-    .getElementById(
-      "dashboardStatus"
-    )
-    .textContent =
-    "—";
-
-
-  document
-    .getElementById(
-      "dashboardAccessEnd"
-    )
-    .textContent =
-    "—";
-
-
-  document
-    .getElementById(
-      "trialBox"
-    )
-    .classList.add(
-      "hidden"
-    );
-
-
-  document
-    .getElementById(
-      "accessBox"
-    )
-    .classList.add(
-      "hidden"
-    );
-
-
-  renewalPanel.classList.add(
-    "hidden"
-  );
-
-
-  paymentFormBox.classList.add(
-    "hidden"
-  );
-
-
-  renewalPlans.innerHTML =
-    "<p>Loading subscription plans...</p>";
-
-
-  paymentHistoryBox.innerHTML =
-    "";
-
-
-  hideAccessLock();
-
-}
-
-
-/* =========================================================
-   INITIAL LOAD
-========================================================= */
-
-async function initializeApplication() {
-
-  await loadGrades();
-
-  await loadBoardsForRegistration();
-
-
-  const {
-    data
-  } =
-    await aqalverseSupabase.auth.getSession();
-
-
-  if (
-    data?.session?.user
-  ) {
-
-    currentUser =
-      data.session.user;
-
-    await initializeUser();
-
-  } else {
-
-    resetDashboard();
-
-  }
-
-}
-
-
-/* =========================================================
-   REGISTRATION BOARD LOADER
-========================================================= */
-
-async function loadBoardsForRegistration() {
-
-  const select =
-    document.getElementById(
-      "registerBoard"
-    );
-
-
-  if (!select) {
-    return;
-  }
-
-
-  const {
-    data,
-    error
-  } =
-    await aqalverseSupabase
-      .from("boards")
-      .select(
-        "id, name"
-      )
-      .eq(
-        "is_active",
-        true
-      )
-      .order(
-        "name"
+      showMessage(
+        "paymentMessage",
+        error.message,
+        "error"
       );
 
+      return;
+    }
 
-  if (error) {
 
-    console.error(
-      "Registration board error:",
-      error
+    showMessage(
+      "paymentMessage",
+      "Payment reference submitted. The academy will verify it.",
+      "success"
     );
 
-    return;
 
+    document
+      .getElementById("paymentForm")
+      .reset();
   }
 
 
-  select.innerHTML =
-    '<option value="">Select Board</option>';
+  /* =========================================================
+     STAFF DASHBOARD
+  ========================================================= */
+
+  async function showStaffDashboard() {
+
+    document
+      .getElementById("loggedOutView")
+      .classList.add("hidden");
+
+    document
+      .getElementById("studentDashboard")
+      .classList.add("hidden");
+
+    document
+      .getElementById("staffDashboard")
+      .classList.remove("hidden");
 
 
-  data.forEach(
-    board => {
+    const isAdmin =
+      currentProfile.role === "admin";
 
-      const option =
-        document.createElement(
-          "option"
+
+    document.getElementById(
+      "staffDashboardTitle"
+    ).textContent =
+      isAdmin
+        ? "Administrator Portal"
+        : "Teacher Portal";
+
+
+    document.getElementById(
+      "staffWelcome"
+    ).textContent =
+      `Welcome, ${currentProfile.full_name}`;
+
+
+    document
+      .querySelectorAll(".admin-only")
+      .forEach(button => {
+
+        button.classList.toggle(
+          "hidden",
+          !isAdmin
         );
 
-
-      option.value =
-        board.id;
+      });
 
 
-      option.textContent =
-        board.name;
+    await loadStaffDashboard();
+  }
 
 
-      select.appendChild(
-        option
+  async function loadStaffDashboard() {
+
+    await Promise.all([
+      loadStaffStudents(),
+      loadStaffCourses(),
+      loadStaffPayments(),
+      loadStaffQuestions()
+    ]);
+
+
+    document.getElementById(
+      "staffStudentCount"
+    ).textContent =
+      staffStudents.length;
+
+
+    document.getElementById(
+      "staffCourseCount"
+    ).textContent =
+      staffCourses.length;
+
+
+    document.getElementById(
+      "staffPaymentCount"
+    ).textContent =
+      window.pendingPaymentCount || 0;
+
+
+    document.getElementById(
+      "staffQuestionCount"
+    ).textContent =
+      window.questionCount || 0;
+
+
+    document.getElementById(
+      "overviewContent"
+    ).innerHTML = `
+
+      <div class="grid" style="
+        grid-template-columns:repeat(2,1fr);
+      ">
+
+        <div class="card">
+          <h3>${staffStudents.length}</h3>
+          <p>Students visible to you</p>
+        </div>
+
+        <div class="card">
+          <h3>${staffCourses.length}</h3>
+          <p>Courses available to you</p>
+        </div>
+
+        <div class="card">
+          <h3>${window.pendingPaymentCount || 0}</h3>
+          <p>Pending payments</p>
+        </div>
+
+        <div class="card">
+          <h3>${window.questionCount || 0}</h3>
+          <p>Question bank records</p>
+        </div>
+
+      </div>
+
+      <div class="message show info" style="margin-top:20px;">
+        ${
+          currentProfile.role === "admin"
+          ? "You have administrator access."
+          : "You have teacher access. Your course access is controlled by teacher-course assignments."
+        }
+      </div>
+    `;
+
+
+    renderStaffStudents();
+    renderStaffCourses();
+    renderAttendanceStudents();
+    renderTeachers();
+  }
+
+
+  async function loadStaffStudents() {
+
+    const { data, error } =
+      await supabaseClient
+        .from("students")
+        .select(`
+          id,
+          board_id,
+          grade_id,
+          trial_started_at,
+          trial_ends_at,
+          account_status,
+          profiles(full_name,username),
+          boards(name),
+          grades(name,grade_number)
+        `)
+        .order("created_at", {
+          ascending:false
+        });
+
+
+    if (error) {
+
+      console.error(error);
+
+      staffStudents = [];
+
+      return;
+    }
+
+
+    staffStudents = data || [];
+  }
+
+
+  async function loadStaffCourses() {
+
+    if (currentProfile.role === "admin") {
+
+      staffCourses =
+        courses;
+
+      return;
+    }
+
+
+    const { data: assignments } =
+      await supabaseClient
+        .from("teacher_course_assignments")
+        .select("course_id")
+        .eq("teacher_id", currentUser.id);
+
+
+    const ids =
+      (assignments || [])
+        .map(a => a.course_id);
+
+
+    staffCourses =
+      courses.filter(
+        c => ids.includes(c.id)
+      );
+  }
+
+
+  async function loadStaffPayments() {
+
+    let query =
+      supabaseClient
+        .from("payments")
+        .select(`
+          id,
+          student_id,
+          amount,
+          payment_method,
+          transaction_reference,
+          payment_date,
+          status,
+          students(
+            profiles(full_name,username)
+          )
+        `)
+        .order("payment_date", {
+          ascending:false
+        });
+
+
+    const { data, error } =
+      await query;
+
+
+    if (error) {
+
+      console.error(error);
+
+      return;
+    }
+
+
+    const payments =
+      data || [];
+
+
+    window.pendingPaymentCount =
+      payments.filter(
+        p => p.status === "pending"
+      ).length;
+
+
+    const tbody =
+      document.getElementById(
+        "paymentsTable"
       );
 
+
+    tbody.innerHTML =
+      payments.length
+      ? payments.map(payment => `
+
+        <tr>
+
+          <td>
+            ${escapeHtml(
+              payment.students?.profiles?.full_name ||
+              payment.student_id
+            )}
+          </td>
+
+          <td>
+            Rs. ${escapeHtml(payment.amount)}
+          </td>
+
+          <td>
+            ${escapeHtml(payment.payment_method)}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              payment.transaction_reference || "-"
+            )}
+          </td>
+
+          <td>
+            ${formatDateTime(payment.payment_date)}
+          </td>
+
+          <td>
+            ${payment.status === "verified"
+              ? badge("Verified","green")
+              : payment.status === "rejected"
+                ? badge("Rejected","red")
+                : badge("Pending","yellow")}
+          </td>
+
+          <td>
+
+            ${
+              currentProfile.role === "admin" &&
+              payment.status === "pending"
+
+              ? `
+                <button
+                  class="btn btn-success btn-small"
+                  onclick="verifyPayment(${payment.id},'verified')">
+                  Verify
+                </button>
+
+                <button
+                  class="btn btn-danger btn-small"
+                  onclick="verifyPayment(${payment.id},'rejected')">
+                  Reject
+                </button>
+              `
+
+              : "-"
+            }
+
+          </td>
+
+        </tr>
+
+      `).join("")
+      : `
+        <tr>
+          <td colspan="7">
+            No payment records found.
+          </td>
+        </tr>
+      `;
+  }
+
+
+  async function loadStaffQuestions() {
+
+    let query =
+      supabaseClient
+        .from("question_bank")
+        .select("id")
+        .eq("approved", true);
+
+
+    const { data } =
+      await query;
+
+
+    window.questionCount =
+      data?.length || 0;
+  }
+
+
+  function renderStaffStudents() {
+
+    const tbody =
+      document.getElementById(
+        "studentsTable"
+      );
+
+
+    tbody.innerHTML =
+      staffStudents.length
+      ? staffStudents.map(student => `
+
+        <tr>
+
+          <td>
+            ${escapeHtml(
+              student.profiles?.full_name || "-"
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              student.profiles?.username || "-"
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              student.grades?.grade_number || "-"
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              student.boards?.name || "-"
+            )}
+          </td>
+
+          <td>
+            ${accessBadge(
+              student.account_status
+            )}
+          </td>
+
+          <td>
+            ${formatDate(
+              student.trial_ends_at
+            )}
+          </td>
+
+        </tr>
+
+      `).join("")
+      : `
+        <tr>
+          <td colspan="6">
+            No students found.
+          </td>
+        </tr>
+      `;
+  }
+
+
+  function renderStaffCourses() {
+
+    const tbody =
+      document.getElementById(
+        "staffCoursesTable"
+      );
+
+
+    tbody.innerHTML =
+      staffCourses.length
+      ? staffCourses.map(course => `
+
+        <tr>
+
+          <td>
+            ${escapeHtml(course.title)}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              course.boards?.name || "-"
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              course.grades?.grade_number || "-"
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              course.subjects?.name || "-"
+            )}
+          </td>
+
+          <td>
+            Rs. ${escapeHtml(
+              course.monthly_price
+            )}
+          </td>
+
+          <td>
+
+            <button
+              class="btn btn-primary btn-small"
+              onclick="selectContentCourse(${course.id})">
+              Manage
+            </button>
+
+          </td>
+
+        </tr>
+
+      `).join("")
+      : `
+        <tr>
+          <td colspan="6">
+            No courses assigned.
+          </td>
+        </tr>
+      `;
+  }
+
+
+  function renderAttendanceStudents() {
+
+    const select =
+      document.getElementById(
+        "attendanceStudent"
+      );
+
+
+    select.innerHTML =
+      `<option value="">
+        Select Student
+      </option>`;
+
+
+    staffStudents.forEach(student => {
+
+      const option =
+        document.createElement("option");
+
+      option.value =
+        student.id;
+
+      option.textContent =
+        student.profiles?.full_name ||
+        student.id;
+
+      select.appendChild(option);
+    });
+  }
+
+
+  async function renderTeachers() {
+
+    const tbody =
+      document.getElementById(
+        "teachersTable"
+      );
+
+
+    if (!tbody) return;
+
+
+    const { data, error } =
+      await supabaseClient
+        .from("teachers")
+        .select(`
+          id,
+          qualification,
+          specialization,
+          is_active,
+          profiles(full_name,username)
+        `)
+        .order("is_active", {
+          ascending:false
+        });
+
+
+    if (error) {
+
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="5">
+            ${escapeHtml(error.message)}
+          </td>
+        </tr>
+      `;
+
+      return;
+    }
+
+
+    tbody.innerHTML =
+      (data || []).map(teacher => `
+
+        <tr>
+
+          <td>
+            ${escapeHtml(
+              teacher.profiles?.full_name || "-"
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              teacher.profiles?.username || "-"
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              teacher.qualification || "-"
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              teacher.specialization || "-"
+            )}
+          </td>
+
+          <td>
+            ${
+              teacher.is_active
+              ? badge("Active","green")
+              : badge("Inactive","red")
+            }
+          </td>
+
+        </tr>
+
+      `).join("");
+  }
+
+
+  /* =========================================================
+     CONTENT MANAGEMENT
+  ========================================================= */
+
+  function populateContentCourses() {
+
+    const select =
+      document.getElementById(
+        "contentCourseSelect"
+      );
+
+
+    select.innerHTML =
+      `<option value="">
+        Select Course
+      </option>`;
+
+
+    staffCourses.forEach(course => {
+
+      const option =
+        document.createElement("option");
+
+      option.value =
+        course.id;
+
+      option.textContent =
+        course.title;
+
+      select.appendChild(option);
+    });
+  }
+
+
+  async function selectContentCourse(courseId) {
+
+    document.getElementById(
+      "contentCourseSelect"
+    ).value =
+      courseId;
+
+
+    document
+      .getElementById("tab-content")
+      .classList.remove("hidden");
+
+
+    await loadChapters(courseId);
+
+
+    document
+      .getElementById("tab-content")
+      .scrollIntoView({
+        behavior:"smooth"
+      });
+  }
+
+
+  async function loadChapters(courseId) {
+
+    const { data, error } =
+      await supabaseClient
+        .from("chapters")
+        .select("*")
+        .eq("course_id", courseId)
+        .order("chapter_number");
+
+
+    const container =
+      document.getElementById(
+        "chapterList"
+      );
+
+
+    if (error) {
+
+      container.innerHTML =
+        `<div class="message show error">
+          ${escapeHtml(error.message)}
+        </div>`;
+
+      return;
+    }
+
+
+    container.innerHTML =
+      (data || []).length
+      ? `<div class="list">
+          ${(data || []).map(chapter => `
+
+            <div class="list-item">
+
+              <div>
+
+                <strong>
+                  Chapter ${escapeHtml(
+                    chapter.chapter_number
+                  )}:
+                  ${escapeHtml(chapter.title)}
+                </strong>
+
+                <div style="
+                  color:#64748b;
+                  font-size:13px;
+                ">
+                  ${escapeHtml(
+                    chapter.description || ""
+                  )}
+                </div>
+
+              </div>
+
+              <span>
+                ID ${chapter.id}
+              </span>
+
+            </div>
+
+          `).join("")}
+        </div>`
+      : `
+        <div class="message show info">
+          No chapters yet.
+        </div>
+      `;
+  }
+
+
+  async function addChapter() {
+
+    const courseId =
+      Number(
+        document.getElementById(
+          "contentCourseSelect"
+        ).value
+      );
+
+
+    const title =
+      document.getElementById(
+        "chapterTitle"
+      ).value.trim();
+
+
+    const chapterNumber =
+      Number(
+        document.getElementById(
+          "chapterNumber"
+        ).value
+      );
+
+
+    const description =
+      document.getElementById(
+        "chapterDescription"
+      ).value.trim();
+
+
+    if (!courseId || !title || !chapterNumber) {
+
+      showMessage(
+        "contentMessage",
+        "Please select a course and enter chapter information.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    const { error } =
+      await supabaseClient
+        .from("chapters")
+        .insert({
+          course_id: courseId,
+          title,
+          chapter_number: chapterNumber,
+          description,
+          is_active: true
+        });
+
+
+    if (error) {
+
+      showMessage(
+        "contentMessage",
+        error.message,
+        "error"
+      );
+
+      return;
+    }
+
+
+    showMessage(
+      "contentMessage",
+      "Chapter added successfully.",
+      "success"
+    );
+
+
+    document.getElementById(
+      "chapterTitle"
+    ).value = "";
+
+    document.getElementById(
+      "chapterNumber"
+    ).value = "";
+
+    document.getElementById(
+      "chapterDescription"
+    ).value = "";
+
+
+    await loadChapters(courseId);
+
+    await loadBasicData();
+    await loadStaffCourses();
+  }
+
+
+  /* =========================================================
+     PAYMENT VERIFICATION
+  ========================================================= */
+
+  async function verifyPayment(
+    paymentId,
+    status
+  ) {
+
+    if (currentProfile.role !== "admin") {
+
+      alert(
+        "Only an administrator can verify payments."
+      );
+
+      return;
+    }
+
+
+    const { data: payment } =
+      await supabaseClient
+        .from("payments")
+        .select("*")
+        .eq("id", paymentId)
+        .single();
+
+
+    if (!payment) {
+
+      alert("Payment not found.");
+
+      return;
+    }
+
+
+    const { error } =
+      await supabaseClient
+        .from("payments")
+        .update({
+          status,
+          verified_by: currentUser.id
+        })
+        .eq("id", paymentId);
+
+
+    if (error) {
+
+      alert(error.message);
+
+      return;
+    }
+
+
+    if (status === "verified") {
+
+      const { data: plan } =
+        await supabaseClient
+          .from("fee_plans")
+          .select("*")
+          .eq("price", payment.amount)
+          .eq("is_active", true)
+          .limit(1)
+          .maybeSingle();
+
+
+      if (plan) {
+
+        const start =
+          new Date();
+
+
+        const end =
+          new Date(
+            start.getTime() +
+            Number(plan.duration_days) *
+            24 * 60 * 60 * 1000
+          );
+
+
+        await supabaseClient
+          .from("student_subscriptions")
+          .insert({
+            student_id: payment.student_id,
+            fee_plan_id: plan.id,
+            start_date:
+              start.toISOString().slice(0,10),
+            end_date:
+              end.toISOString().slice(0,10),
+            status: "active"
+          });
+
+
+        await supabaseClient
+          .from("students")
+          .update({
+            account_status: "active"
+          })
+          .eq("id", payment.student_id);
+      }
+    }
+
+
+    await loadStaffPayments();
+    await loadStaffDashboard();
+  }
+
+
+  /* =========================================================
+     ATTENDANCE
+  ========================================================= */
+
+  async function saveAttendance(event) {
+
+    event.preventDefault();
+
+    clearMessage("attendanceMessage");
+
+
+    const studentId =
+      document.getElementById(
+        "attendanceStudent"
+      ).value;
+
+
+    const date =
+      document.getElementById(
+        "attendanceDate"
+      ).value;
+
+
+    const status =
+      document.getElementById(
+        "attendanceStatus"
+      ).value;
+
+
+    const notes =
+      document.getElementById(
+        "attendanceNotes"
+      ).value.trim();
+
+
+    const { error } =
+      await supabaseClient
+        .from("attendance")
+        .upsert({
+          student_id: studentId,
+          attendance_date: date,
+          status,
+          notes
+        }, {
+          onConflict:
+            "student_id,attendance_date"
+        });
+
+
+    if (error) {
+
+      showMessage(
+        "attendanceMessage",
+        error.message,
+        "error"
+      );
+
+      return;
+    }
+
+
+    showMessage(
+      "attendanceMessage",
+      "Attendance saved successfully.",
+      "success"
+    );
+  }
+
+
+  /* =========================================================
+     TEACHER PROMOTION
+  ========================================================= */
+
+  async function promoteTeacher(event) {
+
+    event.preventDefault();
+
+    if (currentProfile.role !== "admin") {
+
+      showMessage(
+        "teacherMessage",
+        "Only administrators can promote teachers.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    const email =
+      document
+        .getElementById("teacherEmail")
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const qualification =
+      document
+        .getElementById("teacherQualification")
+        .value
+        .trim();
+
+
+    const specialization =
+      document
+        .getElementById("teacherSpecialization")
+        .value
+        .trim();
+
+
+    /*
+      Profiles stores username, not email.
+      We therefore support promotion by matching
+      the username part of the email.
+    */
+
+    const username =
+      email.split("@")[0];
+
+
+    const { data: profile, error } =
+      await supabaseClient
+        .from("profiles")
+        .select("*")
+        .eq("username", username)
+        .maybeSingle();
+
+
+    if (error || !profile) {
+
+      showMessage(
+        "teacherMessage",
+        "No profile found. Ask the user to register first, then try again.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    const { error: roleError } =
+      await supabaseClient
+        .from("profiles")
+        .update({
+          role: "teacher"
+        })
+        .eq("id", profile.id);
+
+
+    if (roleError) {
+
+      showMessage(
+        "teacherMessage",
+        roleError.message,
+        "error"
+      );
+
+      return;
+    }
+
+
+    const { error: teacherError } =
+      await supabaseClient
+        .from("teachers")
+        .upsert({
+          id: profile.id,
+          qualification,
+          specialization,
+          is_active: true
+        });
+
+
+    if (teacherError) {
+
+      showMessage(
+        "teacherMessage",
+        teacherError.message,
+        "error"
+      );
+
+      return;
+    }
+
+
+    showMessage(
+      "teacherMessage",
+      "User promoted to teacher successfully.",
+      "success"
+    );
+
+
+    document
+      .getElementById("teacherPromotionForm")
+      .reset();
+
+
+    await renderTeachers();
+  }
+
+
+  /* =========================================================
+     STAFF TAB NAVIGATION
+  ========================================================= */
+
+  function setupStaffTabs() {
+
+    document
+      .querySelectorAll(".staff-tab")
+      .forEach(button => {
+
+        button.addEventListener(
+          "click",
+          async () => {
+
+            const tab =
+              button.dataset.tab;
+
+
+            document
+              .querySelectorAll(".staff-tab")
+              .forEach(b =>
+                b.classList.remove("active")
+              );
+
+
+            button.classList.add("active");
+
+
+            document
+              .querySelectorAll(".staff-panel")
+              .forEach(panel =>
+                panel.classList.add("hidden")
+              );
+
+
+            const target =
+              document.getElementById(
+                "tab-" + tab
+              );
+
+
+            if (target) {
+              target.classList.remove("hidden");
+            }
+
+
+            if (tab === "content") {
+
+              populateContentCourses();
+
+            }
+
+
+            if (tab === "payments") {
+
+              await loadStaffPayments();
+
+            }
+
+
+            if (tab === "teachers") {
+
+              await renderTeachers();
+
+            }
+
+          }
+        );
+      });
+  }
+
+
+  /* =========================================================
+     EVENT LISTENERS
+  ========================================================= */
+
+  document
+    .getElementById("loginForm")
+    .addEventListener(
+      "submit",
+      loginUser
+    );
+
+
+  document
+    .getElementById("registerForm")
+    .addEventListener(
+      "submit",
+      registerStudent
+    );
+
+
+  document
+    .getElementById("paymentForm")
+    .addEventListener(
+      "submit",
+      submitPayment
+    );
+
+
+  document
+    .getElementById("attendanceForm")
+    .addEventListener(
+      "submit",
+      saveAttendance
+    );
+
+
+  document
+    .getElementById("teacherPromotionForm")
+    .addEventListener(
+      "submit",
+      promoteTeacher
+    );
+
+
+  document
+    .getElementById("addChapterBtn")
+    .addEventListener(
+      "click",
+      addChapter
+    );
+
+
+  document
+    .getElementById("findCoursesBtn")
+    .addEventListener(
+      "click",
+      findPublicCourses
+    );
+
+
+  document
+    .getElementById("studentLogout")
+    .addEventListener(
+      "click",
+      logout
+    );
+
+
+  document
+    .getElementById("staffLogout")
+    .addEventListener(
+      "click",
+      logout
+    );
+
+
+  document
+    .getElementById("contentCourseSelect")
+    .addEventListener(
+      "change",
+      async event => {
+
+        if (event.target.value) {
+
+          await loadChapters(
+            Number(event.target.value)
+          );
+
+        }
+      }
+    );
+
+
+  setupStaffTabs();
+
+
+  /* =========================================================
+     AUTH STATE
+  ========================================================= */
+
+  supabaseClient.auth.onAuthStateChange(
+    async (event, session) => {
+
+      if (session?.user) {
+
+        currentUser =
+          session.user;
+
+        /*
+          Delay profile query slightly so
+          Auth state has completed.
+        */
+
+        setTimeout(
+          () => loadProfile(),
+          100
+        );
+
+      } else {
+
+        showLoggedOut();
+      }
     }
   );
 
-}
+
+  /* =========================================================
+     INITIALIZATION
+  ========================================================= */
+
+  async function init() {
+
+    await loadBasicData();
+
+    await loadCurrentUser();
+  }
 
 
-/* =========================================================
-   START APPLICATION
-========================================================= */
-
-initializeApplication();
+  init();
 
 </script>
 
