@@ -1020,7 +1020,7 @@
 
         <div class="price-card">
           <h3>Individual Subject</h3>
-          <div class="price">Rs. 500</div>
+          <div class="price">Rs. 1,000</div>
           <p>Per subject / month</p>
           <br>
           <p>Biology, Chemistry, Physics and other available subjects.</p>
@@ -1028,7 +1028,7 @@
 
         <div class="price-card">
           <h3>All Subjects</h3>
-          <div class="price">Rs. 2,000</div>
+          <div class="price">Rs. 3,000</div>
           <p>All subjects / month</p>
           <br>
           <p>Designed for students who want complete subject access.</p>
@@ -1039,7 +1039,7 @@
           <div class="price">2 Days</div>
           <p>Try the platform before payment.</p>
           <br>
-          <p>After the trial, students can submit their fee through JazzCash.</p>
+          <p>After the trial, students can submit their fee through JazzCash, Easypaisa or Raast.</p>
         </div>
 
       </div>
@@ -1418,25 +1418,28 @@
 
         <div class="jazzcash-box">
 
-          <h3>💳 Pay Your Fee Through JazzCash</h3>
+          <h3>💳 Pay Your Fee Through JazzCash, Easypaisa or Raast</h3>
 
           <p>
-            Please send your monthly fee to the following JazzCash number:
+            Please send your monthly fee using any of the payment methods below
+            to the same number:
           </p>
 
           <div class="jazzcash-number">
             +92 324 9067734
           </div>
 
+          <p><strong>Available payment methods:</strong> JazzCash • Easypaisa • Raast</p>
+
           <div class="fee-options">
 
             <div class="fee-option">
-              <strong>Rs. 500</strong>
+              <strong>Rs. 1,000</strong>
               Individual Subject / Month
             </div>
 
             <div class="fee-option">
-              <strong>Rs. 2,000</strong>
+              <strong>Rs. 3,000</strong>
               All Subjects / Month
             </div>
 
@@ -1449,8 +1452,12 @@
           <ol class="payment-steps">
 
             <li>
-              Open JazzCash and send your required fee to
+              Open JazzCash, Easypaisa or your Raast-enabled banking app and send your required fee to
               <strong>+92 324 9067734</strong>.
+            </li>
+
+            <li>
+              Select the same payment method in the form below.
             </li>
 
             <li>
@@ -1458,7 +1465,7 @@
             </li>
 
             <li>
-              Keep your JazzCash transaction/reference ID.
+              Keep your transaction/reference ID.
             </li>
 
             <li>
@@ -1485,6 +1492,19 @@
 
         <form id="paymentForm">
 
+            <div class="form-group">
+              <label>Payment Method</label>
+
+              <select id="paymentMethod" required>
+                <option value="">Select Payment Method</option>
+                <option value="JazzCash">JazzCash</option>
+                <option value="Easypaisa">Easypaisa</option>
+                <option value="Raast">Raast</option>
+              </select>
+
+            </div>
+
+
           <div class="form-group">
             <label>Payment Plan</label>
 
@@ -1494,12 +1514,12 @@
                 Select Payment Plan
               </option>
 
-              <option value="500">
-                Individual Subject - Rs. 500
+              <option value="1000">
+                Individual Subject - Rs. 1,000
               </option>
 
-              <option value="2000">
-                All Subjects - Rs. 2,000
+              <option value="3000">
+                All Subjects - Rs. 3,000
               </option>
 
             </select>
@@ -1522,13 +1542,13 @@
           <div class="form-group">
 
             <label>
-              JazzCash Transaction Reference / ID
+              Transaction Reference / ID
             </label>
 
             <input
               id="transactionReference"
               required
-              placeholder="Enter JazzCash transaction ID"
+              placeholder="Enter transaction/reference ID"
             />
 
           </div>
@@ -3475,7 +3495,7 @@
 
         showAlert(
           "dashboardAlert",
-          "Please enter the payment amount and JazzCash transaction reference.",
+          "Please enter the payment amount and transaction reference.",
           "failure"
         );
 
@@ -3493,7 +3513,7 @@
           .insert({
             student_id: currentUser.id,
             amount: amount,
-            payment_method: "JazzCash",
+            payment_method: document.getElementById("paymentMethod").value,
             transaction_reference: reference,
             notes: notes,
             status: "pending"
@@ -3513,6 +3533,7 @@
       }
 
       this.reset();
+      document.getElementById("paymentAmount").value = "";
 
       showAlert(
         "dashboardAlert",
@@ -3606,7 +3627,7 @@
 
           <td>
             ${escapeHtml(
-              payment.payment_method || "JazzCash"
+              payment.payment_method || "-"
             )}
           </td>
 
