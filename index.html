@@ -2614,10 +2614,14 @@
           )
         );
 
+      // Keep each subject ID only once to prevent duplicate-key errors.
       const selectedIds =
-        checkboxes
-          .filter(cb => cb.checked)
-          .map(cb => Number(cb.dataset.subjectId));
+        [...new Set(
+          checkboxes
+            .filter(cb => cb.checked)
+            .map(cb => Number(cb.dataset.subjectId))
+            .filter(id => Number.isInteger(id) && id > 0)
+        )];
 
       const firstGroup =
         checkboxes.find(
