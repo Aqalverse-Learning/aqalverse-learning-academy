@@ -2654,44 +2654,17 @@
           }
         );
 
-      if (rpcResult.error) {
+    if (rpcResult.error) {
+  this.disabled = false;
 
-        /*
-          Fallback direct save.
-        */
+  showAlert(
+    "dashboardAlert",
+    "Could not save subjects: " + rpcResult.error.message,
+    "failure"
+  );
 
-        await supabaseClient
-          .from("student_subjects")
-          .delete()
-          .eq("student_id", currentUser.id);
-
-        const rows =
-          selectedIds.map(subjectId => ({
-            student_id: currentUser.id,
-            subject_id: subjectId,
-            subject_group_id: groupId,
-            is_active: true
-          }));
-
-        const insertResult =
-          await supabaseClient
-            .from("student_subjects")
-            .insert(rows);
-
-        if (insertResult.error) {
-
-          this.disabled = false;
-
-          showAlert(
-            "dashboardAlert",
-            insertResult.error.message,
-            "failure"
-          );
-
-          return;
-        }
-      }
-
+  return;
+}
       /*
         Synchronize selected subjects
         with course enrollments.
