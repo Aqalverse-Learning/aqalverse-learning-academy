@@ -2721,11 +2721,10 @@
       "Loading timetable...";
 
     const enrollmentResult =
-      await supabaseClient
-        .from("enrollments")
-        .select("course_id,status,access_end")
-        .eq("student_id", currentUser.id)
-        .in("status", ["trial", "active"]);
+  await supabaseClient
+    .from("enrollments")
+    .select("course_id,status,access_end")
+    .eq("student_id", currentUser.id);
 
     if (enrollmentResult.error) {
 
