@@ -1227,7 +1227,12 @@
       <button class="tab-button" data-tab="attendance">
         Attendance
       </button>
-
+<button
+  class="tab-button message-tab hidden"
+  data-tab="messages"
+>
+  Private Messages
+</button>
       <button class="tab-button staff-tab hidden" data-tab="students">
         Students
       </button>
@@ -1616,6 +1621,50 @@
 
     </div>
 
+
+<!-- PRIVATE MESSAGES -->
+<div class="dashboard-panel" id="panel-messages">
+  <div class="card">
+    <h3>Private Student–Teacher Messages</h3>
+    <p class="muted">
+      Send a private message to a teacher or student.
+    </p>
+
+    <div class="form-group">
+      <label for="messageRecipient">Choose recipient</label>
+      <select id="messageRecipient">
+        <option value="">Loading recipients...</option>
+      </select>
+    </div>
+
+    <div id="messageStatus" class="alert"></div>
+
+    <div
+      id="messageHistory"
+      style="border:1px solid #ddd;border-radius:8px;padding:12px;min-height:160px;max-height:350px;overflow-y:auto;margin:16px 0;"
+      aria-live="polite"
+    >
+      Choose a recipient to view messages.
+    </div>
+
+    <form id="privateMessageForm">
+      <div class="form-group">
+        <label for="privateMessageText">Your message</label>
+        <textarea
+          id="privateMessageText"
+          rows="3"
+          maxlength="5000"
+          required
+          placeholder="Write your message..."
+        ></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        Send Message
+      </button>
+    </form>
+  </div>
+</div>
 
     <!-- STAFF STUDENTS -->
 
@@ -2386,8 +2435,182 @@
         );
 
       });
+    document
+  .querySelectorAll(".message-tab")
+  .forEach(tab => {
+    tab.classList.toggle(
+      "hidden",
+      !(
+        currentProfile?.role === "student" ||
+        currentProfile?.role === "teacher" ||
+        currentProfile?.role === "admin"
+      )
+    );
+  });
   }
 
+
+async function loadPrivateMessages() {
+  const recipientSelect =
+    document.getElementById("messageRecipient");
+  const history =
+    document.getElementById("messageHistory");
+  const status =
+    document.getElementById("messageStatus");
+
+  if (!currentUser || !currentProfile) return;
+
+  const isStudent = currentProfile.role === "student";
+  const isStaff =
+    currentProfile.role === "admin" ||
+    currentProfile.role === "teacher";
+
+  if (!isStudent && !isStaff) {
+    status.textContent =
+      "Private messaging is available to students and staff.";
+    return;
+  }
+
+  status.textContent = "Loading recipients...";
+
+  const allowedRoles = isStudent
+    ? ["admin", "teacher"]
+    : ["student"];
+
+  const result = await supabaseClient
+    .from("profiles")
+    .select("id, full_name, role")
+    .in("role", allowedRoles)
+    .order("full_name");
+
+  if (result.error) {
+    status.textContent =
+      "Could not load recipients: " + result.error.message;
+    return;
+  }
+
+  recipientSelect.replaceChildren(
+    new Option("Choose a recipient", "")
+  );
+
+  (result.data || []).forEach(profile => {
+    const option = new Option(
+      `${profile.full_name || "User"} (${profile.role})`,
+      profile.id
+    );
+    recipientSelect.add(option);
+  });
+
+  status.textContent = result.data?.length
+    ? "Select a recipient to view your conversation."
+    : "No recipients found. Check that profiles exist and are visible to your account.";
+}
+
+async function loadPrivateMessageHistory() {
+  const recipientId =
+    document.getElementById("messageRecipient").value;
+  const history =
+    document.getElementById("messageHistory");
+
+  history.replaceChildren();
+
+  if (!recipientId || !currentUser) {
+    history.textContent = "Choose a recipient to view messages.";
+    return;
+  }
+
+  history.textContent = "Loading messages...";
+
+  const result = await supabaseClient
+    .from("private_messages")
+    .select("id, sender_id, recipient_id, message, created_at")
+    .or(
+      `and(sender_id.eq.${currentUser.id},recipient_id.eq.${recipientId}),and(sender_id.eq.${recipientId},recipient_id.eq.${currentUser.id})`
+    )
+    .order("created_at", { ascending: true })
+    .limit(100);
+
+  history.replaceChildren();
+
+  if (result.error) {
+    history.textContent =
+      "Could not load messages: " + result.error.message;
+    return;
+  }
+
+  if (!result.data?.length) {
+    history.textContent = "No messages yet. Start the conversation.";
+    return;
+  }
+
+  result.data.forEach(message => {
+    const item = document.createElement("div");
+    item.style.cssText =
+      "padding:10px;margin:8px 0;border-radius:8px;background:#f1f5f9;";
+
+    const label = document.createElement("strong");
+    label.textContent =
+      message.sender_id === currentUser.id ? "You" : "Recipient";
+
+    const body = document.createElement("p");
+    body.style.whiteSpace = "pre-wrap";
+    body.style.margin = "6px 0";
+    body.textContent = message.message;
+
+    const date = document.createElement("small");
+    date.textContent = new Date(
+      message.created_at
+    ).toLocaleString();
+
+    item.append(label, body, date);
+    history.append(item);
+  });
+
+  history.scrollTop = history.scrollHeight;
+}
+
+document
+  .getElementById("messageRecipient")
+  .addEventListener("change", loadPrivateMessageHistory);
+
+document
+  .getElementById("privateMessageForm")
+  .addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const recipientId =
+      document.getElementById("messageRecipient").value;
+    const input =
+      document.getElementById("privateMessageText");
+    const status =
+      document.getElementById("messageStatus");
+    const message = input.value.trim();
+
+    if (!currentUser || !recipientId || !message) {
+      status.textContent = "Choose a recipient and enter a message.";
+      return;
+    }
+
+    status.textContent = "Sending message...";
+
+    const result = await supabaseClient
+      .from("private_messages")
+      .insert({
+        sender_id: currentUser.id,
+        recipient_id: recipientId,
+        message: message
+      });
+
+    if (result.error) {
+      status.textContent =
+        "Message not sent: " + result.error.message;
+      return;
+    }
+
+    input.value = "";
+    status.textContent = "Message sent successfully.";
+    await loadPrivateMessageHistory();
+  });
 
   /* ============================================================
      TABS
@@ -2424,7 +2647,9 @@
         if (panel) {
           panel.classList.add("active");
         }
-
+if (tab === "messages") {
+  await loadPrivateMessages();
+}
       });
 
     });
