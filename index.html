@@ -4610,7 +4610,15 @@ if (tab === "messages") {
       currentUser = null;
       currentProfile = null;
       currentStudent = null;
+const messageBox = document.getElementById("privateMessageText");
+const messageHistory = document.getElementById("messageHistory");
+const messageStatus = document.getElementById("messageStatus");
+const messageRecipient = document.getElementById("messageRecipient");
 
+if (messageBox) messageBox.value = "";
+if (messageHistory) messageHistory.textContent = "Choose a recipient to view messages.";
+if (messageStatus) messageStatus.textContent = "";
+if (messageRecipient) messageRecipient.value = "";
       document
         .getElementById("dashboard")
         .style.display = "none";
