@@ -2575,32 +2575,71 @@ document
   .addEventListener("change", loadPrivateMessageHistory);
 
 document
+  document
   .getElementById("privateMessageForm")
-  .addEventListener("submit", async function(event) {
+  .addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    const recipientId =
-      document.getElementById("messageRecipient").value;
-    const input =
-      document.getElementById("privateMessageText");
-    const status =
-      document.getElementById("messageStatus");
+    const form = this;
+    const input = document.getElementById("privateMessageText");
+    const recipientSelect = document.getElementById("messageRecipient");
+    const status = document.getElementById("messageStatus");
+    const sendButton = form.querySelector('button[type="submit"]');
+
+    function showMessage(text) {
+      status.textContent = text;
+      status.classList.add("show");
+    }
+
+    const recipientId = recipientSelect.value;
     const message = input.value.trim();
 
-    if (!currentUser || !recipientId || !message) {
-      status.textContent = "Choose a recipient and enter a message.";
+    if (!currentUser) {
+      showMessage("Please log in again before sending a message.");
       return;
     }
 
-    status.textContent = "Sending message...";
+    if (!recipientId) {
+      showMessage("Please choose a recipient.");
+      return;
+    }
 
-    const result = await supabaseClient
-      .from("private_messages")
-      .insert({
-        sender_id: currentUser.id,
-        recipient_id: recipientId,
-        message: message
-      });
+    if (!message) {
+      showMessage("Please type a message first.");
+      return;
+    }
+
+    sendButton.disabled = true;
+    showMessage("Sending message...");
+
+    try {
+      const result = await supabaseClient
+        .from("private_messages")
+        .insert({
+          sender_id: currentUser.id,
+          recipient_id: recipientId,
+          message: message
+        });
+
+      if (result.error) {
+        showMessage("Message not sent: " + result.error.message);
+        return;
+      }
+
+      input.value = "";
+      showMessage("Message sent successfully.");
+
+      await loadPrivateMessageHistory();
+
+    } catch (error) {
+      showMessage(
+        "Sending failed: " +
+        (error?.message || String(error))
+      );
+    } finally {
+      sendButton.disabled = false;
+    }
+  });
 
     if (result.error) {
       status.textContent =
