@@ -2575,7 +2575,10 @@ document
   .addEventListener("change", loadPrivateMessageHistory);
 
 document
-  document
+  .getElementById("messageRecipient")
+  .addEventListener("change", loadPrivateMessageHistory);
+
+document
   .getElementById("privateMessageForm")
   .addEventListener("submit", async function (event) {
     event.preventDefault();
@@ -2613,7 +2616,7 @@ document
     showMessage("Sending message...");
 
     try {
-      const result = await supabaseClient
+      const { error } = await supabaseClient
         .from("private_messages")
         .insert({
           sender_id: currentUser.id,
@@ -2621,40 +2624,27 @@ document
           message: message
         });
 
-      if (result.error) {
-        showMessage("Message not sent: " + result.error.message);
+      if (error) {
+        showMessage("Message not sent: " + error.message);
         return;
       }
 
       input.value = "";
       showMessage("Message sent successfully.");
-
       await loadPrivateMessageHistory();
-
     } catch (error) {
       showMessage(
-        "Sending failed: " +
-        (error?.message || String(error))
+        "Sending failed: " + (error?.message || String(error))
       );
     } finally {
       sendButton.disabled = false;
     }
   });
 
-    if (result.error) {
-      status.textContent =
-        "Message not sent: " + result.error.message;
-      return;
-    }
-
-    input.value = "";
-    status.textContent = "Message sent successfully.";
-    await loadPrivateMessageHistory();
-  });
-
   /* ============================================================
      TABS
   ============================================================ */
+
 
   document
     .querySelectorAll(".tab-button[data-tab]")
