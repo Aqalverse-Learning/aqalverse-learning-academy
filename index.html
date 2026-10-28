@@ -451,6 +451,17 @@
       display: block;
     }
 
+    .lesson-resource-links a {
+      color: var(--primary);
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    #lessonManagementForm input[type="checkbox"] {
+      width: auto;
+      margin-right: 8px;
+    }
+
     .dashboard-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -1242,6 +1253,10 @@
         Courses
       </button>
 
+      <button class="tab-button staff-tab hidden" data-tab="lessonManagement">
+        Lesson Management
+      </button>
+
       <button class="tab-button staff-tab hidden" data-tab="manageAssignments">
         Manage Assignments
       </button>
@@ -1698,6 +1713,66 @@
 
       </div>
 
+    </div>
+
+
+    <!-- LESSON MANAGEMENT -->
+
+    <div class="dashboard-panel" id="panel-lessonManagement">
+      <div class="card">
+        <h3>Lesson Management</h3>
+        <p class="muted mb">Add a lesson with its teaching video and notes/PDF link. Only staff with permission for the selected course can save changes.</p>
+        <div id="lessonManagementAlert" class="alert"></div>
+
+        <form id="lessonManagementForm">
+          <div class="form-group">
+            <label for="lessonCourseSelect">Course</label>
+            <select id="lessonCourseSelect" required>
+              <option value="">Loading courses...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="lessonChapterSelect">Chapter</label>
+            <select id="lessonChapterSelect" required disabled>
+              <option value="">Select a course first</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="lessonTitleInput">Lesson title</label>
+            <input id="lessonTitleInput" type="text" maxlength="200" required placeholder="e.g. Introduction to Biology">
+          </div>
+          <div class="form-group">
+            <label for="lessonNumberInput">Lesson number</label>
+            <input id="lessonNumberInput" type="number" min="1" step="1" required value="1">
+          </div>
+          <div class="form-group">
+            <label for="lessonDescriptionInput">Description (optional)</label>
+            <textarea id="lessonDescriptionInput" rows="3" placeholder="Short lesson summary"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="lessonVideoUrlInput">Teaching video URL (optional)</label>
+            <input id="lessonVideoUrlInput" type="url" placeholder="https://...">
+          </div>
+          <div class="form-group">
+            <label for="lessonNotesUrlInput">Notes / PDF URL (optional)</label>
+            <input id="lessonNotesUrlInput" type="url" placeholder="https://...">
+          </div>
+          <div class="form-group">
+            <label for="lessonPassingInput">Passing percentage</label>
+            <input id="lessonPassingInput" type="number" min="1" max="100" step="1" value="60" required>
+          </div>
+          <div class="form-group">
+            <label><input id="lessonPublishInput" type="checkbox" checked> Publish this lesson for students</label>
+          </div>
+          <button id="saveLessonButton" type="submit">Save Lesson</button>
+        </form>
+      </div>
+
+      <div class="card mt">
+        <h3>Existing Lessons</h3>
+        <p class="muted mb">Use Publish/Hide to control whether a lesson appears to students. Hiding a lesson does not delete it.</p>
+        <div id="managedLessonsContainer">Select a course to view its lessons.</div>
+      </div>
     </div>
 
 
@@ -2390,6 +2465,7 @@
 
       await loadStaffStudents();
       await loadStaffCourses();
+      await loadLessonManagementCourses();
       await loadAssignmentCourses();
 
     }
@@ -3323,6 +3399,13 @@ if (tab === "messages") {
             Lesson ${lesson.lesson_number}
           </p>
 
+          ${lesson.description ? `<p>${escapeHtml(lesson.description)}</p>` : ""}
+
+          <div class="lesson-resource-links mt">
+            ${lesson.video_url ? `<p><a href="${escapeHtml(lesson.video_url)}" target="_blank" rel="noopener noreferrer">▶ Watch teaching video</a></p>` : `<p class="muted">Video not added yet.</p>`}
+            ${lesson.notes_url ? `<p><a href="${escapeHtml(lesson.notes_url)}" target="_blank" rel="noopener noreferrer">📘 Open / download notes</a></p>` : `<p class="muted">Notes not added yet.</p>`}
+          </div>
+
           <div class="progress-bar">
             <div
               class="progress-fill"
@@ -4111,6 +4194,218 @@ if (tab === "messages") {
     `;
 
     container.innerHTML = html;
+  }
+
+
+  /* ============================================================
+     LESSON MANAGEMENT (STAFF)
+  ============================================================ */
+
+  function showLessonManagementAlert(message, type = "info") {
+    const element = document.getElementById("lessonManagementAlert");
+    if (!element) return;
+    element.textContent = message;
+    element.className = "alert " + type + " show";
+  }
+
+  async function loadLessonManagementCourses() {
+    if (!isStaff()) return;
+
+    const courseSelect = document.getElementById("lessonCourseSelect");
+    const chapterSelect = document.getElementById("lessonChapterSelect");
+    const result = await supabaseClient
+      .from("courses")
+      .select("id,title,is_active")
+      .eq("is_active", true)
+      .order("title")
+      .limit(500);
+
+    if (result.error) {
+      courseSelect.innerHTML = '<option value="">Could not load courses</option>';
+      showLessonManagementAlert("Could not load courses: " + result.error.message, "failure");
+      return;
+    }
+
+    courseSelect.innerHTML = '<option value="">Select Course</option>' +
+      (result.data || []).map(course =>
+        `<option value="${course.id}">${escapeHtml(course.title)} (ID ${course.id})</option>`
+      ).join("");
+
+    courseSelect.onchange = async function() {
+      const courseId = Number(this.value);
+      chapterSelect.disabled = true;
+      chapterSelect.innerHTML = '<option value="">Loading chapters...</option>';
+      document.getElementById("managedLessonsContainer").innerHTML = "Loading lessons...";
+      if (!courseId) {
+        chapterSelect.innerHTML = '<option value="">Select a course first</option>';
+        document.getElementById("managedLessonsContainer").innerHTML = "Select a course to view its lessons.";
+        return;
+      }
+
+      const chapterResult = await supabaseClient
+        .from("chapters")
+        .select("id,course_id,title,chapter_number,is_active")
+        .eq("course_id", courseId)
+        .eq("is_active", true)
+        .order("chapter_number");
+
+      if (chapterResult.error) {
+        chapterSelect.innerHTML = '<option value="">Could not load chapters</option>';
+        showLessonManagementAlert("Could not load chapters: " + chapterResult.error.message, "failure");
+        return;
+      }
+
+      chapterSelect.innerHTML = '<option value="">Select Chapter</option>' +
+        (chapterResult.data || []).map(chapter =>
+          `<option value="${chapter.id}">Chapter ${chapter.chapter_number}: ${escapeHtml(chapter.title)}</option>`
+        ).join("");
+      chapterSelect.disabled = !(chapterResult.data || []).length;
+      if (!(chapterResult.data || []).length) {
+        chapterSelect.innerHTML = '<option value="">No active chapters found</option>';
+      }
+      await loadManagedLessons(courseId);
+    };
+
+    document.getElementById("lessonManagementForm").onsubmit = async function(event) {
+      event.preventDefault();
+      if (!isStaff() || !currentUser) {
+        showLessonManagementAlert("Please sign in with an authorized staff account.", "failure");
+        return;
+      }
+
+      const courseId = Number(courseSelect.value);
+      const chapterId = Number(chapterSelect.value);
+      const title = document.getElementById("lessonTitleInput").value.trim();
+      const lessonNumber = Number(document.getElementById("lessonNumberInput").value);
+      const description = document.getElementById("lessonDescriptionInput").value.trim();
+      const videoUrl = document.getElementById("lessonVideoUrlInput").value.trim();
+      const notesUrl = document.getElementById("lessonNotesUrlInput").value.trim();
+      const passing = Number(document.getElementById("lessonPassingInput").value);
+      const isActive = document.getElementById("lessonPublishInput").checked;
+
+      if (!courseId || !chapterId || !title || !Number.isInteger(lessonNumber) || lessonNumber < 1) {
+        showLessonManagementAlert("Select a course and chapter, then enter a title and lesson number of 1 or higher.", "failure");
+        return;
+      }
+      if (!Number.isInteger(passing) || passing < 1 || passing > 100) {
+        showLessonManagementAlert("Passing percentage must be between 1 and 100.", "failure");
+        return;
+      }
+      for (const [label, url] of [["Video", videoUrl], ["Notes", notesUrl]]) {
+        if (url && !/^https?:\/\//i.test(url)) {
+          showLessonManagementAlert(label + " URL must start with https:// or http://.", "failure");
+          return;
+        }
+      }
+
+      const saveButton = document.getElementById("saveLessonButton");
+      saveButton.disabled = true;
+      saveButton.textContent = "Saving...";
+      showLessonManagementAlert("Saving lesson...", "info");
+
+      try {
+        const { error } = await supabaseClient.from("lessons").insert({
+          chapter_id: chapterId,
+          title,
+          lesson_number: lessonNumber,
+          description: description || null,
+          video_url: videoUrl || null,
+          notes_url: notesUrl || null,
+          passing_percentage: passing,
+          is_active: isActive
+        });
+
+        if (error) {
+          showLessonManagementAlert("Lesson was not saved: " + error.message, "failure");
+          return;
+        }
+
+        showLessonManagementAlert("Lesson saved successfully.", "success");
+        document.getElementById("lessonTitleInput").value = "";
+        document.getElementById("lessonNumberInput").value = "1";
+        document.getElementById("lessonDescriptionInput").value = "";
+        document.getElementById("lessonVideoUrlInput").value = "";
+        document.getElementById("lessonNotesUrlInput").value = "";
+        document.getElementById("lessonPassingInput").value = "60";
+        document.getElementById("lessonPublishInput").checked = true;
+        await loadManagedLessons(courseId);
+      } catch (error) {
+        showLessonManagementAlert("Unexpected save error: " + (error?.message || String(error)), "failure");
+      } finally {
+        saveButton.disabled = false;
+        saveButton.textContent = "Save Lesson";
+      }
+    };
+  }
+
+  async function loadManagedLessons(courseId) {
+    if (!isStaff() || !courseId) return;
+    const container = document.getElementById("managedLessonsContainer");
+    const chapterResult = await supabaseClient
+      .from("chapters")
+      .select("id,title,chapter_number")
+      .eq("course_id", Number(courseId))
+      .order("chapter_number");
+
+    if (chapterResult.error) {
+      container.innerHTML = `<div class="alert failure show">${escapeHtml(chapterResult.error.message)}</div>`;
+      return;
+    }
+    const chapters = chapterResult.data || [];
+    const chapterIds = chapters.map(chapter => chapter.id);
+    if (!chapterIds.length) {
+      container.innerHTML = '<p class="muted">No chapters are available for this course yet.</p>';
+      return;
+    }
+
+    const lessonResult = await supabaseClient
+      .from("lessons")
+      .select("id,chapter_id,title,lesson_number,description,video_url,notes_url,passing_percentage,is_active")
+      .in("chapter_id", chapterIds)
+      .order("lesson_number");
+
+    if (lessonResult.error) {
+      container.innerHTML = `<div class="alert failure show">${escapeHtml(lessonResult.error.message)}</div>`;
+      return;
+    }
+    const lessons = lessonResult.data || [];
+    if (!lessons.length) {
+      container.innerHTML = '<p class="muted">No lessons have been added for this course yet.</p>';
+      return;
+    }
+
+    container.innerHTML = `<div class="table-wrap"><table><thead><tr><th>Chapter</th><th>Lesson</th><th>Video</th><th>Notes</th><th>Status</th><th>Action</th></tr></thead><tbody>` +
+      lessons.map(lesson => {
+        const chapter = chapters.find(item => item.id === lesson.chapter_id);
+        return `<tr>
+          <td>Chapter ${chapter?.chapter_number || "-"}: ${escapeHtml(chapter?.title || "")}</td>
+          <td>${escapeHtml(lesson.lesson_number + ". " + lesson.title)}</td>
+          <td>${lesson.video_url ? "Added" : "Not added"}</td>
+          <td>${lesson.notes_url ? "Added" : "Not added"}</td>
+          <td>${lesson.is_active ? "Published" : "Hidden"}</td>
+          <td><button type="button" class="lesson-toggle-button" data-lesson-id="${lesson.id}" data-next-active="${!lesson.is_active}">${lesson.is_active ? "Hide" : "Publish"}</button></td>
+        </tr>`;
+      }).join("") + '</tbody></table></div>';
+
+    container.querySelectorAll(".lesson-toggle-button").forEach(button => {
+      button.addEventListener("click", async function() {
+        if (!isStaff()) return;
+        const lessonId = Number(this.dataset.lessonId);
+        const nextActive = this.dataset.nextActive === "true";
+        this.disabled = true;
+        const { error } = await supabaseClient
+          .from("lessons")
+          .update({ is_active: nextActive })
+          .eq("id", lessonId);
+        if (error) {
+          showLessonManagementAlert("Could not update lesson status: " + error.message, "failure");
+          this.disabled = false;
+          return;
+        }
+        showLessonManagementAlert(nextActive ? "Lesson published." : "Lesson hidden from students.", "success");
+        await loadManagedLessons(Number(courseId));
+      });
+    });
   }
 
 
