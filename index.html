@@ -1237,14 +1237,10 @@
 
       <button class="tab-button" data-tab="attendance">
         Attendance
-        <button class="tab-button message-tab hidden" data-tab="messages">Private Messages</button>
       </button>
-<button
-  class="tab-button message-tab hidden"
-  data-tab="messages"
->
-  Private Messages
-</button>
+      <button class="tab-button message-tab hidden" data-tab="messages">
+        Private Messages
+      </button>
       <button class="tab-button staff-tab hidden" data-tab="students">
         Students
       </button>
@@ -1721,7 +1717,7 @@
     <div class="dashboard-panel" id="panel-lessonManagement">
       <div class="card">
         <h3>Lesson Management</h3>
-        <p class="muted mb">Add a lesson with its teaching video and notes/PDF link. Only staff with permission for the selected course can save changes.</p>
+        <p class="muted mb">Add a lesson and upload its teaching video and notes directly from your computer. Only authorized staff can save changes.</p>
         <div id="lessonManagementAlert" class="alert"></div>
 
         <form id="lessonManagementForm">
@@ -1750,12 +1746,14 @@
             <textarea id="lessonDescriptionInput" rows="3" placeholder="Short lesson summary"></textarea>
           </div>
           <div class="form-group">
-            <label for="lessonVideoUrlInput">Teaching video URL (optional)</label>
-            <input id="lessonVideoUrlInput" type="url" placeholder="https://...">
+            <label for="lessonVideoFileInput">Teaching video file (optional)</label>
+            <input id="lessonVideoFileInput" type="file" accept="video/*">
+            <small class="muted">Choose a video saved on your computer. Large videos may exceed your Supabase storage file-size limit.</small>
           </div>
           <div class="form-group">
-            <label for="lessonNotesUrlInput">Notes / PDF URL (optional)</label>
-            <input id="lessonNotesUrlInput" type="url" placeholder="https://...">
+            <label for="lessonNotesFileInput">Notes file (optional)</label>
+            <input id="lessonNotesFileInput" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,text/plain">
+            <small class="muted">Choose a PDF, Word document, PowerPoint, or text file from your computer.</small>
           </div>
           <div class="form-group">
             <label for="lessonPassingInput">Passing percentage</label>
@@ -1814,9 +1812,10 @@
 
             <textarea
               id="assignmentDescription"
-              rows="4"
-              placeholder="Assignment instructions"
+              rows="6"
+              placeholder="Type the assignment questions and instructions here. No PDF is required."
             ></textarea>
+            <small class="muted">You can write the complete assignment here as text. Leave PDF attachments out; students will read these instructions in their Assignments tab.</small>
 
           </div>
 
@@ -4278,8 +4277,8 @@ if (tab === "messages") {
       const title = document.getElementById("lessonTitleInput").value.trim();
       const lessonNumber = Number(document.getElementById("lessonNumberInput").value);
       const description = document.getElementById("lessonDescriptionInput").value.trim();
-      const videoUrl = document.getElementById("lessonVideoUrlInput").value.trim();
-      const notesUrl = document.getElementById("lessonNotesUrlInput").value.trim();
+      const videoFile = document.getElementById("lessonVideoFileInput").files[0] || null;
+      const notesFile = document.getElementById("lessonNotesFileInput").files[0] || null;
       const passing = Number(document.getElementById("lessonPassingInput").value);
       const isActive = document.getElementById("lessonPublishInput").checked;
 
@@ -4291,11 +4290,17 @@ if (tab === "messages") {
         showLessonManagementAlert("Passing percentage must be between 1 and 100.", "failure");
         return;
       }
-      for (const [label, url] of [["Video", videoUrl], ["Notes", notesUrl]]) {
-        if (url && !/^https?:\/\//i.test(url)) {
-          showLessonManagementAlert(label + " URL must start with https:// or http://.", "failure");
-          return;
-        }
+      if (videoFile && !videoFile.type.startsWith("video/")) {
+        showLessonManagementAlert("Please choose a valid video file.", "failure");
+        return;
+      }
+      if (videoFile && videoFile.size > 50 * 1024 * 1024) {
+        showLessonManagementAlert("The video is larger than 50 MB. This setup is limited to 50 MB per file. Please compress it or use a smaller video.", "failure");
+        return;
+      }
+      if (notesFile && notesFile.size > 50 * 1024 * 1024) {
+        showLessonManagementAlert("The notes file is larger than 50 MB. Please choose a smaller file.", "failure");
+        return;
       }
 
       const saveButton = document.getElementById("saveLessonButton");
@@ -4304,13 +4309,31 @@ if (tab === "messages") {
       showLessonManagementAlert("Saving lesson...", "info");
 
       try {
+        const bucket = "lesson-resources";
+        async function uploadLessonFile(file, kind) {
+          if (!file) return null;
+          const safeName = file.name.normalize("NFKD").replace(/[^a-zA-Z0-9._-]+/g, "_").slice(-120) || (kind === "video" ? "video" : "notes");
+          const objectPath = `${courseId}/${chapterId}/${Date.now()}-${kind}-${safeName}`;
+          const uploadResult = await supabaseClient.storage.from(bucket).upload(objectPath, file, {
+            cacheControl: "3600",
+            upsert: false,
+            contentType: file.type || undefined
+          });
+          if (uploadResult.error) throw new Error(`${kind === "video" ? "Video" : "Notes"} upload failed: ${uploadResult.error.message}`);
+          const publicResult = supabaseClient.storage.from(bucket).getPublicUrl(objectPath);
+          return publicResult.data.publicUrl;
+        }
+
+        showLessonManagementAlert("Uploading selected files and saving lesson...", "info");
+        const videoUrl = await uploadLessonFile(videoFile, "video");
+        const notesUrl = await uploadLessonFile(notesFile, "notes");
         const { error } = await supabaseClient.from("lessons").insert({
           chapter_id: chapterId,
           title,
           lesson_number: lessonNumber,
           description: description || null,
-          video_url: videoUrl || null,
-          notes_url: notesUrl || null,
+          video_url: videoUrl,
+          notes_url: notesUrl,
           passing_percentage: passing,
           is_active: isActive
         });
@@ -4324,8 +4347,8 @@ if (tab === "messages") {
         document.getElementById("lessonTitleInput").value = "";
         document.getElementById("lessonNumberInput").value = "1";
         document.getElementById("lessonDescriptionInput").value = "";
-        document.getElementById("lessonVideoUrlInput").value = "";
-        document.getElementById("lessonNotesUrlInput").value = "";
+        document.getElementById("lessonVideoFileInput").value = "";
+        document.getElementById("lessonNotesFileInput").value = "";
         document.getElementById("lessonPassingInput").value = "60";
         document.getElementById("lessonPublishInput").checked = true;
         await loadManagedLessons(courseId);
