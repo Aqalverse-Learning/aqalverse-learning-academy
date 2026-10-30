@@ -13,6 +13,7 @@
   />
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
   <style>
     * {
@@ -1778,24 +1779,21 @@
     </div>
 
 
-    <!-- ADMIN BULK MCQ MANAGER -->
+    <!-- ADMIN BULK MCQ PDF MANAGER -->
     <div class="dashboard-panel" id="panel-mcqManager">
       <div class="card">
-        <h3>Bulk MCQ Manager</h3>
-        <p class="muted mb">Upload a CSV file for one chapter/lesson at a time. Review questions before approving them into the question bank.</p>
+        <h3>Bulk MCQ PDF Importer</h3>
+        <p class="muted mb">Choose one or more chapter PDFs. Each PDF is linked to its own lesson. Text-based PDFs are extracted in your browser; scanned PDFs need OCR and will be identified if no text is found.</p>
         <div id="mcqManagerAlert" class="alert"></div>
         <div class="form-group">
-          <label for="mcqLessonSelect">Lesson / Chapter</label>
-          <select id="mcqLessonSelect"><option value="">Loading lessons...</option></select>
+          <label for="mcqPdfFiles">Select chapter PDF files (multiple allowed)</label>
+          <input id="mcqPdfFiles" type="file" accept="application/pdf,.pdf" multiple>
+          <small class="muted">Example: Chapter 1.pdf, Chapter 2.pdf, Chapter 3.pdf. Select the lesson for each PDF below.</small>
         </div>
-        <div class="form-group">
-          <label for="mcqCsvFile">MCQ CSV file</label>
-          <input id="mcqCsvFile" type="file" accept=".csv,text/csv">
-          <small class="muted">Required columns: question_text, option_a, option_b, option_c, option_d, correct_option. Optional: explanation, difficulty, language. Correct option must be A/B/C/D.</small>
-        </div>
-        <button class="btn btn-primary" id="mcqPreviewButton" type="button">Preview CSV</button>
+        <div id="mcqPdfMappings" class="mt"></div>
+        <button class="btn btn-primary" id="mcqPreviewButton" type="button">Read PDFs and Preview MCQs</button>
         <div id="mcqPreview" class="mt"></div>
-        <button class="btn btn-primary mt" id="mcqImportButton" type="button" disabled>Import for Review</button>
+        <button class="btn btn-primary mt" id="mcqImportButton" type="button" disabled>Import All for Admin Review</button>
       </div>
       <div class="card mt">
         <h3>Pending MCQ Imports</h3>
@@ -4989,10 +4987,10 @@ if (tab === "mcqManager" && currentProfile?.role === "admin") {
 
 
   /* ============================================================
-     ADMIN BULK MCQ MANAGER
+     ADMIN BULK MCQ PDF MANAGER
   ============================================================ */
-  let mcqCsvRows = [];
-  let mcqCurrentImportFileId = null;
+  let mcqPdfLessons = [];
+  let mcqPdfParsedFiles = [];
 
   function mcqAlert(message, type = "info") {
     const el = document.getElementById("mcqManagerAlert");
@@ -5001,119 +4999,242 @@ if (tab === "mcqManager" && currentProfile?.role === "admin") {
     el.textContent = message;
   }
 
-  function parseMcqCsv(text) {
-    const rows = [];
-    let row = [], field = "", quoted = false;
-    for (let i = 0; i < text.length; i++) {
-      const ch = text[i], next = text[i + 1];
-      if (ch === '"' && quoted && next === '"') { field += '"'; i++; }
-      else if (ch === '"') quoted = !quoted;
-      else if (ch === "," && !quoted) { row.push(field); field = ""; }
-      else if ((ch === "\n" || ch === "\r") && !quoted) {
-        if (ch === "\r" && next === "\n") i++;
-        row.push(field); if (row.some(v => v.trim())) rows.push(row);
-        row = []; field = "";
-      } else field += ch;
-    }
-    row.push(field); if (row.some(v => v.trim())) rows.push(row);
-    if (rows.length < 2) throw new Error("CSV must contain a header and at least one question.");
-    const headers = rows.shift().map(h => h.trim().toLowerCase());
-    const required = ["question_text", "option_a", "option_b", "option_c", "option_d", "correct_option"];
-    const missing = required.filter(h => !headers.includes(h));
-    if (missing.length) throw new Error("Missing CSV columns: " + missing.join(", "));
-    return rows.map((values, index) => {
-      const item = {};
-      headers.forEach((h, i) => item[h] = (values[i] || "").trim());
-      item.correct_option = (item.correct_option || "").toUpperCase();
-      item.difficulty = (item.difficulty || "medium").toLowerCase();
-      item.language = (item.language || "both").toLowerCase();
-      if (!item.question_text || !item.option_a || !item.option_b || !item.option_c || !item.option_d)
-        throw new Error("Row " + (index + 2) + ": question and all four options are required.");
-      if (!["A", "B", "C", "D"].includes(item.correct_option))
-        throw new Error("Row " + (index + 2) + ": correct_option must be A, B, C or D.");
-      if (!["easy", "medium", "hard"].includes(item.difficulty))
-        throw new Error("Row " + (index + 2) + ": difficulty must be easy, medium or hard.");
-      if (!["english", "urdu", "both"].includes(item.language))
-        throw new Error("Row " + (index + 2) + ": language must be english, urdu or both.");
-      return item;
-    });
-  }
-
   async function loadMcqManager() {
     if (currentProfile?.role !== "admin") return;
-    const lessonSelect = document.getElementById("mcqLessonSelect");
     const [lessonsRes, testsRes] = await Promise.all([
       supabaseClient.from("lessons").select("id,title,chapter_id,is_active").order("title"),
       supabaseClient.from("tests").select("id,title,lesson_id,is_active").order("title")
     ]);
     if (lessonsRes.error) mcqAlert("Could not load lessons: " + lessonsRes.error.message, "error");
-    lessonSelect.replaceChildren(new Option("Choose lesson", ""));
-    (lessonsRes.data || []).forEach(l => lessonSelect.add(new Option(l.title + " (Lesson " + l.id + ")", l.id)));
+    mcqPdfLessons = lessonsRes.data || [];
     const testSelect = document.getElementById("mcqTestSelect");
-    testSelect.replaceChildren(new Option("Choose test", ""));
+    testSelect.replaceChildren(new Option("Choose a test", ""));
     (testsRes.data || []).forEach(t => testSelect.add(new Option(t.title + " (Test " + t.id + ")", t.id)));
+    renderMcqPdfMappings();
     await loadMcqPendingImports();
   }
 
+  function renderMcqPdfMappings() {
+    const files = Array.from(document.getElementById("mcqPdfFiles")?.files || []);
+    const box = document.getElementById("mcqPdfMappings");
+    if (!box) return;
+    if (!files.length) { box.innerHTML = ""; return; }
+    box.innerHTML = files.map((f, i) => `
+      <div class="mini-card mb">
+        <strong>${escapeHtml(f.name)}</strong>
+        <div class="form-group mt">
+          <label for="mcqPdfLesson_${i}">Lesson for this PDF</label>
+          <select id="mcqPdfLesson_${i}" class="mcq-pdf-lesson">
+            <option value="">Choose lesson</option>
+            ${mcqPdfLessons.map(l => `<option value="${l.id}">${escapeHtml(l.title)} (Lesson ${l.id})</option>`).join("")}
+          </select>
+        </div>
+      </div>`).join("");
+  }
+
+  document.getElementById("mcqPdfFiles")?.addEventListener("change", () => {
+    mcqPdfParsedFiles = [];
+    document.getElementById("mcqPreview").innerHTML = "";
+    document.getElementById("mcqImportButton").disabled = true;
+    renderMcqPdfMappings();
+  });
+
+  function normalizePdfText(text) {
+    return text.replace(/\u00a0/g, " ").replace(/[ \t]+/g, " ").replace(/\s+/g, " ").trim();
+  }
+
+  function parseMcqPdfText(rawText) {
+    const text = normalizePdfText(rawText);
+    const answerStart = text.search(/Answer\s*key/i);
+    const questionText = answerStart >= 0 ? text.slice(0, answerStart) : text;
+    const answerText = answerStart >= 0 ? text.slice(answerStart) : "";
+    const answers = {};
+    const answerRegex = /\b(\d{1,4})\s*([A-D])\b/g;
+    let am;
+    while ((am = answerRegex.exec(answerText)) !== null) answers[Number(am[1])] = am[2];
+
+    const starts = [];
+    const qStartRegex = /(?:^|\s)(\d{1,4})\.\s+/g;
+    let qm;
+    while ((qm = qStartRegex.exec(questionText)) !== null) {
+      const num = Number(qm[1]);
+      if (num > 0 && num < 10000) starts.push({ number: num, start: qm.index + (qm[0].length - qm[0].trimStart().length) });
+    }
+
+    const parsed = [];
+    for (let i = 0; i < starts.length; i++) {
+      const start = starts[i].start;
+      const end = i + 1 < starts.length ? starts[i + 1].start : questionText.length;
+      let segment = questionText.slice(start, end).trim();
+      segment = segment.replace(/^\d{1,4}\.\s*/, "");
+      const aPos = segment.search(/\bA\.\s*/);
+      if (aPos < 1) continue;
+      const qText = segment.slice(0, aPos).trim();
+      const optsText = segment.slice(aPos);
+      const optionMatches = [];
+      const optionRegex = /\b([A-D])\.\s*/g;
+      let om;
+      while ((om = optionRegex.exec(optsText)) !== null) optionMatches.push({ key: om[1], start: om.index, valueStart: optionRegex.lastIndex });
+      if (optionMatches.length < 4 || !qText) continue;
+      const options = {};
+      for (let j = 0; j < optionMatches.length; j++) {
+        const cur = optionMatches[j];
+        if (!["A","B","C","D"].includes(cur.key) || options[cur.key]) continue;
+        const next = optionMatches[j + 1];
+        options[cur.key] = optsText.slice(cur.valueStart, next ? next.start : optsText.length).trim();
+      }
+      if (["A","B","C","D"].every(k => options[k]) && answers[starts[i].number]) {
+        parsed.push({
+          source_number: starts[i].number,
+          question_text: qText,
+          option_a: options.A,
+          option_b: options.B,
+          option_c: options.C,
+          option_d: options.D,
+          correct_option: answers[starts[i].number],
+          explanation: null,
+          difficulty: "medium",
+          language: "english"
+        });
+      }
+    }
+    return { questions: parsed, foundQuestionNumbers: starts.length, answerCount: Object.keys(answers).length };
+  }
+
+  async function extractPdfText(file) {
+    if (!window.pdfjsLib) throw new Error("PDF reader library did not load. Refresh the page and try again.");
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    const bytes = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: bytes }).promise;
+    let fullText = "";
+    for (let pageNo = 1; pageNo <= pdf.numPages; pageNo++) {
+      const page = await pdf.getPage(pageNo);
+      const content = await page.getTextContent();
+      fullText += "\n" + content.items.map(item => item.str).join(" ");
+    }
+    return fullText;
+  }
+
   document.getElementById("mcqPreviewButton")?.addEventListener("click", async () => {
+    const files = Array.from(document.getElementById("mcqPdfFiles").files || []);
+    if (!files.length) return mcqAlert("Please select one or more chapter PDF files.", "error");
+    const mappings = files.map((file, i) => ({
+      file,
+      lessonId: Number(document.getElementById("mcqPdfLesson_" + i)?.value || 0)
+    }));
+    const missing = mappings.find(x => !x.lessonId);
+    if (missing) return mcqAlert("Please select a lesson for every PDF.", "error");
+    const btn = document.getElementById("mcqPreviewButton");
+    btn.disabled = true;
+    mcqPdfParsedFiles = [];
     try {
-      const file = document.getElementById("mcqCsvFile").files[0];
-      if (!file) throw new Error("Choose a CSV file first.");
-      mcqCsvRows = parseMcqCsv(await file.text());
-      document.getElementById("mcqPreview").innerHTML = `<p><strong>${mcqCsvRows.length} valid questions found.</strong> First 5 questions:</p>` + mcqCsvRows.slice(0,5).map((q,i) => `<div class="mini-card mb"><strong>${i+1}. ${escapeHtml(q.question_text)}</strong><p>A. ${escapeHtml(q.option_a)} | B. ${escapeHtml(q.option_b)}</p><p>C. ${escapeHtml(q.option_c)} | D. ${escapeHtml(q.option_d)}</p><small>Answer: ${q.correct_option} · ${q.difficulty} · ${q.language}</small></div>`).join("");
+      for (const item of mappings) {
+        mcqAlert("Reading " + item.file.name + " ...");
+        const raw = await extractPdfText(item.file);
+        const result = parseMcqPdfText(raw);
+        if (!result.questions.length) {
+          throw new Error(item.file.name + ": no complete MCQs with matching answer-key entries were detected. This may be a scanned PDF requiring OCR, or its layout may differ.");
+        }
+        mcqPdfParsedFiles.push({ file: item.file, lessonId: item.lessonId, questions: result.questions });
+      }
+      const total = mcqPdfParsedFiles.reduce((n, f) => n + f.questions.length, 0);
+      document.getElementById("mcqPreview").innerHTML =
+        `<p><strong>${total} questions extracted from ${mcqPdfParsedFiles.length} PDF(s).</strong> Check the sample below before importing.</p>` +
+        mcqPdfParsedFiles.map(f => `
+          <div class="mini-card mb">
+            <strong>${escapeHtml(f.file.name)}</strong>
+            <p>${f.questions.length} questions · Lesson ID ${f.lessonId}</p>
+            ${f.questions.slice(0, 3).map(q => `<div class="mb"><strong>Q${q.source_number}. ${escapeHtml(q.question_text)}</strong><p>A. ${escapeHtml(q.option_a)}<br>B. ${escapeHtml(q.option_b)}<br>C. ${escapeHtml(q.option_c)}<br>D. ${escapeHtml(q.option_d)}</p><small>Answer: ${q.correct_option}</small></div>`).join("")}
+          </div>`).join("");
       document.getElementById("mcqImportButton").disabled = false;
-      mcqAlert("CSV checked successfully. Review the preview, then import.", "success");
-    } catch (e) { mcqCsvRows = []; document.getElementById("mcqImportButton").disabled = true; mcqAlert(e.message, "error"); }
+      mcqAlert("PDF extraction completed. Please inspect the preview, then import for review.", "success");
+    } catch (e) {
+      mcqPdfParsedFiles = [];
+      document.getElementById("mcqPreview").innerHTML = "";
+      document.getElementById("mcqImportButton").disabled = true;
+      mcqAlert(e.message || String(e), "error");
+    } finally { btn.disabled = false; }
   });
 
   document.getElementById("mcqImportButton")?.addEventListener("click", async () => {
     if (currentProfile?.role !== "admin") return mcqAlert("Admin access required.", "error");
-    const lessonId = Number(document.getElementById("mcqLessonSelect").value);
-    const file = document.getElementById("mcqCsvFile").files[0];
-    if (!lessonId || !file || !mcqCsvRows.length) return mcqAlert("Choose a lesson and preview a valid CSV first.", "error");
-    const btn = document.getElementById("mcqImportButton"); btn.disabled = true;
+    if (!mcqPdfParsedFiles.length) return mcqAlert("Read and preview the PDFs first.", "error");
+    const btn = document.getElementById("mcqImportButton");
+    btn.disabled = true;
+    let importedTotal = 0;
     try {
-      const batchRes = await supabaseClient.from("mcq_import_batches").insert({created_by: currentUser.id, batch_name: file.name, status: "review", total_files: 1}).select("id").single();
-      if (batchRes.error) throw batchRes.error;
-      const fileRes = await supabaseClient.from("mcq_import_files").insert({batch_id: batchRes.data.id, file_name: file.name, lesson_id: lessonId, status: "processing", question_count: mcqCsvRows.length}).select("id").single();
-      if (fileRes.error) throw fileRes.error;
-      const importId = fileRes.data.id;
-      for (let i = 0; i < mcqCsvRows.length; i += 100) {
-        const chunk = mcqCsvRows.slice(i, i + 100).map(q => ({import_file_id: importId, question_text:q.question_text, option_a:q.option_a, option_b:q.option_b, option_c:q.option_c, option_d:q.option_d, correct_option:q.correct_option, explanation:q.explanation || null, difficulty:q.difficulty, language:q.language, approved:false}));
-        const insertRes = await supabaseClient.from("mcq_import_questions").insert(chunk);
-        if (insertRes.error) throw insertRes.error;
+      for (const item of mcqPdfParsedFiles) {
+        const batchRes = await supabaseClient.from("mcq_import_batches")
+          .insert({ created_by: currentUser.id, batch_name: item.file.name, status: "review", total_files: 1 })
+          .select("id").single();
+        if (batchRes.error) throw batchRes.error;
+        const fileRes = await supabaseClient.from("mcq_import_files")
+          .insert({ batch_id: batchRes.data.id, file_name: item.file.name, lesson_id: item.lessonId, status: "processing", question_count: item.questions.length })
+          .select("id").single();
+        if (fileRes.error) throw fileRes.error;
+        const importId = fileRes.data.id;
+        for (let i = 0; i < item.questions.length; i += 100) {
+          const chunk = item.questions.slice(i, i + 100).map(q => ({
+            import_file_id: importId, question_text: q.question_text,
+            option_a: q.option_a, option_b: q.option_b, option_c: q.option_c, option_d: q.option_d,
+            correct_option: q.correct_option, explanation: q.explanation,
+            difficulty: q.difficulty, language: q.language, approved: false
+          }));
+          const inserted = await supabaseClient.from("mcq_import_questions").insert(chunk);
+          if (inserted.error) throw inserted.error;
+        }
+        const statusRes = await supabaseClient.from("mcq_import_files").update({ status: "review" }).eq("id", importId);
+        if (statusRes.error) throw statusRes.error;
+        importedTotal += item.questions.length;
       }
-      await supabaseClient.from("mcq_import_files").update({status:"review"}).eq("id", importId);
-      mcqCurrentImportFileId = importId;
-      mcqAlert("Imported " + mcqCsvRows.length + " questions for review. Nothing has been published to students yet.", "success");
-      document.getElementById("mcqCsvFile").value = ""; document.getElementById("mcqPreview").innerHTML = ""; mcqCsvRows = [];
+      mcqAlert("Successfully imported " + importedTotal + " questions from " + mcqPdfParsedFiles.length + " PDF(s) for admin review. They are not published to students yet.", "success");
+      document.getElementById("mcqPdfFiles").value = "";
+      document.getElementById("mcqPdfMappings").innerHTML = "";
+      document.getElementById("mcqPreview").innerHTML = "";
+      mcqPdfParsedFiles = [];
       await loadMcqPendingImports();
-    } catch (e) { mcqAlert("Import stopped: " + (e.message || e), "error"); }
-    finally { btn.disabled = false; }
+    } catch (e) {
+      mcqAlert("Import stopped: " + (e.message || e) + ". Check Pending MCQ Imports before retrying to avoid duplicates.", "error");
+      await loadMcqPendingImports();
+    } finally { btn.disabled = false; }
   });
 
   async function loadMcqPendingImports() {
-    const el = document.getElementById("mcqPendingList"); if (!el) return;
-    const files = await supabaseClient.from("mcq_import_files").select("id,file_name,lesson_id,status,question_count,created_at").in("status", ["review","uploaded","failed"]).order("created_at", {ascending:false});
+    const el = document.getElementById("mcqPendingList");
+    if (!el) return;
+    const files = await supabaseClient.from("mcq_import_files")
+      .select("id,file_name,lesson_id,status,question_count,created_at")
+      .in("status", ["review","uploaded","failed"]).order("created_at", { ascending: false });
     if (files.error) { el.textContent = "Could not load imports: " + files.error.message; return; }
     if (!files.data?.length) { el.textContent = "No pending imports."; return; }
-    el.innerHTML = files.data.map(f => `<div class="mini-card mb"><strong>${escapeHtml(f.file_name)}</strong><p>${f.question_count} questions · ${escapeHtml(f.status)}</p><button type="button" class="btn btn-primary" data-mcq-approve="${f.id}">Approve all questions</button></div>`).join("");
+    el.innerHTML = files.data.map(f => `<div class="mini-card mb"><strong>${escapeHtml(f.file_name)}</strong><p>${f.question_count} questions · ${escapeHtml(f.status)} · Lesson ${f.lesson_id || "not selected"}</p><button type="button" class="btn btn-primary" data-mcq-approve="${f.id}">Approve all questions</button></div>`).join("");
     el.querySelectorAll("[data-mcq-approve]").forEach(b => b.addEventListener("click", () => approveMcqImport(Number(b.dataset.mcqApprove))));
   }
 
   async function approveMcqImport(importFileId) {
     if (currentProfile?.role !== "admin") return;
-    const qres = await supabaseClient.from("mcq_import_questions").select("id,question_text,option_a,option_b,option_c,option_d,correct_option,explanation,difficulty,language").eq("import_file_id", importFileId).eq("approved", false);
+    const fileRes = await supabaseClient.from("mcq_import_files").select("lesson_id").eq("id", importFileId).single();
+    if (fileRes.error) return mcqAlert(fileRes.error.message, "error");
+    const qres = await supabaseClient.from("mcq_import_questions")
+      .select("id,question_text,option_a,option_b,option_c,option_d,correct_option,explanation,difficulty,language")
+      .eq("import_file_id", importFileId).eq("approved", false);
     if (qres.error) return mcqAlert(qres.error.message, "error");
     if (!qres.data?.length) return mcqAlert("No unapproved questions found for this import.", "error");
     if (!confirm("Approve and add " + qres.data.length + " questions to the question bank?")) return;
     for (const q of qres.data) {
-      const add = await supabaseClient.from("question_bank").insert({lesson_id:(await supabaseClient.from("mcq_import_files").select("lesson_id").eq("id",importFileId).single()).data.lesson_id, question_text:q.question_text, option_a:q.option_a, option_b:q.option_b, option_c:q.option_c, option_d:q.option_d, correct_option:q.correct_option, explanation:q.explanation, difficulty:q.difficulty, language:q.language, approved:true, created_by:currentUser.id}).select("id").single();
+      const add = await supabaseClient.from("question_bank").insert({
+        lesson_id: fileRes.data.lesson_id, question_text: q.question_text,
+        option_a: q.option_a, option_b: q.option_b, option_c: q.option_c, option_d: q.option_d,
+        correct_option: q.correct_option, explanation: q.explanation, difficulty: q.difficulty,
+        language: q.language, approved: true, created_by: currentUser.id
+      }).select("id").single();
       if (add.error) return mcqAlert("Stopped while approving. " + add.error.message, "error");
-      const upd = await supabaseClient.from("mcq_import_questions").update({approved:true, imported_question_id:add.data.id}).eq("id",q.id);
-      if (upd.error) return mcqAlert("Question saved, but import tracking update failed: " + upd.error.message, "error");
+      const upd = await supabaseClient.from("mcq_import_questions")
+        .update({ approved: true, imported_question_id: add.data.id }).eq("id", q.id);
+      if (upd.error) return mcqAlert("Question saved, but tracking update failed: " + upd.error.message, "error");
     }
-    await supabaseClient.from("mcq_import_files").update({status:"imported"}).eq("id",importFileId);
+    const status = await supabaseClient.from("mcq_import_files").update({ status: "imported" }).eq("id", importFileId);
+    if (status.error) return mcqAlert(status.error.message, "error");
     mcqAlert(qres.data.length + " questions approved and saved to the question bank.", "success");
     await loadMcqPendingImports();
   }
@@ -5123,16 +5244,21 @@ if (tab === "mcqManager" && currentProfile?.role === "admin") {
     const testId = Number(document.getElementById("mcqTestSelect").value);
     const count = Math.max(1, Number(document.getElementById("mcqQuestionCount").value || 10));
     if (!testId) return mcqAlert("Choose a test first.", "error");
-    const test = await supabaseClient.from("tests").select("id,lesson_id").eq("id",testId).single();
+    const test = await supabaseClient.from("tests").select("id,lesson_id").eq("id", testId).single();
     if (test.error) return mcqAlert(test.error.message, "error");
-    const qs = await supabaseClient.from("question_bank").select("id").eq("lesson_id",test.data.lesson_id).eq("approved",true).limit(count);
+    const qs = await supabaseClient.from("question_bank").select("id")
+      .eq("lesson_id", test.data.lesson_id).eq("approved", true).limit(count);
     if (qs.error) return mcqAlert(qs.error.message, "error");
     if (!qs.data?.length) return mcqAlert("No approved questions found for this test's lesson.", "error");
-    const rows = qs.data.map((q,i) => ({test_id:testId, question_id:q.id, question_order:i+1}));
-    const add = await supabaseClient.from("test_questions").upsert(rows,{onConflict:"test_id,question_id",ignoreDuplicates:true});
+    const rows = qs.data.map((q, i) => ({ test_id: testId, question_id: q.id, question_order: i + 1 }));
+    const add = await supabaseClient.from("test_questions").upsert(rows, { onConflict: "test_id,question_id", ignoreDuplicates: true });
     if (add.error) return mcqAlert(add.error.message, "error");
-    await supabaseClient.from("tests").update({number_of_questions:qs.data.length,passing_percentage:60,randomize_questions:true,is_active:true}).eq("id",testId);
-    mcqAlert(qs.data.length + " questions assigned. Test set to randomized with 60% passing.", "success");
+    const update = await supabaseClient.from("tests").update({
+      number_of_questions: qs.data.length, passing_percentage: 60,
+      randomize_questions: true, is_active: true
+    }).eq("id", testId);
+    if (update.error) return mcqAlert("Questions assigned but test settings update failed: " + update.error.message, "error");
+    mcqAlert(qs.data.length + " approved questions assigned to the test.", "success");
   });
 
 
