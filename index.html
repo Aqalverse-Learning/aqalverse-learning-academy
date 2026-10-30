@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -450,6 +449,17 @@
 
     .dashboard-panel.active {
       display: block;
+    }
+
+    .lesson-resource-links a {
+      color: var(--primary);
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    #lessonManagementForm input[type="checkbox"] {
+      width: auto;
+      margin-right: 8px;
     }
 
     .dashboard-grid {
@@ -1228,13 +1238,19 @@
       <button class="tab-button" data-tab="attendance">
         Attendance
       </button>
-
+      <button class="tab-button message-tab hidden" data-tab="messages">
+        Private Messages
+      </button>
       <button class="tab-button staff-tab hidden" data-tab="students">
         Students
       </button>
 
       <button class="tab-button staff-tab hidden" data-tab="staffCourses">
         Courses
+      </button>
+
+      <button class="tab-button staff-tab hidden" data-tab="lessonManagement">
+        Lesson Management
       </button>
 
       <button class="tab-button staff-tab hidden" data-tab="manageAssignments">
@@ -1618,6 +1634,50 @@
     </div>
 
 
+<!-- PRIVATE MESSAGES -->
+<div class="dashboard-panel" id="panel-messages">
+  <div class="card">
+    <h3>Private Student–Teacher Messages</h3>
+    <p class="muted">
+      Send a private message to a teacher or student.
+    </p>
+
+    <div class="form-group">
+      <label for="messageRecipient">Choose recipient</label>
+      <select id="messageRecipient">
+        <option value="">Loading recipients...</option>
+      </select>
+    </div>
+
+    <div id="messageStatus" class="alert"></div>
+
+    <div
+      id="messageHistory"
+      style="border:1px solid #ddd;border-radius:8px;padding:12px;min-height:160px;max-height:350px;overflow-y:auto;margin:16px 0;"
+      aria-live="polite"
+    >
+      Choose a recipient to view messages.
+    </div>
+
+    <form id="privateMessageForm">
+      <div class="form-group">
+        <label for="privateMessageText">Your message</label>
+        <textarea
+          id="privateMessageText"
+          rows="3"
+          maxlength="5000"
+          required
+          placeholder="Write your message..."
+        ></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        Send Message
+      </button>
+    </form>
+  </div>
+</div>
+
     <!-- STAFF STUDENTS -->
 
     <div class="dashboard-panel" id="panel-students">
@@ -1649,6 +1709,68 @@
 
       </div>
 
+    </div>
+
+
+    <!-- LESSON MANAGEMENT -->
+
+    <div class="dashboard-panel" id="panel-lessonManagement">
+      <div class="card">
+        <h3>Lesson Management</h3>
+        <p class="muted mb">Add a lesson and upload its teaching video and notes directly from your computer. Only authorized staff can save changes.</p>
+        <div id="lessonManagementAlert" class="alert"></div>
+
+        <form id="lessonManagementForm">
+          <div class="form-group">
+            <label for="lessonCourseSelect">Course</label>
+            <select id="lessonCourseSelect" required>
+              <option value="">Loading courses...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="lessonChapterSelect">Chapter</label>
+            <select id="lessonChapterSelect" required disabled>
+              <option value="">Select a course first</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="lessonTitleInput">Lesson title</label>
+            <input id="lessonTitleInput" type="text" maxlength="200" required placeholder="e.g. Introduction to Biology">
+          </div>
+          <div class="form-group">
+            <label for="lessonNumberInput">Lesson number</label>
+            <input id="lessonNumberInput" type="number" min="1" step="1" required value="1">
+          </div>
+          <div class="form-group">
+            <label for="lessonDescriptionInput">Description (optional)</label>
+            <textarea id="lessonDescriptionInput" rows="3" placeholder="Short lesson summary"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="lessonVideoFileInput">Teaching video file (optional)</label>
+            <input id="lessonVideoFileInput" type="file" accept="video/*">
+            <small class="muted">Choose a video saved on your computer. Large videos may exceed your Supabase storage file-size limit.</small>
+          </div>
+          <div class="form-group">
+            <label for="lessonNotesFileInput">Notes file (optional)</label>
+            <input id="lessonNotesFileInput" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,text/plain">
+            <small class="muted">Choose a PDF, Word document, PowerPoint, or text file from your computer.</small>
+          </div>
+          <div class="form-group">
+            <label for="lessonPassingInput">Passing percentage</label>
+            <input id="lessonPassingInput" type="number" min="1" max="100" step="1" value="60" required>
+          </div>
+          <div class="form-group">
+            <label><input id="lessonPublishInput" type="checkbox" checked> Publish this lesson for students</label>
+          </div>
+          <button id="saveLessonButton" type="submit">Save Lesson</button>
+        </form>
+      </div>
+
+      <div class="card mt">
+        <h3>Existing Lessons</h3>
+        <p class="muted mb">Use Publish/Hide to control whether a lesson appears to students. Hiding a lesson does not delete it.</p>
+        <div id="managedLessonsContainer">Select a course to view its lessons.</div>
+      </div>
     </div>
 
 
@@ -1690,9 +1812,10 @@
 
             <textarea
               id="assignmentDescription"
-              rows="4"
-              placeholder="Assignment instructions"
+              rows="6"
+              placeholder="Type the assignment questions and instructions here. No PDF is required."
             ></textarea>
+            <small class="muted">You can write the complete assignment here as text. Leave PDF attachments out; students will read these instructions in their Assignments tab.</small>
 
           </div>
 
@@ -2341,6 +2464,7 @@
 
       await loadStaffStudents();
       await loadStaffCourses();
+      await loadLessonManagementCourses();
       await loadAssignmentCourses();
 
     }
@@ -2387,12 +2511,215 @@
         );
 
       });
+    document
+  .querySelectorAll(".message-tab")
+  .forEach(tab => {
+    tab.classList.toggle(
+      "hidden",
+      !(
+        currentProfile?.role === "student" ||
+        currentProfile?.role === "teacher" ||
+        currentProfile?.role === "admin"
+      )
+    );
+  });
   }
 
+
+async function loadPrivateMessages() {
+  const recipientSelect =
+    document.getElementById("messageRecipient");
+  const history =
+    document.getElementById("messageHistory");
+  const status =
+    document.getElementById("messageStatus");
+
+  if (!currentUser || !currentProfile) return;
+
+  const isStudent = currentProfile.role === "student";
+  const isStaff =
+    currentProfile.role === "admin" ||
+    currentProfile.role === "teacher";
+
+  if (!isStudent && !isStaff) {
+    status.textContent =
+      "Private messaging is available to students and staff.";
+    return;
+  }
+
+  status.textContent = "Loading recipients...";
+
+  const allowedRoles = isStudent
+    ? ["admin", "teacher"]
+    : ["student"];
+
+  const result = await supabaseClient
+    .from("profiles")
+    .select("id, full_name, role")
+    .in("role", allowedRoles)
+    .order("full_name");
+
+  if (result.error) {
+    status.textContent =
+      "Could not load recipients: " + result.error.message;
+    return;
+  }
+
+  recipientSelect.replaceChildren(
+    new Option("Choose a recipient", "")
+  );
+
+  (result.data || []).forEach(profile => {
+    const option = new Option(
+      `${profile.full_name || "User"} (${profile.role})`,
+      profile.id
+    );
+    recipientSelect.add(option);
+  });
+
+  status.textContent = result.data?.length
+    ? "Select a recipient to view your conversation."
+    : "No recipients found. Check that profiles exist and are visible to your account.";
+}
+
+async function loadPrivateMessageHistory() {
+  const recipientId =
+    document.getElementById("messageRecipient").value;
+  const history =
+    document.getElementById("messageHistory");
+
+  history.replaceChildren();
+
+  if (!recipientId || !currentUser) {
+    history.textContent = "Choose a recipient to view messages.";
+    return;
+  }
+
+  history.textContent = "Loading messages...";
+
+  const result = await supabaseClient
+    .from("private_messages")
+    .select("id, sender_id, recipient_id, message, created_at")
+    .or(
+      `and(sender_id.eq.${currentUser.id},recipient_id.eq.${recipientId}),and(sender_id.eq.${recipientId},recipient_id.eq.${currentUser.id})`
+    )
+    .order("created_at", { ascending: true })
+    .limit(100);
+
+  history.replaceChildren();
+
+  if (result.error) {
+    history.textContent =
+      "Could not load messages: " + result.error.message;
+    return;
+  }
+
+  if (!result.data?.length) {
+    history.textContent = "No messages yet. Start the conversation.";
+    return;
+  }
+
+  result.data.forEach(message => {
+    const item = document.createElement("div");
+    item.style.cssText =
+      "padding:10px;margin:8px 0;border-radius:8px;background:#f1f5f9;";
+
+    const label = document.createElement("strong");
+    label.textContent =
+      message.sender_id === currentUser.id ? "You" : "Recipient";
+
+    const body = document.createElement("p");
+    body.style.whiteSpace = "pre-wrap";
+    body.style.margin = "6px 0";
+    body.textContent = message.message;
+
+    const date = document.createElement("small");
+    date.textContent = new Date(
+      message.created_at
+    ).toLocaleString();
+
+    item.append(label, body, date);
+    history.append(item);
+  });
+
+  history.scrollTop = history.scrollHeight;
+}
+
+document
+  .getElementById("messageRecipient")
+  .addEventListener("change", loadPrivateMessageHistory);
+
+document
+  .getElementById("messageRecipient")
+  .addEventListener("change", loadPrivateMessageHistory);
+
+document
+  .getElementById("privateMessageForm")
+  .addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const form = this;
+    const input = document.getElementById("privateMessageText");
+    const recipientSelect = document.getElementById("messageRecipient");
+    const status = document.getElementById("messageStatus");
+    const sendButton = form.querySelector('button[type="submit"]');
+
+    function showMessage(text) {
+      status.textContent = text;
+      status.classList.add("show");
+    }
+
+    const recipientId = recipientSelect.value;
+    const message = input.value.trim();
+
+    if (!currentUser) {
+      showMessage("Please log in again before sending a message.");
+      return;
+    }
+
+    if (!recipientId) {
+      showMessage("Please choose a recipient.");
+      return;
+    }
+
+    if (!message) {
+      showMessage("Please type a message first.");
+      return;
+    }
+
+    sendButton.disabled = true;
+    showMessage("Sending message...");
+
+    try {
+      const { error } = await supabaseClient
+        .from("private_messages")
+        .insert({
+          sender_id: currentUser.id,
+          recipient_id: recipientId,
+          message: message
+        });
+
+      if (error) {
+        showMessage("Message not sent: " + error.message);
+        return;
+      }
+
+      input.value = "";
+      showMessage("Message sent successfully.");
+      await loadPrivateMessageHistory();
+    } catch (error) {
+      showMessage(
+        "Sending failed: " + (error?.message || String(error))
+      );
+    } finally {
+      sendButton.disabled = false;
+    }
+  });
 
   /* ============================================================
      TABS
   ============================================================ */
+
 
   document
     .querySelectorAll(".tab-button[data-tab]")
@@ -2425,7 +2752,9 @@
         if (panel) {
           panel.classList.add("active");
         }
-
+if (tab === "messages") {
+  await loadPrivateMessages();
+}
       });
 
     });
@@ -2615,10 +2944,14 @@
           )
         );
 
+      // Keep each subject ID only once to prevent duplicate-key errors.
       const selectedIds =
-        checkboxes
-          .filter(cb => cb.checked)
-          .map(cb => Number(cb.dataset.subjectId));
+        [...new Set(
+          checkboxes
+            .filter(cb => cb.checked)
+            .map(cb => Number(cb.dataset.subjectId))
+            .filter(id => Number.isInteger(id) && id > 0)
+        )];
 
       const firstGroup =
         checkboxes.find(
@@ -2651,44 +2984,17 @@
           }
         );
 
-      if (rpcResult.error) {
+    if (rpcResult.error) {
+  this.disabled = false;
 
-        /*
-          Fallback direct save.
-        */
+  showAlert(
+    "dashboardAlert",
+    "Could not save subjects: " + rpcResult.error.message,
+    "failure"
+  );
 
-        await supabaseClient
-          .from("student_subjects")
-          .delete()
-          .eq("student_id", currentUser.id);
-
-        const rows =
-          selectedIds.map(subjectId => ({
-            student_id: currentUser.id,
-            subject_id: subjectId,
-            subject_group_id: groupId,
-            is_active: true
-          }));
-
-        const insertResult =
-          await supabaseClient
-            .from("student_subjects")
-            .insert(rows);
-
-        if (insertResult.error) {
-
-          this.disabled = false;
-
-          showAlert(
-            "dashboardAlert",
-            insertResult.error.message,
-            "failure"
-          );
-
-          return;
-        }
-      }
-
+  return;
+}
       /*
         Synchronize selected subjects
         with course enrollments.
@@ -2745,11 +3051,10 @@
       "Loading timetable...";
 
     const enrollmentResult =
-      await supabaseClient
-        .from("enrollments")
-        .select("course_id,status,access_end")
-        .eq("student_id", currentUser.id)
-        .in("status", ["trial", "active"]);
+  await supabaseClient
+    .from("enrollments")
+    .select("course_id,status,access_end")
+    .eq("student_id", currentUser.id);
 
     if (enrollmentResult.error) {
 
@@ -3092,6 +3397,13 @@
           <p class="muted">
             Lesson ${lesson.lesson_number}
           </p>
+
+          ${lesson.description ? `<p>${escapeHtml(lesson.description)}</p>` : ""}
+
+          <div class="lesson-resource-links mt">
+            ${lesson.video_url ? `<p><a href="${escapeHtml(lesson.video_url)}" target="_blank" rel="noopener noreferrer">▶ Watch teaching video</a></p>` : `<p class="muted">Video not added yet.</p>`}
+            ${lesson.notes_url ? `<p><a href="${escapeHtml(lesson.notes_url)}" target="_blank" rel="noopener noreferrer">📘 Open / download notes</a></p>` : `<p class="muted">Notes not added yet.</p>`}
+          </div>
 
           <div class="progress-bar">
             <div
@@ -3885,6 +4197,242 @@
 
 
   /* ============================================================
+     LESSON MANAGEMENT (STAFF)
+  ============================================================ */
+
+  function showLessonManagementAlert(message, type = "info") {
+    const element = document.getElementById("lessonManagementAlert");
+    if (!element) return;
+    element.textContent = message;
+    element.className = "alert " + type + " show";
+  }
+
+  async function loadLessonManagementCourses() {
+    if (!isStaff()) return;
+
+    const courseSelect = document.getElementById("lessonCourseSelect");
+    const chapterSelect = document.getElementById("lessonChapterSelect");
+    const result = await supabaseClient
+      .from("courses")
+      .select("id,title,is_active")
+      .eq("is_active", true)
+      .order("title")
+      .limit(500);
+
+    if (result.error) {
+      courseSelect.innerHTML = '<option value="">Could not load courses</option>';
+      showLessonManagementAlert("Could not load courses: " + result.error.message, "failure");
+      return;
+    }
+
+    courseSelect.innerHTML = '<option value="">Select Course</option>' +
+      (result.data || []).map(course =>
+        `<option value="${course.id}">${escapeHtml(course.title)} (ID ${course.id})</option>`
+      ).join("");
+
+    courseSelect.onchange = async function() {
+      const courseId = Number(this.value);
+      chapterSelect.disabled = true;
+      chapterSelect.innerHTML = '<option value="">Loading chapters...</option>';
+      document.getElementById("managedLessonsContainer").innerHTML = "Loading lessons...";
+      if (!courseId) {
+        chapterSelect.innerHTML = '<option value="">Select a course first</option>';
+        document.getElementById("managedLessonsContainer").innerHTML = "Select a course to view its lessons.";
+        return;
+      }
+
+      const chapterResult = await supabaseClient
+        .from("chapters")
+        .select("id,course_id,title,chapter_number,is_active")
+        .eq("course_id", courseId)
+        .eq("is_active", true)
+        .order("chapter_number");
+
+      if (chapterResult.error) {
+        chapterSelect.innerHTML = '<option value="">Could not load chapters</option>';
+        showLessonManagementAlert("Could not load chapters: " + chapterResult.error.message, "failure");
+        return;
+      }
+
+      chapterSelect.innerHTML = '<option value="">Select Chapter</option>' +
+        (chapterResult.data || []).map(chapter =>
+          `<option value="${chapter.id}">Chapter ${chapter.chapter_number}: ${escapeHtml(chapter.title)}</option>`
+        ).join("");
+      chapterSelect.disabled = !(chapterResult.data || []).length;
+      if (!(chapterResult.data || []).length) {
+        chapterSelect.innerHTML = '<option value="">No active chapters found</option>';
+      }
+      await loadManagedLessons(courseId);
+    };
+
+    document.getElementById("lessonManagementForm").onsubmit = async function(event) {
+      event.preventDefault();
+      if (!isStaff() || !currentUser) {
+        showLessonManagementAlert("Please sign in with an authorized staff account.", "failure");
+        return;
+      }
+
+      const courseId = Number(courseSelect.value);
+      const chapterId = Number(chapterSelect.value);
+      const title = document.getElementById("lessonTitleInput").value.trim();
+      const lessonNumber = Number(document.getElementById("lessonNumberInput").value);
+      const description = document.getElementById("lessonDescriptionInput").value.trim();
+      const videoFile = document.getElementById("lessonVideoFileInput").files[0] || null;
+      const notesFile = document.getElementById("lessonNotesFileInput").files[0] || null;
+      const passing = Number(document.getElementById("lessonPassingInput").value);
+      const isActive = document.getElementById("lessonPublishInput").checked;
+
+      if (!courseId || !chapterId || !title || !Number.isInteger(lessonNumber) || lessonNumber < 1) {
+        showLessonManagementAlert("Select a course and chapter, then enter a title and lesson number of 1 or higher.", "failure");
+        return;
+      }
+      if (!Number.isInteger(passing) || passing < 1 || passing > 100) {
+        showLessonManagementAlert("Passing percentage must be between 1 and 100.", "failure");
+        return;
+      }
+      if (videoFile && !videoFile.type.startsWith("video/")) {
+        showLessonManagementAlert("Please choose a valid video file.", "failure");
+        return;
+      }
+      if (videoFile && videoFile.size > 50 * 1024 * 1024) {
+        showLessonManagementAlert("The video is larger than 50 MB. This setup is limited to 50 MB per file. Please compress it or use a smaller video.", "failure");
+        return;
+      }
+      if (notesFile && notesFile.size > 50 * 1024 * 1024) {
+        showLessonManagementAlert("The notes file is larger than 50 MB. Please choose a smaller file.", "failure");
+        return;
+      }
+
+      const saveButton = document.getElementById("saveLessonButton");
+      saveButton.disabled = true;
+      saveButton.textContent = "Saving...";
+      showLessonManagementAlert("Saving lesson...", "info");
+
+      try {
+        const bucket = "lesson-resources";
+        async function uploadLessonFile(file, kind) {
+          if (!file) return null;
+          const safeName = file.name.normalize("NFKD").replace(/[^a-zA-Z0-9._-]+/g, "_").slice(-120) || (kind === "video" ? "video" : "notes");
+          const objectPath = `${courseId}/${chapterId}/${Date.now()}-${kind}-${safeName}`;
+          const uploadResult = await supabaseClient.storage.from(bucket).upload(objectPath, file, {
+            cacheControl: "3600",
+            upsert: false,
+            contentType: file.type || undefined
+          });
+          if (uploadResult.error) throw new Error(`${kind === "video" ? "Video" : "Notes"} upload failed: ${uploadResult.error.message}`);
+          const publicResult = supabaseClient.storage.from(bucket).getPublicUrl(objectPath);
+          return publicResult.data.publicUrl;
+        }
+
+        showLessonManagementAlert("Uploading selected files and saving lesson...", "info");
+        const videoUrl = await uploadLessonFile(videoFile, "video");
+        const notesUrl = await uploadLessonFile(notesFile, "notes");
+        const { error } = await supabaseClient.from("lessons").insert({
+          chapter_id: chapterId,
+          title,
+          lesson_number: lessonNumber,
+          description: description || null,
+          video_url: videoUrl,
+          notes_url: notesUrl,
+          passing_percentage: passing,
+          is_active: isActive
+        });
+
+        if (error) {
+          showLessonManagementAlert("Lesson was not saved: " + error.message, "failure");
+          return;
+        }
+
+        showLessonManagementAlert("Lesson saved successfully.", "success");
+        document.getElementById("lessonTitleInput").value = "";
+        document.getElementById("lessonNumberInput").value = "1";
+        document.getElementById("lessonDescriptionInput").value = "";
+        document.getElementById("lessonVideoFileInput").value = "";
+        document.getElementById("lessonNotesFileInput").value = "";
+        document.getElementById("lessonPassingInput").value = "60";
+        document.getElementById("lessonPublishInput").checked = true;
+        await loadManagedLessons(courseId);
+      } catch (error) {
+        showLessonManagementAlert("Unexpected save error: " + (error?.message || String(error)), "failure");
+      } finally {
+        saveButton.disabled = false;
+        saveButton.textContent = "Save Lesson";
+      }
+    };
+  }
+
+  async function loadManagedLessons(courseId) {
+    if (!isStaff() || !courseId) return;
+    const container = document.getElementById("managedLessonsContainer");
+    const chapterResult = await supabaseClient
+      .from("chapters")
+      .select("id,title,chapter_number")
+      .eq("course_id", Number(courseId))
+      .order("chapter_number");
+
+    if (chapterResult.error) {
+      container.innerHTML = `<div class="alert failure show">${escapeHtml(chapterResult.error.message)}</div>`;
+      return;
+    }
+    const chapters = chapterResult.data || [];
+    const chapterIds = chapters.map(chapter => chapter.id);
+    if (!chapterIds.length) {
+      container.innerHTML = '<p class="muted">No chapters are available for this course yet.</p>';
+      return;
+    }
+
+    const lessonResult = await supabaseClient
+      .from("lessons")
+      .select("id,chapter_id,title,lesson_number,description,video_url,notes_url,passing_percentage,is_active")
+      .in("chapter_id", chapterIds)
+      .order("lesson_number");
+
+    if (lessonResult.error) {
+      container.innerHTML = `<div class="alert failure show">${escapeHtml(lessonResult.error.message)}</div>`;
+      return;
+    }
+    const lessons = lessonResult.data || [];
+    if (!lessons.length) {
+      container.innerHTML = '<p class="muted">No lessons have been added for this course yet.</p>';
+      return;
+    }
+
+    container.innerHTML = `<div class="table-wrap"><table><thead><tr><th>Chapter</th><th>Lesson</th><th>Video</th><th>Notes</th><th>Status</th><th>Action</th></tr></thead><tbody>` +
+      lessons.map(lesson => {
+        const chapter = chapters.find(item => item.id === lesson.chapter_id);
+        return `<tr>
+          <td>Chapter ${chapter?.chapter_number || "-"}: ${escapeHtml(chapter?.title || "")}</td>
+          <td>${escapeHtml(lesson.lesson_number + ". " + lesson.title)}</td>
+          <td>${lesson.video_url ? "Added" : "Not added"}</td>
+          <td>${lesson.notes_url ? "Added" : "Not added"}</td>
+          <td>${lesson.is_active ? "Published" : "Hidden"}</td>
+          <td><button type="button" class="lesson-toggle-button" data-lesson-id="${lesson.id}" data-next-active="${!lesson.is_active}">${lesson.is_active ? "Hide" : "Publish"}</button></td>
+        </tr>`;
+      }).join("") + '</tbody></table></div>';
+
+    container.querySelectorAll(".lesson-toggle-button").forEach(button => {
+      button.addEventListener("click", async function() {
+        if (!isStaff()) return;
+        const lessonId = Number(this.dataset.lessonId);
+        const nextActive = this.dataset.nextActive === "true";
+        this.disabled = true;
+        const { error } = await supabaseClient
+          .from("lessons")
+          .update({ is_active: nextActive })
+          .eq("id", lessonId);
+        if (error) {
+          showLessonManagementAlert("Could not update lesson status: " + error.message, "failure");
+          this.disabled = false;
+          return;
+        }
+        showLessonManagementAlert(nextActive ? "Lesson published." : "Lesson hidden from students.", "success");
+        await loadManagedLessons(Number(courseId));
+      });
+    });
+  }
+
+
+  /* ============================================================
      STAFF COURSES
   ============================================================ */
 
@@ -4410,7 +4958,15 @@
       currentUser = null;
       currentProfile = null;
       currentStudent = null;
+const messageBox = document.getElementById("privateMessageText");
+const messageHistory = document.getElementById("messageHistory");
+const messageStatus = document.getElementById("messageStatus");
+const messageRecipient = document.getElementById("messageRecipient");
 
+if (messageBox) messageBox.value = "";
+if (messageHistory) messageHistory.textContent = "Choose a recipient to view messages.";
+if (messageStatus) messageStatus.textContent = "";
+if (messageRecipient) messageRecipient.value = "";
       document
         .getElementById("dashboard")
         .style.display = "none";
@@ -4466,5 +5022,3 @@
 
 </body>
 </html>
-
-
