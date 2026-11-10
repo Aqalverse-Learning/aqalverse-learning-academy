@@ -1208,35 +1208,35 @@
 
     <div class="dashboard-tabs">
 
-      <button class="tab-button active" data-tab="overview">
+      <button class="tab-button active student-tab" data-tab="overview">
         Overview
       </button>
 
-      <button class="tab-button" data-tab="subjects">
+      <button class="tab-button student-tab" data-tab="subjects">
         My Subjects
       </button>
 
-      <button class="tab-button" data-tab="timetable">
+      <button class="tab-button student-tab" data-tab="timetable">
         Timetable
       </button>
 
-      <button class="tab-button" data-tab="lessons">
+      <button class="tab-button student-tab" data-tab="lessons">
         Lessons
       </button>
 
-      <button class="tab-button" data-tab="assignments">
+      <button class="tab-button student-tab" data-tab="assignments">
         Assignments
       </button>
 
-      <button class="tab-button" data-tab="tests">
+      <button class="tab-button student-tab" data-tab="tests">
         Tests
       </button>
 
-      <button class="tab-button" data-tab="payments">
+      <button class="tab-button student-tab" data-tab="payments">
         Payments
       </button>
 
-      <button class="tab-button" data-tab="attendance">
+      <button class="tab-button student-tab" data-tab="attendance">
         Attendance
       </button>
       <button class="tab-button message-tab hidden" data-tab="messages">
@@ -1285,6 +1285,8 @@
 
     <div class="dashboard-panel active" id="panel-overview">
 
+      <div id="studentOverviewContent">
+
       <div class="dashboard-grid">
 
         <div class="mini-card">
@@ -1322,6 +1324,18 @@
           <strong>Free trial:</strong> 2 days
         </p>
 
+      </div>
+
+      </div>
+
+      <div id="parentOverviewContent" class="hidden">
+        <div class="card mt">
+          <h3>Parent Overview</h3>
+          <p class="muted">Use the parent sections to view your linked child’s information.</p>
+          <p><strong>My Children:</strong> View the student linked to this parent account.</p>
+          <p><strong>Child Progress:</strong> Review lesson and video progress.</p>
+          <p><strong>Child Timetable:</strong> View the child’s active class timetable.</p>
+        </div>
       </div>
 
     </div>
@@ -2524,43 +2538,58 @@
 
   function setupRoleTabs() {
 
+    const parentMode = isParent();
+
+    // Student learning tabs are not shown to parent accounts.
+    document
+      .querySelectorAll(".student-tab")
+      .forEach(tab => {
+        tab.classList.toggle("hidden", parentMode);
+      });
+
+    // Show the parent-specific overview only to parent accounts.
+    const studentOverview = document.getElementById("studentOverviewContent");
+    const parentOverview = document.getElementById("parentOverviewContent");
+
+    if (studentOverview) {
+      studentOverview.classList.toggle("hidden", parentMode);
+    }
+
+    if (parentOverview) {
+      parentOverview.classList.toggle("hidden", !parentMode);
+    }
+
     document
       .querySelectorAll(".staff-tab")
       .forEach(tab => {
-
-        tab.classList.toggle(
-          "hidden",
-          !isStaff()
-        );
-
+        tab.classList.toggle("hidden", !isStaff());
       });
 
-    document.querySelectorAll(".admin-mcq-tab").forEach(tab => {
-      tab.classList.toggle("hidden", currentProfile?.role !== "admin");
-    });
+    document
+      .querySelectorAll(".admin-mcq-tab")
+      .forEach(tab => {
+        tab.classList.toggle("hidden", currentProfile?.role !== "admin");
+      });
 
     document
       .querySelectorAll(".parent-tab")
       .forEach(tab => {
+        tab.classList.toggle("hidden", !parentMode);
+      });
 
+    document
+      .querySelectorAll(".message-tab")
+      .forEach(tab => {
         tab.classList.toggle(
           "hidden",
-          !isParent()
+          !(
+            currentProfile?.role === "student" ||
+            currentProfile?.role === "teacher" ||
+            currentProfile?.role === "admin"
+          )
         );
-
       });
-    document
-  .querySelectorAll(".message-tab")
-  .forEach(tab => {
-    tab.classList.toggle(
-      "hidden",
-      !(
-        currentProfile?.role === "student" ||
-        currentProfile?.role === "teacher" ||
-        currentProfile?.role === "admin"
-      )
-    );
-  });
+
   }
 
 
