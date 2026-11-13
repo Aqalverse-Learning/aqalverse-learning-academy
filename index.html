@@ -1274,6 +1274,10 @@
         Child Timetable
       </button>
 
+      <button class="tab-button parent-tab hidden" data-tab="parentFees">
+        Child Fees
+      </button>
+
       <button class="tab-button" id="logoutButton">
         Logout
       </button>
@@ -1965,6 +1969,27 @@
 
     </div>
 
+
+    <!-- PARENT FEES -->
+
+    <div class="dashboard-panel" id="panel-parentFees">
+
+      <div class="card">
+
+        <h3>Child Fees</h3>
+
+        <p class="muted">
+          View your linked child's fee plan, subscription status and payment history.
+        </p>
+
+        <div id="parentFeesContainer">
+          Loading fee information...
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
 
 </section>
@@ -2522,6 +2547,7 @@
       await loadChildren();
       await loadParentProgress();
       await loadParentTimetable();
+      await loadParentFees();
 
     }
 
@@ -5012,6 +5038,218 @@ if (tab === "mcqManager" && currentProfile?.role === "admin") {
       `<p class="muted">
         No timetable available.
       </p>`;
+  }
+
+
+  /* ============================================================
+     PARENT FEES
+  ============================================================ */
+
+  async function loadParentFees() {
+
+    if (!isParent()) return;
+
+    const container =
+      document.getElementById("parentFeesContainer");
+
+    if (!container) return;
+
+    container.innerHTML = "Loading fee information...";
+
+    // First obtain only the children linked to this signed-in parent.
+    const linksResult =
+      await supabaseClient
+        .from("parent_students")
+        .select("student_id")
+        .eq("parent_id", currentUser.id);
+
+    if (linksResult.error) {
+      container.innerHTML =
+        `<div class="alert failure show">${escapeHtml(linksResult.error.message)}</div>`;
+      return;
+    }
+
+    const studentIds =
+      (linksResult.data || []).map(row => row.student_id).filter(Boolean);
+
+    if (!studentIds.length) {
+      container.innerHTML =
+        `<p class="muted">No child is linked to this parent account yet.</p>`;
+      return;
+    }
+
+    const [profilesResult, subscriptionsResult, paymentsResult] =
+      await Promise.all([
+        supabaseClient
+          .from("profiles")
+          .select("id,full_name,username")
+          .in("id", studentIds),
+
+        supabaseClient
+          .from("student_subscriptions")
+          .select("id,student_id,fee_plan_id,start_date,end_date,status,created_at")
+          .in("student_id", studentIds)
+          .order("created_at", { ascending: false }),
+
+        supabaseClient
+          .from("payments")
+          .select("id,student_id,subscription_id,amount,payment_method,transaction_reference,payment_date,status,notes")
+          .in("student_id", studentIds)
+          .order("payment_date", { ascending: false })
+      ]);
+
+    if (subscriptionsResult.error || paymentsResult.error || profilesResult.error) {
+      const error =
+        subscriptionsResult.error ||
+        paymentsResult.error ||
+        profilesResult.error;
+
+      container.innerHTML =
+        `<div class="alert failure show">${escapeHtml(error.message)}</div>`;
+      return;
+    }
+
+    const profileMap = Object.fromEntries(
+      (profilesResult.data || []).map(profile => [profile.id, profile])
+    );
+
+    const subscriptions = subscriptionsResult.data || [];
+    const payments = paymentsResult.data || [];
+
+    const feePlanIds = [
+      ...new Set(
+        subscriptions
+          .map(subscription => subscription.fee_plan_id)
+          .filter(id => id !== null && id !== undefined)
+      )
+    ];
+
+    let feePlans = [];
+
+    if (feePlanIds.length) {
+      const plansResult =
+        await supabaseClient
+          .from("fee_plans")
+          .select("id,name,price,duration_days,plan_type,description")
+          .in("id", feePlanIds);
+
+      if (plansResult.error) {
+        container.innerHTML =
+          `<div class="alert failure show">${escapeHtml(plansResult.error.message)}</div>`;
+        return;
+      }
+
+      feePlans = plansResult.data || [];
+    }
+
+    const feePlanMap = Object.fromEntries(
+      feePlans.map(plan => [plan.id, plan])
+    );
+
+    const money = value => {
+      const amount = Number(value);
+      return Number.isFinite(amount)
+        ? "Rs. " + amount.toLocaleString("en-PK")
+        : "Not available";
+    };
+
+    const dateText = value => {
+      if (!value) return "-";
+      const date = new Date(value);
+      return Number.isNaN(date.getTime())
+        ? escapeHtml(String(value))
+        : date.toLocaleDateString("en-PK", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+          });
+    };
+
+    const statusText = value => {
+      const status = String(value || "unknown");
+      return escapeHtml(
+        status.charAt(0).toUpperCase() + status.slice(1).replace(/_/g, " ")
+      );
+    };
+
+    let output = "";
+
+    studentIds.forEach(studentId => {
+      const profile = profileMap[studentId] || {};
+      const childName = escapeHtml(profile.full_name || profile.username || "Student");
+      const childSubscriptions =
+        subscriptions.filter(row => row.student_id === studentId);
+      const childPayments =
+        payments.filter(row => row.student_id === studentId);
+
+      output += `
+        <div class="mini-card mb">
+          <h3>${childName}</h3>
+          <h4>Fee Plan & Subscription</h4>
+      `;
+
+      if (!childSubscriptions.length) {
+        output += `<p class="muted">No fee subscription record found for this child.</p>`;
+      } else {
+        childSubscriptions.forEach(subscription => {
+          const plan = feePlanMap[subscription.fee_plan_id];
+          output += `
+            <div class="lesson-card mb">
+              <p><strong>Fee plan:</strong> ${escapeHtml(plan?.name || "Plan information unavailable")}</p>
+              <p><strong>Fee amount:</strong> ${plan ? money(plan.price) : "Not available"}</p>
+              <p><strong>Plan type:</strong> ${escapeHtml(plan?.plan_type || "-")}</p>
+              <p><strong>Duration:</strong> ${plan?.duration_days ? escapeHtml(String(plan.duration_days) + " days") : "-"}</p>
+              <p><strong>Subscription status:</strong> ${statusText(subscription.status)}</p>
+              <p><strong>Start date:</strong> ${dateText(subscription.start_date)}</p>
+              <p><strong>End date:</strong> ${dateText(subscription.end_date)}</p>
+            </div>
+          `;
+        });
+      }
+
+      output += `<h4>Payment History</h4>`;
+
+      if (!childPayments.length) {
+        output += `<p class="muted">No payment records found.</p>`;
+      } else {
+        output += `
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Amount</th>
+                  <th>Method</th>
+                  <th>Transaction Reference</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+        `;
+
+        childPayments.forEach(payment => {
+          output += `
+            <tr>
+              <td>${dateText(payment.payment_date)}</td>
+              <td>${money(payment.amount)}</td>
+              <td>${escapeHtml(payment.payment_method || "-")}</td>
+              <td>${escapeHtml(payment.transaction_reference || "-")}</td>
+              <td>${statusText(payment.status)}</td>
+            </tr>
+          `;
+        });
+
+        output += `
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+
+      output += `</div>`;
+    });
+
+    container.innerHTML = output;
   }
 
 
