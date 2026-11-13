@@ -1077,11 +1077,19 @@
     <div class="container">
 
       <div class="section-title">
-        <h2>Student & Staff Access</h2>
+        <h2>Student, Parent & Staff Access</h2>
         <p>Login to your Aqalverse account.</p>
       </div>
 
       <div id="authAlert" class="alert"></div>
+
+      <div class="form-group" style="max-width:420px;margin:0 auto 18px;">
+        <label>Which account do you want to create?</label>
+        <select id="registerAccountType">
+          <option value="student">Student Account</option>
+          <option value="parent">Parent Account</option>
+        </select>
+      </div>
 
       <div class="auth-grid">
 
@@ -1091,6 +1099,15 @@
           <h3>Login</h3>
 
           <form id="loginForm">
+
+            <div class="form-group">
+              <label>Login as</label>
+              <select id="loginRole" required>
+                <option value="student">Student</option>
+                <option value="parent">Parent</option>
+                <option value="staff">Teacher / Admin</option>
+              </select>
+            </div>
 
             <div class="form-group">
               <label>Email</label>
@@ -1121,7 +1138,7 @@
 
         <!-- REGISTER -->
 
-        <div class="card">
+        <div class="card" id="studentRegisterCard">
           <h3>Create Student Account</h3>
 
           <form id="registerForm">
@@ -1183,6 +1200,50 @@
               Create Account
             </button>
 
+          </form>
+        </div>
+
+        <!-- PARENT REGISTRATION -->
+        <div class="card hidden" id="parentRegisterCard">
+          <h3>Create Parent Account</h3>
+          <p class="muted">Enter your details and verify your child using the child's registered name and admission number.</p>
+          <form id="parentRegisterForm">
+            <div class="form-group">
+              <label>Parent Full Name</label>
+              <input type="text" id="parentRegisterName" required placeholder="Your full name" />
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" id="parentRegisterEmail" required placeholder="Your email" />
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <input type="password" id="parentRegisterPassword" required minlength="6" placeholder="At least 6 characters" />
+            </div>
+            <hr />
+            <h4>Find Your Child</h4>
+            <div class="form-group">
+              <label>Child Full Name</label>
+              <input type="text" id="parentChildName" required placeholder="Enter child's registered full name" />
+            </div>
+            <div class="form-group">
+              <label>Child Admission Number</label>
+              <input type="text" id="parentChildAdmission" required placeholder="Example: ST-123456" />
+            </div>
+            <button class="btn btn-secondary" type="button" id="findParentChildButton">Search Child</button>
+            <div id="parentChildSearchResult" class="mt" aria-live="polite"></div>
+            <div class="form-group mt">
+              <label>Relationship with Student</label>
+              <select id="parentRelationship" required>
+                <option value="">Select relationship</option>
+                <option value="Mother">Mother</option>
+                <option value="Father">Father</option>
+                <option value="Guardian">Guardian</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" type="submit">Create Parent Account & Send Request</button>
+            <p class="muted mt">Your child-link request will remain pending until the academy admin approves it.</p>
           </form>
         </div>
 
@@ -1260,6 +1321,10 @@
 
       <button class="tab-button admin-mcq-tab hidden" data-tab="mcqManager">
         Bulk MCQ Manager
+      </button>
+
+      <button class="tab-button admin-parent-requests-tab hidden" data-tab="parentRequests">
+        Parent Requests
       </button>
 
       <button class="tab-button parent-tab hidden" data-tab="children">
@@ -1919,6 +1984,21 @@
     </div>
 
 
+    <!-- ADMIN PARENT REQUESTS -->
+
+    <div class="dashboard-panel" id="panel-parentRequests">
+      <div class="card">
+        <h3>Parent–Student Link Requests</h3>
+        <p class="muted">Verify the parent and student details before approving a link.</p>
+        <div id="parentRequestsAlert" class="alert"></div>
+        <h4>Pending Requests</h4>
+        <div id="parentRequestsContainer">Loading requests...</div>
+        <hr class="mt" />
+        <h4>Approved Parent–Student Records</h4>
+        <div id="parentLinksContainer">Loading approved links...</div>
+      </div>
+    </div>
+
     <!-- PARENT CHILDREN -->
 
     <div class="dashboard-panel" id="panel-children">
@@ -2042,6 +2122,7 @@
   let subjects = [];
   let selectedLandingGrade = null;
   let selectedLandingBoard = null;
+  let verifiedParentChild = null;
 
 
   /* ============================================================
@@ -2297,12 +2378,71 @@
         return;
       }
 
+      const expectedRole = document.getElementById("loginRole").value;
+      const profileCheck = await supabaseClient
+        .from("profiles")
+        .select("role")
+        .eq("id", data.user.id)
+        .maybeSingle();
+
+      const actualRole = profileCheck.data?.role;
+      const roleMatches = expectedRole === "staff"
+        ? ["admin", "teacher"].includes(actualRole)
+        : actualRole === expectedRole;
+
+      if (!roleMatches) {
+        await supabaseClient.auth.signOut();
+        showAlert("authAlert", "This account is not registered as the selected login type. Please choose the correct option.", "failure");
+        return;
+      }
+
       currentUser = data.user;
 
       await loadDashboard();
 
     });
 
+
+  // Switch between student and parent registration forms.
+  document.getElementById("registerAccountType")?.addEventListener("change", function() {
+    const isParentRegistration = this.value === "parent";
+    document.getElementById("studentRegisterCard")?.classList.toggle("hidden", isParentRegistration);
+    document.getElementById("parentRegisterCard")?.classList.toggle("hidden", !isParentRegistration);
+    verifiedParentChild = null;
+    const result = document.getElementById("parentChildSearchResult");
+    if (result) result.textContent = "";
+  });
+
+  // Search is an exact match on both registered child name and admission number.
+  document.getElementById("findParentChildButton")?.addEventListener("click", async function() {
+    const name = document.getElementById("parentChildName").value.trim();
+    const admission = document.getElementById("parentChildAdmission").value.trim();
+    const resultBox = document.getElementById("parentChildSearchResult");
+    verifiedParentChild = null;
+    if (!name || !admission) {
+      resultBox.textContent = "Enter both the child's full name and admission number.";
+      return;
+    }
+    this.disabled = true;
+    resultBox.textContent = "Searching...";
+    try {
+      const { data, error } = await supabaseClient.rpc("find_student_for_parent", {
+        p_student_name: name,
+        p_admission_number: admission
+      });
+      if (error) throw error;
+      if (!data || !data.length) {
+        resultBox.textContent = "No exact match found. Check the spelling and admission number, or contact the academy.";
+        return;
+      }
+      verifiedParentChild = data[0];
+      resultBox.innerHTML = `<div class="mini-card"><strong>Student found:</strong> ${escapeHtml(verifiedParentChild.student_name)}<br><strong>Admission No:</strong> ${escapeHtml(verifiedParentChild.admission_number)}</div>`;
+    } catch (err) {
+      resultBox.textContent = "Search failed: " + (err.message || String(err));
+    } finally {
+      this.disabled = false;
+    }
+  });
 
   /* ============================================================
      REGISTER
@@ -2458,6 +2598,33 @@
     });
 
 
+  // Parent registration stores the requested child in auth metadata.
+  // The parent profile and request are finalized after email verification/login if required.
+  document.getElementById("parentRegisterForm")?.addEventListener("submit", async function(e) {
+    e.preventDefault();
+    hideAlert("authAlert");
+    if (!verifiedParentChild) {
+      showAlert("authAlert", "Please search and verify your child before creating the parent account.", "failure");
+      return;
+    }
+    const fullName = document.getElementById("parentRegisterName").value.trim();
+    const email = document.getElementById("parentRegisterEmail").value.trim();
+    const password = document.getElementById("parentRegisterPassword").value;
+    const relationship = document.getElementById("parentRelationship").value;
+    const childId = verifiedParentChild.student_id;
+    const { data, error } = await supabaseClient.auth.signUp({
+      email, password,
+      options: { data: { full_name: fullName, role: "parent", requested_student_id: childId, requested_relationship: relationship } }
+    });
+    if (error) { showAlert("authAlert", error.message, "failure"); return; }
+    if (!data.session) {
+      showAlert("authAlert", "Parent account created. Please verify your email, then choose Parent Login. Your child-link request will be submitted after login.", "success");
+      return;
+    }
+    currentUser = data.user;
+    await loadDashboard();
+  });
+
   /* ============================================================
      LOAD DASHBOARD
   ============================================================ */
@@ -2484,8 +2651,49 @@
       return;
     }
 
-    currentProfile =
-      profileResult.data;
+    currentProfile = profileResult.data;
+
+    // Complete parent setup after sign-up or email verification.
+    if (currentUser.user_metadata?.role === "parent") {
+      const meta = currentUser.user_metadata || {};
+      const parentName = String(meta.full_name || currentProfile?.full_name || "Parent").trim();
+      if (!currentProfile) {
+        const profileCreate = await supabaseClient.from("profiles").insert({
+          id: currentUser.id, full_name: parentName,
+          username: (currentUser.email || "parent").split("@")[0],
+          role: "parent", preferred_language: "both"
+        });
+        if (profileCreate.error) {
+          showAlert("authAlert", "Could not create parent profile: " + profileCreate.error.message, "failure");
+          return;
+        }
+        currentProfile = { id: currentUser.id, full_name: parentName, role: "parent", preferred_language: "both" };
+      }
+      const parentCreate = await supabaseClient.from("parents").upsert({ id: currentUser.id }, { onConflict: "id" });
+      if (parentCreate.error) {
+        showAlert("authAlert", "Could not create parent record: " + parentCreate.error.message, "failure");
+        return;
+      }
+      if (meta.requested_student_id) {
+        const requestCreate = await supabaseClient.rpc("submit_parent_child_request", {
+          p_student_id: meta.requested_student_id,
+          p_relationship: meta.requested_relationship || "Guardian"
+        });
+        if (requestCreate.error) {
+          showAlert("authAlert", "Parent account is ready, but child-link request failed: " + requestCreate.error.message, "failure");
+        } else {
+          const clearRequestMeta = await supabaseClient.auth.updateUser({
+            data: { requested_student_id: null, requested_relationship: null }
+          });
+          if (clearRequestMeta.error) console.warn("Could not clear parent request metadata:", clearRequestMeta.error.message);
+        }
+      }
+    }
+
+    if (!currentProfile) {
+      showAlert("authAlert", "Your account profile was not found. Please contact the academy admin.", "failure");
+      return;
+    }
 
     const studentResult =
       await supabaseClient
@@ -2592,7 +2800,7 @@
       });
 
     document
-      .querySelectorAll(".admin-mcq-tab")
+      .querySelectorAll(".admin-mcq-tab, .admin-parent-requests-tab")
       .forEach(tab => {
         tab.classList.toggle("hidden", currentProfile?.role !== "admin");
       });
@@ -2850,6 +3058,9 @@ if (tab === "messages") {
 }
 if (tab === "mcqManager" && currentProfile?.role === "admin") {
   await loadMcqManager();
+}
+if (tab === "parentRequests" && currentProfile?.role === "admin") {
+  await loadParentRequests();
 }
       });
 
@@ -4738,6 +4949,72 @@ if (tab === "mcqManager" && currentProfile?.role === "admin") {
 
     });
 
+
+  /* ============================================================
+     ADMIN PARENT-CHILD REQUESTS
+  ============================================================ */
+  async function loadParentRequests() {
+    if (currentProfile?.role !== "admin") return;
+    const box = document.getElementById("parentRequestsContainer");
+    const linksBox = document.getElementById("parentLinksContainer");
+    box.textContent = "Loading requests...";
+    linksBox.textContent = "Loading approved links...";
+    const { data, error } = await supabaseClient
+      .from("parent_child_requests")
+      .select("id,parent_id,student_id,relationship,status,created_at")
+      .eq("status", "pending")
+      .order("created_at", { ascending: true });
+    if (error) { box.textContent = "Could not load requests: " + error.message; }
+    else if (!data || !data.length) { box.innerHTML = '<p class="muted">No pending parent requests.</p>'; }
+    else {
+      const parentIds = [...new Set(data.map(r => r.parent_id))];
+      const studentIds = [...new Set(data.map(r => r.student_id))];
+      const [parentsRes, studentsRes, studentRowsRes] = await Promise.all([
+        supabaseClient.from("profiles").select("id,full_name").in("id", parentIds),
+        supabaseClient.from("profiles").select("id,full_name").in("id", studentIds),
+        supabaseClient.from("students").select("id,admission_number").in("id", studentIds)
+      ]);
+      const parents = Object.fromEntries((parentsRes.data || []).map(x => [x.id, x]));
+      const students = Object.fromEntries((studentsRes.data || []).map(x => [x.id, x]));
+      const studentRows = Object.fromEntries((studentRowsRes.data || []).map(x => [x.id, x]));
+      box.innerHTML = data.map(r => {
+        const parent = parents[r.parent_id] || {};
+        const student = students[r.student_id] || {};
+        const studentRow = studentRows[r.student_id] || {};
+        return `<div class="mini-card mb"><p><strong>Parent:</strong> ${escapeHtml(parent.full_name || r.parent_id)}</p><p><strong>Student:</strong> ${escapeHtml(student.full_name || r.student_id)}</p><p><strong>Admission No:</strong> ${escapeHtml(studentRow.admission_number || "-")}</p><p><strong>Relationship:</strong> ${escapeHtml(r.relationship)}</p><p><strong>Request date:</strong> ${formatDate(r.created_at)}</p><div class="mt"><button class="btn btn-primary" type="button" onclick="reviewParentRequest(${Number(r.id)}, true)">Approve</button> <button class="btn btn-secondary" type="button" onclick="reviewParentRequest(${Number(r.id)}, false)">Reject</button></div></div>`;
+      }).join("");
+    }
+
+    const linksRes = await supabaseClient
+      .from("parent_students")
+      .select("parent_id,student_id,relationship")
+      .order("student_id");
+    if (linksRes.error) { linksBox.textContent = "Could not load approved links: " + linksRes.error.message; return; }
+    const links = linksRes.data || [];
+    if (!links.length) { linksBox.innerHTML = '<p class="muted">No approved parent–student links yet.</p>'; return; }
+    const parentIds = [...new Set(links.map(r => r.parent_id))];
+    const studentIds = [...new Set(links.map(r => r.student_id))];
+    const [parentsRes, studentsRes, studentRowsRes] = await Promise.all([
+      supabaseClient.from("profiles").select("id,full_name").in("id", parentIds),
+      supabaseClient.from("profiles").select("id,full_name").in("id", studentIds),
+      supabaseClient.from("students").select("id,admission_number").in("id", studentIds)
+    ]);
+    const parents = Object.fromEntries((parentsRes.data || []).map(x => [x.id, x]));
+    const students = Object.fromEntries((studentsRes.data || []).map(x => [x.id, x]));
+    const studentRows = Object.fromEntries((studentRowsRes.data || []).map(x => [x.id, x]));
+    linksBox.innerHTML = `<div class="table-wrap"><table><thead><tr><th>Student</th><th>Admission No</th><th>Parent</th><th>Relationship</th></tr></thead><tbody>${links.map(r => `<tr><td>${escapeHtml(students[r.student_id]?.full_name || r.student_id)}</td><td>${escapeHtml(studentRows[r.student_id]?.admission_number || "-")}</td><td>${escapeHtml(parents[r.parent_id]?.full_name || r.parent_id)}</td><td>${escapeHtml(r.relationship || "-")}</td></tr>`).join("")}</tbody></table></div>`;
+  }
+
+  async function reviewParentRequest(requestId, approve) {
+    if (currentProfile?.role !== "admin") return;
+    const { error } = await supabaseClient.rpc("admin_review_parent_request", {
+      p_request_id: requestId, p_approve: approve
+    });
+    if (error) { showAlert("parentRequestsAlert", error.message, "failure"); return; }
+    showAlert("parentRequestsAlert", approve ? "Parent-child link approved." : "Request rejected.", "success");
+    await loadParentRequests();
+  }
+  window.reviewParentRequest = reviewParentRequest;
 
   /* ============================================================
      PARENT CHILDREN
