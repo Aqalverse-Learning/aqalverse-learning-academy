@@ -1228,7 +1228,8 @@
             </div>
             <div class="form-group">
               <label>Child Admission Number</label>
-              <input type="text" id="parentChildAdmission" required placeholder="Example: ST-123456" />
+              <input type="text" id="parentChildAdmission" required placeholder="Enter the number shown in the student's dashboard" />
+              <small class="muted">Ask your child to log in and share the Admission Number shown on their Overview page. If the child cannot log in, contact the academy admin.</small>
             </div>
             <button class="btn btn-secondary" type="button" id="findParentChildButton">Search Child</button>
             <div id="parentChildSearchResult" class="mt" aria-live="polite"></div>
@@ -1357,6 +1358,12 @@
       <div id="studentOverviewContent">
 
       <div class="dashboard-grid">
+
+        <div class="mini-card">
+          <h4>My Admission Number</h4>
+          <div class="big" id="overviewAdmissionNo">-</div>
+          <p class="muted">Share this number with your parent for parent registration.</p>
+        </div>
 
         <div class="mini-card">
           <h4>Account Status</h4>
@@ -3077,6 +3084,11 @@ if (tab === "parentRequests" && currentProfile?.role === "admin") {
       .getElementById("overviewStatus")
       .textContent =
       currentStudent?.account_status || "-";
+
+    document
+      .getElementById("overviewAdmissionNo")
+      .textContent =
+      currentStudent?.admission_number || "Not assigned";
 
     if (!currentStudent) return;
 
