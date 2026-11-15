@@ -1267,6 +1267,10 @@
     </div>
 
     <div id="dashboardAlert" class="alert"></div>
+    <div id="academyNotificationBanner" class="card mt hidden" aria-live="polite">
+      <h3>Academy Announcements</h3>
+      <div id="academyNotificationList">No announcements at this time.</div>
+    </div>
 
     <div class="dashboard-tabs">
 
@@ -1326,6 +1330,12 @@
 
       <button class="tab-button admin-parent-requests-tab hidden" data-tab="parentRequests">
         Parent Requests
+      </button>
+      <button class="tab-button admin-only-tab hidden" data-tab="adminPayments">
+        Payments
+      </button>
+      <button class="tab-button admin-only-tab hidden" data-tab="adminNotifications">
+        Notifications
       </button>
 
       <button class="tab-button parent-tab hidden" data-tab="children">
@@ -1651,6 +1661,11 @@
 
           </div>
 
+          <div class="form-group" id="paymentSubjectGroup">
+            <label for="paymentSubjectName">Subject name (for an individual subject payment)</label>
+            <input id="paymentSubjectName" type="text" maxlength="120" placeholder="Enter the subject name">
+          </div>
+
           <div class="form-group">
             <label>Amount Paid</label>
 
@@ -1676,6 +1691,12 @@
               placeholder="Enter transaction/reference ID"
             />
 
+          </div>
+
+          <div class="form-group">
+            <label for="paymentReceiptFile">Payment receipt / screenshot (optional)</label>
+            <input id="paymentReceiptFile" type="file" accept="image/*,.pdf,application/pdf">
+            <small class="muted">Upload a screenshot or PDF receipt to help the academy verify your payment.</small>
           </div>
 
           <div class="form-group">
@@ -2056,6 +2077,39 @@
 
     </div>
 
+
+    <!-- ADMIN PAYMENT HISTORY -->
+    <div class="dashboard-panel" id="panel-adminPayments">
+      <div class="card">
+        <h3>Student Payment History</h3>
+        <p class="muted">This area shows only student names and submitted payment records.</p>
+        <div id="adminPaymentsContainer">Loading payment records...</div>
+      </div>
+    </div>
+
+    <!-- ADMIN NOTIFICATIONS -->
+    <div class="dashboard-panel" id="panel-adminNotifications">
+      <div class="card">
+        <h3>Post an Academy Announcement</h3>
+        <p class="muted">Published announcements will appear on student and parent dashboards.</p>
+        <div id="notificationAdminAlert" class="alert"></div>
+        <form id="academyNotificationForm">
+          <div class="form-group">
+            <label for="notificationTitle">Announcement title</label>
+            <input id="notificationTitle" type="text" maxlength="150" required placeholder="e.g. Important Fee Notice">
+          </div>
+          <div class="form-group">
+            <label for="notificationMessage">Message</label>
+            <textarea id="notificationMessage" rows="4" maxlength="5000" required placeholder="Write the announcement for students and parents..."></textarea>
+          </div>
+          <button class="btn btn-primary" type="submit">Publish Announcement</button>
+        </form>
+      </div>
+      <div class="card mt">
+        <h3>Published Announcements</h3>
+        <div id="adminNotificationList">Loading announcements...</div>
+      </div>
+    </div>
 
     <!-- PARENT FEES -->
 
@@ -2735,6 +2789,7 @@
     setupRoleTabs();
 
     await loadOverview();
+    await loadVisibleNotifications();
 
     if (currentProfile.role === "student") {
 
@@ -2807,7 +2862,7 @@
       });
 
     document
-      .querySelectorAll(".admin-mcq-tab, .admin-parent-requests-tab")
+      .querySelectorAll(".admin-mcq-tab, .admin-parent-requests-tab, .admin-only-tab")
       .forEach(tab => {
         tab.classList.toggle("hidden", currentProfile?.role !== "admin");
       });
@@ -3025,6 +3080,161 @@ document
   });
 
   /* ============================================================
+     ACADEMY NOTIFICATIONS
+  ============================================================ */
+
+  async function loadVisibleNotifications() {
+    const banner = document.getElementById("academyNotificationBanner");
+    const list = document.getElementById("academyNotificationList");
+    if (!banner || !list || !currentProfile) return;
+    if (!["student", "parent"].includes(currentProfile.role)) {
+      banner.classList.add("hidden");
+      return;
+    }
+    const result = await supabaseClient
+      .from("academy_notifications")
+      .select("id,title,message,created_at")
+      .eq("active", true)
+      .order("created_at", { ascending: false })
+      .limit(10);
+    if (result.error) {
+      banner.classList.add("hidden");
+      console.warn("Could not load academy announcements:", result.error.message);
+      return;
+    }
+    if (!result.data?.length) {
+      banner.classList.add("hidden");
+      return;
+    }
+    list.innerHTML = result.data.map(item => `
+      <div style="border-top:1px solid #e5e7eb;padding:10px 0;">
+        <strong>${escapeHtml(item.title)}</strong>
+        <p style="white-space:pre-wrap;margin:6px 0;">${escapeHtml(item.message)}</p>
+        <small class="muted">${formatDate(item.created_at)}</small>
+      </div>
+    `).join("");
+    banner.classList.remove("hidden");
+  }
+
+  async function loadAdminNotifications() {
+    if (currentProfile?.role !== "admin") return;
+    const list = document.getElementById("adminNotificationList");
+    const result = await supabaseClient
+      .from("academy_notifications")
+      .select("id,title,message,created_at,active")
+      .order("created_at", { ascending: false })
+      .limit(100);
+    if (result.error) {
+      list.textContent = "Could not load announcements: " + result.error.message;
+      return;
+    }
+    if (!result.data?.length) {
+      list.textContent = "No announcements have been published yet.";
+      return;
+    }
+    list.innerHTML = result.data.map(item => `
+      <div style="border-top:1px solid #e5e7eb;padding:12px 0;">
+        <strong>${escapeHtml(item.title)}</strong>
+        <p style="white-space:pre-wrap;margin:6px 0;">${escapeHtml(item.message)}</p>
+        <small class="muted">${formatDate(item.created_at)} · ${item.active ? "Visible to students and parents" : "Hidden"}</small>
+        <button type="button" class="btn btn-secondary mt" data-delete-notification="${item.id}">Delete</button>
+      </div>
+    `).join("");
+  }
+
+  document.getElementById("academyNotificationForm")?.addEventListener("submit", async function(e) {
+    e.preventDefault();
+    if (currentProfile?.role !== "admin") return;
+    const button = this.querySelector("button[type='submit']");
+    button.disabled = true;
+    const result = await supabaseClient.from("academy_notifications").insert({
+      title: document.getElementById("notificationTitle").value.trim(),
+      message: document.getElementById("notificationMessage").value.trim(),
+      created_by: currentUser.id,
+      active: true
+    });
+    button.disabled = false;
+    if (result.error) {
+      showAlert("notificationAdminAlert", "Could not publish: " + result.error.message, "failure");
+      return;
+    }
+    this.reset();
+    showAlert("notificationAdminAlert", "Announcement published successfully.", "success");
+    await loadAdminNotifications();
+  });
+
+  document.getElementById("adminNotificationList")?.addEventListener("click", async function(e) {
+    const button = e.target.closest("[data-delete-notification]");
+    if (!button || currentProfile?.role !== "admin") return;
+    if (!confirm("Delete this announcement?")) return;
+    const result = await supabaseClient.from("academy_notifications")
+      .delete().eq("id", button.dataset.deleteNotification);
+    if (result.error) {
+      showAlert("notificationAdminAlert", "Could not delete: " + result.error.message, "failure");
+      return;
+    }
+    await loadAdminNotifications();
+  });
+
+  /* ============================================================
+     ADMIN PAYMENT HISTORY
+  ============================================================ */
+
+  async function loadAdminPayments() {
+    if (currentProfile?.role !== "admin") return;
+    const container = document.getElementById("adminPaymentsContainer");
+    container.textContent = "Loading payment records...";
+    const [studentResult, paymentResult] = await Promise.all([
+      supabaseClient.from("profiles").select("id,full_name").eq("role", "student").order("full_name"),
+      supabaseClient.from("payments").select("*").order("payment_date", { ascending: false })
+    ]);
+    if (studentResult.error || paymentResult.error) {
+      container.innerHTML = `<div class="alert failure show">${escapeHtml(studentResult.error?.message || paymentResult.error?.message)}</div>`;
+      return;
+    }
+    const students = studentResult.data || [];
+    const payments = paymentResult.data || [];
+    if (!students.length) {
+      container.textContent = "No students found.";
+      return;
+    }
+    const nameById = Object.fromEntries(students.map(student => [student.id, student.full_name || "Student"]));
+    const studentIds = new Set(students.map(student => student.id));
+    const relevantPayments = payments.filter(payment => studentIds.has(payment.student_id));
+    if (!relevantPayments.length) {
+      container.innerHTML = `<p class="muted">Students are listed below. No payment submissions have been received yet.</p>` +
+        students.map(student => `<div style="padding:10px 0;border-top:1px solid #e5e7eb;"><strong>${escapeHtml(student.full_name || "Student")}</strong><p class="muted">No payment history</p></div>`).join("");
+      return;
+    }
+    let html = `<div class="table-wrap"><table><thead><tr>
+      <th>Student</th><th>Payment Date</th><th>Amount</th><th>Package / Subject</th>
+      <th>Method</th><th>Transaction ID</th><th>Receipt</th><th>Status</th>
+      </tr></thead><tbody>`;
+    for (const payment of relevantPayments) {
+      let receiptCell = "-";
+      if (payment.receipt_path) {
+        const signed = await supabaseClient.storage.from("payment-receipts").createSignedUrl(payment.receipt_path, 300);
+        receiptCell = signed.data?.signedUrl
+          ? `<a href="${escapeHtml(signed.data.signedUrl)}" target="_blank" rel="noopener">View receipt</a>`
+          : `<span class="muted">Receipt saved</span>`;
+      }
+      const statusClass = payment.status === "verified" ? "status-verified" : payment.status === "rejected" ? "status-rejected" : "status-pending";
+      html += `<tr>
+        <td>${escapeHtml(nameById[payment.student_id] || "Student")}</td>
+        <td>${formatDate(payment.payment_date)}</td>
+        <td>Rs. ${escapeHtml(payment.amount)}</td>
+        <td>${escapeHtml(payment.payment_plan || "-")}</td>
+        <td>${escapeHtml(payment.payment_method || "-")}</td>
+        <td>${escapeHtml(payment.transaction_reference || "-")}</td>
+        <td>${receiptCell}</td>
+        <td><span class="payment-status ${statusClass}">${escapeHtml(payment.status || "pending")}</span></td>
+      </tr>`;
+    }
+    html += `</tbody></table></div>`;
+    container.innerHTML = html;
+  }
+
+  /* ============================================================
      TABS
   ============================================================ */
 
@@ -3068,6 +3278,12 @@ if (tab === "mcqManager" && currentProfile?.role === "admin") {
 }
 if (tab === "parentRequests" && currentProfile?.role === "admin") {
   await loadParentRequests();
+}
+if (tab === "adminPayments" && currentProfile?.role === "admin") {
+  await loadAdminPayments();
+}
+if (tab === "adminNotifications" && currentProfile?.role === "admin") {
+  await loadAdminNotifications();
 }
       });
 
@@ -4088,12 +4304,16 @@ if (tab === "parentRequests" && currentProfile?.role === "admin") {
   document
     .getElementById("paymentPlan")
     .addEventListener("change", function() {
-
-      document
-        .getElementById("paymentAmount")
-        .value = this.value || "";
-
+      document.getElementById("paymentAmount").value = this.value || "";
+      const subjectGroup = document.getElementById("paymentSubjectGroup");
+      const subjectInput = document.getElementById("paymentSubjectName");
+      const individual = this.value === "1000";
+      subjectGroup.classList.toggle("hidden", !individual);
+      subjectInput.required = individual;
+      if (!individual) subjectInput.value = "";
     });
+
+  document.getElementById("paymentSubjectGroup").classList.add("hidden");
 
 
   /* ============================================================
@@ -4152,6 +4372,35 @@ if (tab === "parentRequests" && currentProfile?.role === "admin") {
 
       submitButton.disabled = true;
 
+      const receiptFile =
+        document.getElementById("paymentReceiptFile").files[0] || null;
+      let receiptPath = null;
+
+      if (receiptFile) {
+        const safeName = receiptFile.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+        receiptPath = `${currentUser.id}/${Date.now()}_${safeName}`;
+        const uploadResult = await supabaseClient.storage
+          .from("payment-receipts")
+          .upload(receiptPath, receiptFile, { upsert: false });
+        if (uploadResult.error) {
+          submitButton.disabled = false;
+          showAlert("dashboardAlert", "Receipt upload failed: " + uploadResult.error.message + ". Please try again or submit without the receipt.", "failure");
+          return;
+        }
+      }
+
+      const selectedPlan = document.getElementById("paymentPlan");
+      let planLabel = selectedPlan.options[selectedPlan.selectedIndex]?.text || "";
+      const subjectName = document.getElementById("paymentSubjectName").value.trim();
+      if (selectedPlan.value === "1000" && !subjectName) {
+        submitButton.disabled = false;
+        showAlert("dashboardAlert", "Please enter the subject name for an individual subject payment.", "failure");
+        return;
+      }
+      if (selectedPlan.value === "1000" && subjectName) {
+        planLabel += " — " + subjectName;
+      }
+
       const result =
         await supabaseClient
           .from("payments")
@@ -4160,6 +4409,8 @@ if (tab === "parentRequests" && currentProfile?.role === "admin") {
             amount: amount,
             payment_method: document.getElementById("paymentMethod").value,
             transaction_reference: reference,
+            payment_plan: planLabel,
+            receipt_path: receiptPath,
             notes: notes,
             status: "pending"
           });
@@ -4241,8 +4492,10 @@ if (tab === "parentRequests" && currentProfile?.role === "admin") {
             <tr>
               <th>Date</th>
               <th>Amount</th>
+              <th>Package</th>
               <th>Method</th>
               <th>Transaction ID</th>
+              <th>Receipt</th>
               <th>Status</th>
             </tr>
           </thead>
@@ -4270,6 +4523,8 @@ if (tab === "parentRequests" && currentProfile?.role === "admin") {
             Rs. ${payment.amount}
           </td>
 
+          <td>${escapeHtml(payment.payment_plan || "-")}</td>
+
           <td>
             ${escapeHtml(
               payment.payment_method || "-"
@@ -4281,6 +4536,8 @@ if (tab === "parentRequests" && currentProfile?.role === "admin") {
               payment.transaction_reference || "-"
             )}
           </td>
+
+          <td>${payment.receipt_path ? '<span class="muted">Uploaded</span>' : "-"}</td>
 
           <td>
             <span class="payment-status ${statusClass}">
