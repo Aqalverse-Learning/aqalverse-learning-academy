@@ -794,6 +794,27 @@
     .text-center {
       text-align: center;
     }
+  
+
+    /* Aqalverse learning tools: timed work, papers and announcements */
+    .academy-notice { background:#fffbea; border:2px solid #e4b93f; border-left:7px solid #20a46b; border-radius:14px; padding:18px; margin:16px 0; box-shadow:0 5px 18px rgba(23,59,108,.08); }
+    .academy-notice h3 { color:#173b6c; margin:0 0 10px; }
+    .academy-notice-item { border-top:1px solid #eadfbd; padding:12px 0; }
+    .academy-notice-item:first-child { border-top:0; }
+    .academy-notice-message { white-space:pre-wrap; line-height:1.8; overflow-wrap:anywhere; }
+    .academy-guide { background:#f4f8fc; border:1px solid #d8e3ef; border-radius:16px; padding:24px; margin:24px auto; }
+    .academy-guide-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; }
+    .academy-guide-card { background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:16px; }
+    .academy-video-placeholder { background:#102b4e; color:#fff; border-radius:14px; padding:24px; text-align:center; min-height:150px; display:flex; flex-direction:column; justify-content:center; }
+    .academy-timer { font-weight:800; color:#173b6c; font-size:1.05rem; margin:10px 0; }
+    .academy-timer.expired { color:#b42318; }
+    .academy-work-card { border:1px solid var(--border); border-radius:14px; padding:18px; margin:14px 0; background:#fff; }
+    .academy-work-card .form-group { margin:12px 0; }
+    .academy-review-item { border-top:1px solid #e5e7eb; padding:14px 0; }
+    .academy-review-item:first-child { border-top:0; }
+    .academy-small { font-size:.9rem; color:#64748b; }
+    @media(max-width:600px){ .academy-guide{padding:16px;} .academy-work-card{padding:14px;} }
+
   </style>
 </head>
 
@@ -864,6 +885,33 @@
         </div>
       </div>
 
+    </div>
+  </section>
+
+  <!-- STUDENT AND PARENT QUICK GUIDE -->
+  <section class="container academy-guide" id="how-to-use">
+    <div class="section-title">
+      <h2>How to Use Aqalverse</h2>
+      <p>Simple steps for students and parents.</p>
+    </div>
+    <div class="academy-guide-grid">
+      <div class="academy-guide-card">
+        <h3>🎓 Student Login</h3>
+        <p>Choose Student Login, enter your account details, then open My Subjects, Timetable and Lessons. Watch the lesson, read notes, complete tests and submit assignments before their deadlines.</p>
+      </div>
+      <div class="academy-guide-card">
+        <h3>👨‍👩‍👧 Parent Login</h3>
+        <p>Choose Parent Login and sign in with your parent account. Open My Children, Child Progress, Child Timetable and Child Fees to review your linked student's information.</p>
+      </div>
+      <div class="academy-guide-card">
+        <h3>🔔 Important Notices</h3>
+        <p>After login, check the highlighted Academy Announcements area for fee dates, timetable changes and other important messages. Notices may be written in Urdu or English.</p>
+      </div>
+    </div>
+    <div class="academy-video-placeholder mt" aria-label="Login guide video placeholder">
+      <strong>Student & Parent Login Guide</strong>
+      <span class="mt">Video coming soon</span>
+      <span class="academy-small" style="color:#dbeafe">A tutorial video will be added here when it is ready.</span>
     </div>
   </section>
 
@@ -996,9 +1044,7 @@
             <button class="select-button"
               onclick="selectLandingBoard('Federal Board (FBISE)')">
               Federal Board (FBISE)
-            </button>
-
-            <button class="select-button"
+            </button><button class="select-button"
               onclick="selectLandingBoard('AJK Boards')">
               AJK Boards
             </button>
@@ -1267,8 +1313,9 @@
     </div>
 
     <div id="dashboardAlert" class="alert"></div>
-    <div id="academyNotificationBanner" class="card mt hidden" aria-live="polite">
-      <h3>Academy Announcements</h3>
+    <div id="academyNotificationBanner" class="academy-notice hidden" aria-live="polite">
+      <h3>🔔 Academy Announcements / اہم اعلانات</h3>
+      <p class="academy-small">Please read the latest message from the academy.</p>
       <div id="academyNotificationList">No announcements at this time.</div>
     </div>
 
@@ -1336,6 +1383,9 @@
       </button>
       <button class="tab-button admin-only-tab hidden" data-tab="adminNotifications">
         Notifications
+      </button>
+      <button class="tab-button staff-tab hidden" data-tab="paperReview">
+        Chapter Papers & Review
       </button>
 
       <button class="tab-button parent-tab hidden" data-tab="children">
@@ -1492,6 +1542,11 @@
 
         <div id="lessonsContainer">
           Loading lessons...
+        </div>
+        <div class="mt">
+          <h3>Chapter-End Papers (60 Minutes)</h3>
+          <p class="muted">After completing a chapter, open its paper. The 60-minute timer is saved and will not restart if you return later.</p>
+          <div id="chapterPapersContainer">Loading chapter papers...</div>
         </div>
 
       </div>
@@ -1997,9 +2052,7 @@
               value="100"
               min="1"
               required
-            />
-
-          </div>
+            /></div>
 
           <button class="btn btn-primary">
             Create Assignment
@@ -2096,11 +2149,11 @@
         <form id="academyNotificationForm">
           <div class="form-group">
             <label for="notificationTitle">Announcement title</label>
-            <input id="notificationTitle" type="text" maxlength="150" required placeholder="e.g. Important Fee Notice">
+            <input id="notificationTitle" dir="auto" type="text" maxlength="150" required placeholder="e.g. Important Fee Notice">
           </div>
           <div class="form-group">
             <label for="notificationMessage">Message</label>
-            <textarea id="notificationMessage" rows="4" maxlength="5000" required placeholder="Write the announcement for students and parents..."></textarea>
+            <textarea id="notificationMessage" dir="auto" rows="4" maxlength="5000" required placeholder="Write in Urdu or English for students and parents..."></textarea>
           </div>
           <button class="btn btn-primary" type="submit">Publish Announcement</button>
         </form>
@@ -2108,6 +2161,25 @@
       <div class="card mt">
         <h3>Published Announcements</h3>
         <div id="adminNotificationList">Loading announcements...</div>
+      </div>
+    </div>
+
+    <!-- CHAPTER PAPER MANAGEMENT AND REVIEW (STAFF) -->
+    <div class="dashboard-panel" id="panel-paperReview">
+      <div class="card">
+        <h3>Chapter-End Paper Management</h3>
+        <p class="muted">Create a 1-hour chapter paper. Students can submit photos or a PDF; staff can review and award marks.</p>
+        <div id="paperAdminAlert" class="alert"></div>
+        <div class="form-group"><label for="paperCourseSelect">Course</label><select id="paperCourseSelect"><option value="">Loading courses...</option></select></div>
+        <div class="form-group"><label for="paperChapterSelect">Chapter</label><select id="paperChapterSelect"><option value="">Select a course first</option></select></div>
+        <div class="form-group"><label for="paperTitleInput">Paper title</label><input id="paperTitleInput" type="text" maxlength="180" placeholder="Chapter 1 Assessment"></div>
+        <div class="form-group"><label for="paperUrlInput">Paper PDF URL (optional)</label><input id="paperUrlInput" type="url" placeholder="https://..."></div>
+        <div class="form-group"><label for="paperMarksInput">Total marks</label><input id="paperMarksInput" type="number" min="1" max="1000" value="100"></div>
+        <button type="button" class="btn btn-primary" id="createChapterPaperButton">Publish 1-Hour Paper</button>
+      </div>
+      <div class="card mt">
+        <h3>Student Paper Submissions</h3>
+        <div id="chapterPaperReviewList">Loading submissions...</div>
       </div>
     </div>
 
@@ -2796,6 +2868,7 @@
       await loadSubjectGroups();
       await loadTimetable();
       await loadLessons();
+      await loadChapterPapers();
       await loadAssignments();
       await loadTests();
       await loadPayments();
@@ -2809,6 +2882,8 @@
       await loadStaffCourses();
       await loadLessonManagementCourses();
       await loadAssignmentCourses();
+      await loadPaperManagementCourses();
+      await loadChapterPaperReviews();
 
     }
 
@@ -2997,8 +3072,7 @@ async function loadPrivateMessageHistory() {
     body.textContent = message.message;
 
     const date = document.createElement("small");
-    date.textContent = new Date(
-      message.created_at
+    date.textContent = new Date(message.created_at
     ).toLocaleString();
 
     item.append(label, body, date);
@@ -3106,13 +3180,18 @@ document
       banner.classList.add("hidden");
       return;
     }
-    list.innerHTML = result.data.map(item => `
-      <div style="border-top:1px solid #e5e7eb;padding:10px 0;">
-        <strong>${escapeHtml(item.title)}</strong>
-        <p style="white-space:pre-wrap;margin:6px 0;">${escapeHtml(item.message)}</p>
-        <small class="muted">${formatDate(item.created_at)}</small>
-      </div>
-    `).join("");
+    list.innerHTML = result.data.map(item => {
+      const combined = `${item.title || ""} ${item.message || ""}`;
+      const isUrdu = /[\u0600-\u06FF]/.test(combined);
+      const direction = isUrdu ? "rtl" : "ltr";
+      return `
+        <article class="academy-notice-item" dir="${direction}" lang="${isUrdu ? "ur" : "en"}" style="text-align:${isUrdu ? "right" : "left"}">
+          <strong>${escapeHtml(item.title)}</strong>
+          <p class="academy-notice-message">${escapeHtml(item.message)}</p>
+          <small class="muted">${formatDate(item.created_at)}</small>
+        </article>
+      `;
+    }).join("");
     banner.classList.remove("hidden");
   }
 
@@ -3132,14 +3211,18 @@ document
       list.textContent = "No announcements have been published yet.";
       return;
     }
-    list.innerHTML = result.data.map(item => `
-      <div style="border-top:1px solid #e5e7eb;padding:12px 0;">
-        <strong>${escapeHtml(item.title)}</strong>
-        <p style="white-space:pre-wrap;margin:6px 0;">${escapeHtml(item.message)}</p>
-        <small class="muted">${formatDate(item.created_at)} · ${item.active ? "Visible to students and parents" : "Hidden"}</small>
-        <button type="button" class="btn btn-secondary mt" data-delete-notification="${item.id}">Delete</button>
-      </div>
-    `).join("");
+    list.innerHTML = result.data.map(item => {
+      const isUrdu = /[\u0600-\u06FF]/.test(`${item.title || ""} ${item.message || ""}`);
+      const direction = isUrdu ? "rtl" : "ltr";
+      return `
+        <div class="academy-notice-item" dir="${direction}" style="text-align:${isUrdu ? "right" : "left"}">
+          <strong>${escapeHtml(item.title)}</strong>
+          <p class="academy-notice-message">${escapeHtml(item.message)}</p>
+          <small class="muted">${formatDate(item.created_at)} · ${item.active ? "Visible to students and parents" : "Hidden"}</small>
+          <button type="button" class="btn btn-secondary mt" data-delete-notification="${item.id}">Delete</button>
+        </div>
+      `;
+    }).join("");
   }
 
   document.getElementById("academyNotificationForm")?.addEventListener("submit", async function(e) {
@@ -3997,8 +4080,7 @@ if (tab === "adminNotifications" && currentProfile?.role === "admin") {
         "assignmentsContainer"
       );
 
-    container.innerHTML =
-      "Loading assignments...";
+    container.innerHTML ="Loading assignments...";
 
     const enrollmentResult =
       await supabaseClient
@@ -4085,20 +4167,271 @@ if (tab === "adminNotifications" && currentProfile?.role === "admin") {
             )}
           </p>
 
-          <p class="mt">
-            <strong>
-              Total Marks:
-            </strong>
-            ${a.total_marks}
-          </p>
+          <p class="mt"><strong>Total Marks:</strong> ${a.total_marks}</p>
+          <div id="assignmentAttempt-${a.id}" class="mt">
+            <button type="button" class="btn btn-primary" data-start-assignment="${a.id}">Open Assignment (starts 24-hour timer)</button>
+          </div>
 
         </div>
       `;
     });
 
     container.innerHTML = html;
+    for (const assignment of result.data) {
+      const attemptResult = await supabaseClient.from("assignment_attempts")
+        .select("id,deadline_at,status,submitted_at,submission_paths,marks")
+        .eq("assignment_id", assignment.id).eq("student_id", currentUser.id).maybeSingle();
+      if (attemptResult.error) {
+        console.warn("Assignment attempt status:", attemptResult.error.message);
+        continue;
+      }
+      if (attemptResult.data) {
+        if (attemptResult.data.status === "open" && new Date(attemptResult.data.deadline_at).getTime() <= Date.now()) {
+          const expired = await supabaseClient.rpc("start_assignment_attempt", { p_assignment_id: Number(assignment.id) });
+          if (!expired.error) renderAssignmentAttempt(assignment.id, expired.data);
+        } else renderAssignmentAttempt(assignment.id, attemptResult.data);
+      }
+    }
   }
 
+
+  /* ============================================================
+     TIMED ASSIGNMENTS + CHAPTER PAPERS
+  ============================================================ */
+
+  const academyTimerIntervals = {};
+  function formatRemaining(ms) {
+    const seconds = Math.max(0, Math.floor(ms / 1000));
+    const h = String(Math.floor(seconds / 3600)).padStart(2, "0");
+    const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
+    const sec = String(seconds % 60).padStart(2, "0");
+    return `${h}:${m}:${sec}`;
+  }
+
+  function startCountdown(elementId, deadline, expiredText) {
+    if (academyTimerIntervals[elementId]) clearInterval(academyTimerIntervals[elementId]);
+    const tick = () => {
+      const el = document.getElementById(elementId);
+      if (!el) { clearInterval(academyTimerIntervals[elementId]); return; }
+      const remaining = new Date(deadline).getTime() - Date.now();
+      if (remaining <= 0) {
+        el.textContent = expiredText;
+        el.classList.add("expired");
+        clearInterval(academyTimerIntervals[elementId]);
+        const assignmentMatch = elementId.match(/^assignmentTimer-(\d+)$/);
+        const paperMatch = elementId.match(/^chapterPaperTimer-(\d+)$/);
+        if (assignmentMatch) { (async () => { const r = await supabaseClient.rpc("start_assignment_attempt", { p_assignment_id:Number(assignmentMatch[1]) }); if (r.error) console.warn(r.error); })(); }
+        if (paperMatch) { (async () => { const r = await supabaseClient.rpc("start_chapter_paper_attempt", { p_paper_id:Number(paperMatch[1]) }); if (r.error) console.warn(r.error); })(); }
+      } else {
+        el.textContent = `Time remaining: ${formatRemaining(remaining)}`;
+      }
+    };
+    tick();
+    academyTimerIntervals[elementId] = setInterval(tick, 1000);
+  }
+
+  function renderAssignmentAttempt(assignmentId, attempt) {
+    const target = document.getElementById(`assignmentAttempt-${assignmentId}`);
+    if (!target) return;
+    if (attempt.status === "submitted") {
+      target.innerHTML = `<p class="payment-status status-verified">Submitted successfully</p><p class="academy-small">Your work is awaiting teacher review.</p>`;
+      return;
+    }
+    if (attempt.status === "expired" || new Date(attempt.deadline_at).getTime() <= Date.now()) {
+      target.innerHTML = `<p class="academy-timer expired">Time expired — 0 marks if not submitted.</p>`;
+      return;
+    }
+    target.innerHTML = `
+      <p id="assignmentTimer-${assignmentId}" class="academy-timer"></p>
+      <div class="form-group"><label for="assignmentFiles-${assignmentId}">Upload your completed work (images or PDF)</label><input id="assignmentFiles-${assignmentId}" type="file" accept="image/jpeg,image/png,image/webp,application/pdf" multiple></div>
+      <button type="button" class="btn btn-primary" data-submit-assignment="${assignmentId}">Submit Assignment</button>
+    `;
+    startCountdown(`assignmentTimer-${assignmentId}`, attempt.deadline_at, "Time expired — submission closed.");
+  }
+
+  async function openAssignmentAttempt(id) {
+    const target = document.getElementById(`assignmentAttempt-${id}`);
+    if (target) target.innerHTML = "Opening assignment...";
+    const { data, error } = await supabaseClient.rpc("start_assignment_attempt", { p_assignment_id: Number(id) });
+    if (error) { if (target) target.textContent = error.message; return; }
+    renderAssignmentAttempt(id, data);
+  }
+
+  async function uploadAcademySubmission(files, folder, recordId) {
+    if (!files?.length) throw new Error("Please select at least one image or PDF.");
+    const paths = [];
+    for (const file of Array.from(files)) {
+      if (!/^(image\/(jpeg|png|webp)|application\/pdf)$/.test(file.type)) throw new Error("Only JPG, PNG, WEBP or PDF files are allowed.");
+      if (file.size > 20 * 1024 * 1024) throw new Error("Each file must be 20 MB or smaller.");
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+      const path = `${currentUser.id}/${folder}/${recordId}/${Date.now()}-${Math.random().toString(36).slice(2,8)}-${safeName}`;
+      const uploaded = await supabaseClient.storage.from("academy-submissions").upload(path, file, { upsert:false, contentType:file.type });
+      if (uploaded.error) throw uploaded.error;
+      paths.push(path);
+    }
+    return paths;
+  }
+
+  async function submitAssignmentWork(id) {
+    const input = document.getElementById(`assignmentFiles-${id}`);
+    const button = document.querySelector(`[data-submit-assignment="${id}"]`);
+    if (!input?.files?.length) return showAlert("dashboardAlert", "Please choose your assignment images or PDF first.", "failure");
+    if (button) button.disabled = true;
+    try {
+      const paths = await uploadAcademySubmission(input.files, "assignments", id);
+      const { data, error } = await supabaseClient.rpc("submit_assignment_attempt", { p_assignment_id:Number(id), p_submission_paths:paths });
+      if (error) throw error;
+      renderAssignmentAttempt(id, data);
+      showAlert("dashboardAlert", data.status === "submitted" ? "Assignment submitted successfully." : "The assignment deadline has passed.", data.status === "submitted" ? "success" : "failure");
+    } catch (e) {
+      if (button) button.disabled = false;
+      showAlert("dashboardAlert", e.message || String(e), "failure");
+    }
+  }
+
+  async function loadChapterPapers() {
+    const container = document.getElementById("chapterPapersContainer");
+    if (!container || !currentStudent) return;
+    container.textContent = "Loading chapter papers...";
+    const enrollment = await supabaseClient.from("enrollments").select("course_id").eq("student_id", currentUser.id).in("status", ["trial","active"]);
+    const courseIds = (enrollment.data || []).map(x => x.course_id);
+    if (!courseIds.length) { container.textContent = "No active course enrolments found."; return; }
+    const papers = await supabaseClient.from("chapter_papers").select("id,course_id,chapter_id,title,instructions,paper_url,total_marks,duration_minutes").eq("is_active", true).in("course_id", courseIds).order("created_at", {ascending:false});
+    if (papers.error) { container.textContent = papers.error.message; return; }
+    if (!papers.data?.length) { container.textContent = "No chapter papers have been published yet."; return; }
+    const chapterIds = [...new Set(papers.data.map(x => x.chapter_id))];
+    const chapterResult = await supabaseClient.from("chapters").select("id,title,chapter_number").in("id", chapterIds);
+    const chapterMap = Object.fromEntries((chapterResult.data || []).map(x => [x.id,x]));
+    container.innerHTML = papers.data.map(p => `<div class="academy-work-card"><h4>${escapeHtml(p.title)}</h4><p class="academy-small">${escapeHtml(chapterMap[p.chapter_id]?.title || "Chapter")} · 60 minutes · ${p.total_marks} marks</p>${p.instructions ? `<p>${escapeHtml(p.instructions)}</p>` : ""}${p.paper_url ? `<p><a href="${escapeHtml(p.paper_url)}" target="_blank" rel="noopener noreferrer">Open question paper PDF</a></p>` : ""}<div id="chapterPaperAttempt-${p.id}"><button type="button" class="btn btn-primary" data-start-chapter-paper="${p.id}">Start 1-Hour Paper</button></div></div>`).join("");
+    for (const paper of papers.data) {
+      const attempt = await supabaseClient.from("chapter_paper_attempts").select("id,deadline_at,status,submitted_at,submission_paths,marks").eq("paper_id",paper.id).eq("student_id",currentUser.id).maybeSingle();
+      if (attempt.data) {
+        if (attempt.data.status === "open" && new Date(attempt.data.deadline_at).getTime() <= Date.now()) {
+          const expired = await supabaseClient.rpc("start_chapter_paper_attempt", { p_paper_id:Number(paper.id) });
+          if (!expired.error) renderChapterPaperAttempt(paper.id, expired.data);
+        } else renderChapterPaperAttempt(paper.id, attempt.data);
+      }
+    }
+  }
+
+  function renderChapterPaperAttempt(paperId, attempt) {
+    const target = document.getElementById(`chapterPaperAttempt-${paperId}`);
+    if (!target) return;
+    if (attempt.status === "submitted") { target.innerHTML = `<p class="payment-status status-verified">Paper submitted — awaiting teacher review.</p>`; return; }
+    if (attempt.status === "expired" || new Date(attempt.deadline_at).getTime() <= Date.now()) { target.innerHTML = `<p class="academy-timer expired">60-minute time limit expired.</p>`; return; }
+    target.innerHTML = `<p id="chapterPaperTimer-${paperId}" class="academy-timer"></p><div class="form-group"><label for="chapterPaperFiles-${paperId}">Upload answer-sheet photos or PDF</label><input id="chapterPaperFiles-${paperId}" type="file" accept="image/jpeg,image/png,image/webp,application/pdf" multiple></div><button type="button" class="btn btn-primary" data-submit-chapter-paper="${paperId}">Submit Paper</button>`;
+    startCountdown(`chapterPaperTimer-${paperId}`,attempt.deadline_at,"60-minute time limit expired.");
+  }
+
+  async function openChapterPaperAttempt(id) {
+    const target = document.getElementById(`chapterPaperAttempt-${id}`);
+    if (target) target.textContent = "Starting paper...";
+    const { data,error } = await supabaseClient.rpc("start_chapter_paper_attempt",{p_paper_id:Number(id)});
+    if (error) { if (target) target.textContent = error.message; return; }
+    renderChapterPaperAttempt(id,data);
+  }
+
+  async function submitChapterPaper(id) {
+    const input = document.getElementById(`chapterPaperFiles-${id}`);
+    const button = document.querySelector(`[data-submit-chapter-paper="${id}"]`);
+    if (!input?.files?.length) return showAlert("dashboardAlert","Please select your answer-sheet images or PDF.","failure");
+    if (button) button.disabled = true;
+    try {
+      const paths = await uploadAcademySubmission(input.files,"chapter-papers",id);
+      const {data,error} = await supabaseClient.rpc("submit_chapter_paper_attempt",{p_paper_id:Number(id),p_submission_paths:paths});
+      if (error) throw error;
+      renderChapterPaperAttempt(id,data);
+      showAlert("dashboardAlert",data.status === "submitted" ? "Chapter paper submitted." : "Paper time has expired.",data.status === "submitted" ? "success" : "failure");
+    } catch(e) { if(button) button.disabled=false; showAlert("dashboardAlert",e.message || String(e),"failure"); }
+  }
+
+  async function loadPaperManagementCourses() {
+    if (!isStaff()) return;
+    const select = document.getElementById("paperCourseSelect");
+    if (!select) return;
+    const res = await supabaseClient.from("courses").select("id,title").eq("is_active",true).order("title");
+    if (res.error) { select.innerHTML = `<option value="">${escapeHtml(res.error.message)}</option>`; return; }
+    select.innerHTML = `<option value="">Select course</option>` + (res.data || []).map(c => `<option value="${c.id}">${escapeHtml(c.title)}</option>`).join("");
+  }
+
+  document.getElementById("paperCourseSelect")?.addEventListener("change", async function() {
+    const chapterSelect = document.getElementById("paperChapterSelect");
+    if (!this.value) { chapterSelect.innerHTML = `<option value="">Select a course first</option>`; return; }
+    const res = await supabaseClient.from("chapters").select("id,title,chapter_number").eq("course_id",Number(this.value)).eq("is_active",true).order("chapter_number");
+    chapterSelect.innerHTML = `<option value="">Select chapter</option>` + (res.data || []).map(c => `<option value="${c.id}">Chapter ${c.chapter_number || ""}: ${escapeHtml(c.title)}</option>`).join("");
+  });
+
+  document.getElementById("createChapterPaperButton")?.addEventListener("click", async function() {
+    if (!isStaff()) return;
+    const courseId = Number(document.getElementById("paperCourseSelect").value);
+    const chapterId = Number(document.getElementById("paperChapterSelect").value);
+    const title = document.getElementById("paperTitleInput").value.trim();
+    const paperUrl = document.getElementById("paperUrlInput").value.trim();
+    const marks = Number(document.getElementById("paperMarksInput").value || 100);
+    if (!courseId || !chapterId || !title) return showAlert("paperAdminAlert","Select a course, chapter and enter a title.","failure");
+    const btn = this; btn.disabled = true;
+    const res = await supabaseClient.from("chapter_papers").insert({course_id:courseId,chapter_id:chapterId,title,paper_url:paperUrl || null,total_marks:marks,duration_minutes:60,is_active:true,created_by:currentUser.id});
+    btn.disabled = false;
+    if (res.error) return showAlert("paperAdminAlert",res.error.message,"failure");
+    document.getElementById("paperTitleInput").value = "";
+    document.getElementById("paperUrlInput").value = "";
+    showAlert("paperAdminAlert","Chapter paper published.","success");
+    await loadChapterPaperReviews();
+  });
+
+  async function loadChapterPaperReviews() {
+    const container = document.getElementById("chapterPaperReviewList");
+    if (!container || !isStaff()) return;
+    container.textContent = "Loading submissions...";
+    const res = await supabaseClient.from("chapter_paper_attempts").select("id,paper_id,student_id,started_at,submitted_at,submission_paths,status,marks,teacher_feedback").order("submitted_at",{ascending:false,nullsFirst:false}).limit(100);
+    if (res.error) { container.textContent = res.error.message; return; }
+    const submitted = (res.data || []).filter(x => x.status === "submitted");
+    if (!submitted.length) { container.textContent = "No student submissions yet."; return; }
+    const paperIds = [...new Set(submitted.map(x => x.paper_id))];
+    const studentIds = [...new Set(submitted.map(x => x.student_id))];
+    const [paperRes,profileRes] = await Promise.all([
+      supabaseClient.from("chapter_papers").select("id,title,total_marks").in("id",paperIds),
+      supabaseClient.from("profiles").select("id,full_name,username").in("id",studentIds)
+    ]);
+    const paperMap = Object.fromEntries((paperRes.data || []).map(x => [x.id,x]));
+    const profileMap = Object.fromEntries((profileRes.data || []).map(x => [x.id,x]));
+    const blocks = [];
+    for (const item of submitted) {
+      const links = [];
+      for (const path of (item.submission_paths || [])) {
+        const signed = await supabaseClient.storage.from("academy-submissions").createSignedUrl(path,3600);
+        if (!signed.error && signed.data?.signedUrl) links.push(`<a href="${signed.data.signedUrl}" target="_blank" rel="noopener noreferrer">Open submitted file</a>`);
+      }
+      blocks.push(`<div class="academy-review-item"><strong>${escapeHtml(profileMap[item.student_id]?.full_name || profileMap[item.student_id]?.username || "Student")}</strong><p>${escapeHtml(paperMap[item.paper_id]?.title || "Chapter paper")} · Submitted: ${item.submitted_at ? formatDate(item.submitted_at) : "-"}</p><p>${links.join(" · ") || "Files unavailable"}</p><div class="form-group"><label>Marks (out of ${Number(paperMap[item.paper_id]?.total_marks || 100)})</label><input type="number" min="0" max="${Number(paperMap[item.paper_id]?.total_marks || 100)}" id="paperReviewMarks-${item.id}" value="${item.marks ?? ""}"></div><div class="form-group"><label>Feedback</label><textarea id="paperReviewFeedback-${item.id}" rows="2">${escapeHtml(item.teacher_feedback || "")}</textarea></div><button class="btn btn-primary" type="button" data-save-paper-review="${item.id}">Save Review</button></div>`);
+    }
+    container.innerHTML = blocks.join("");
+  }
+
+  document.getElementById("chapterPaperReviewList")?.addEventListener("click", async function(e) {
+    const btn = e.target.closest("[data-save-paper-review]");
+    if (!btn || !isStaff()) return;
+    const id = Number(btn.dataset.savePaperReview);
+    const marks = Number(document.getElementById(`paperReviewMarks-${id}`).value);
+    const feedback = document.getElementById(`paperReviewFeedback-${id}`).value.trim();
+    btn.disabled = true;
+    const res = await supabaseClient.from("chapter_paper_attempts").update({marks,teacher_feedback:feedback,reviewed_by:currentUser.id,reviewed_at:new Date().toISOString()}).eq("id",id);
+    btn.disabled = false;
+    if (res.error) return showAlert("paperAdminAlert",res.error.message,"failure");
+    showAlert("paperAdminAlert","Review saved.","success");
+  });
+
+  document.getElementById("assignmentsContainer")?.addEventListener("click", function(e) {
+    const start = e.target.closest("[data-start-assignment]");
+    const submit = e.target.closest("[data-submit-assignment]");
+    if (start) openAssignmentAttempt(start.dataset.startAssignment);
+    if (submit) submitAssignmentWork(submit.dataset.submitAssignment);
+  });
+  document.getElementById("chapterPapersContainer")?.addEventListener("click", function(e) {
+    const start = e.target.closest("[data-start-chapter-paper]");
+    const submit = e.target.closest("[data-submit-chapter-paper]");
+    if (start) openChapterPaperAttempt(start.dataset.startChapterPaper);
+    if (submit) submitChapterPaper(submit.dataset.submitChapterPaper);
+  });
 
   /* ============================================================
      TESTS
@@ -4997,8 +5330,7 @@ if (tab === "adminNotifications" && currentProfile?.role === "admin") {
           .update({ is_active: nextActive })
           .eq("id", lessonId);
         if (error) {
-          showLessonManagementAlert("Could not update lesson status: " + error.message, "failure");
-          this.disabled = false;
+          showLessonManagementAlert("Could not update lesson status: " + error.message, "failure");this.disabled = false;
           return;
         }
         showLessonManagementAlert(nextActive ? "Lesson published." : "Lesson hidden from students.", "success");
@@ -5997,8 +6329,7 @@ if (tab === "adminNotifications" && currentProfile?.role === "admin") {
           if (inserted.error) throw inserted.error;
         }
         const statusRes = await supabaseClient.from("mcq_import_files").update({ status: "review" }).eq("id", importId);
-        if (statusRes.error) throw statusRes.error;
-        importedTotal += item.questions.length;
+        if (statusRes.error) throw statusRes.error;importedTotal += item.questions.length;
       }
       mcqAlert("Successfully imported " + importedTotal + " questions from " + mcqPdfParsedFiles.length + " PDF(s) for admin review. They are not published to students yet.", "success");
       document.getElementById("mcqPdfFiles").value = "";
