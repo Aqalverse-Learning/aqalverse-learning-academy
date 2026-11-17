@@ -5052,6 +5052,7 @@ if (tab === "adminNotifications" && currentProfile?.role === "admin") {
               <th>Username</th>
               <th>Admission No.</th>
               <th>Status</th>
+              ${currentProfile?.role === "admin" ? "<th>Test Access</th>" : ""}
             </tr>
           </thead>
 
@@ -5089,6 +5090,11 @@ if (tab === "adminNotifications" && currentProfile?.role === "admin") {
               student.account_status || "-"
             )}
           </td>
+          ${currentProfile?.role === "admin" ? `
+            <td>
+              <button type="button" class="btn btn-primary test-access-button" data-student-id="${student.id}" data-student-name="${escapeHtml(profile?.full_name || profile?.username || "student")}">Activate Test Access</button>
+            </td>
+          ` : ""}
 
         </tr>
       `;
@@ -5102,6 +5108,48 @@ if (tab === "adminNotifications" && currentProfile?.role === "admin") {
     `;
 
     container.innerHTML = html;
+
+    // Only the academy admin can activate a dedicated test account.
+    if (currentProfile?.role === "admin") {
+      container.querySelectorAll(".test-access-button").forEach(button => {
+        button.addEventListener("click", async () => {
+          const studentId = button.dataset.studentId;
+          const studentName = button.dataset.studentName || "this student";
+          if (!studentId || !confirm(`Activate permanent TEST access for ${studentName}? This bypasses the 2-day trial for this account only.`)) return;
+
+          button.disabled = true;
+          button.textContent = "Activating...";
+
+          const studentUpdate = await supabaseClient
+            .from("students")
+            .update({ account_status: "active" })
+            .eq("id", studentId);
+
+          if (studentUpdate.error) {
+            alert("Could not activate test account: " + studentUpdate.error.message);
+            button.disabled = false;
+            button.textContent = "Activate Test Access";
+            return;
+          }
+
+          const enrollmentUpdate = await supabaseClient
+            .from("enrollments")
+            .update({ status: "active" })
+            .eq("student_id", studentId)
+            .in("status", ["trial", "expired"]);
+
+          if (enrollmentUpdate.error) {
+            alert("Student account was activated, but course access could not be updated: " + enrollmentUpdate.error.message + "\nPlease check the Supabase enrollment update policy.");
+            button.disabled = false;
+            button.textContent = "Retry Course Access";
+            return;
+          }
+
+          alert("Test access activated for " + studentName + ". The 2-day trial remains unchanged for all other students.");
+          await loadStaffStudents();
+        });
+      });
+    }
   }
 
 
