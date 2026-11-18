@@ -1225,10 +1225,10 @@
 
               <select id="registerGrade" required>
                 <option value="">Select Grade</option>
-                <option value="9">Grade 9</option>
-                <option value="10">Grade 10</option>
-                <option value="11">Grade 11</option>
-                <option value="12">Grade 12</option>
+                <option value="1">Grade 9</option>
+                <option value="2">Grade 10</option>
+                <option value="3">Grade 11</option>
+                <option value="4">Grade 12</option>
               </select>
 
             </div>
@@ -2586,150 +2586,77 @@
     .addEventListener("submit", async function(e) {
 
       e.preventDefault();
-
       hideAlert("authAlert");
 
-      const fullName =
-        document
-          .getElementById("registerName")
-          .value
-          .trim();
-
-      const email =
-        document
-          .getElementById("registerEmail")
-          .value
-          .trim();
-
-      const password =
-        document
-          .getElementById("registerPassword")
-          .value;
-
-      const gradeId =
-        document
-          .getElementById("registerGrade")
-          .value;
-
-      const boardId =
-        document
-          .getElementById("registerBoard")
-          .value;
+      const fullName = document.getElementById("registerName").value.trim();
+      const email = document.getElementById("registerEmail").value.trim();
+      const password = document.getElementById("registerPassword").value;
+      const gradeId = document.getElementById("registerGrade").value;
+      const boardId = document.getElementById("registerBoard").value;
 
       if (!fullName || !email || !password || !gradeId || !boardId) {
-
-        showAlert(
-          "authAlert",
-          "Please complete all registration fields.",
-          "failure"
-        );
-
+        showAlert("authAlert", "Please complete all registration fields.", "failure");
         return;
       }
 
-      const { data, error } =
-        await supabaseClient.auth.signUp({
-          email,
-          password
-        });
+      if (!["1", "2", "3", "4"].includes(gradeId)) {
+        showAlert("authAlert", "Please select a valid grade.", "failure");
+        return;
+      }
+
+      if (!/^\d+$/.test(boardId)) {
+        showAlert("authAlert", "Please select a valid board.", "failure");
+        return;
+      }
+
+      const username = email.split("@")[0];
+
+      const { data, error } = await supabaseClient.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+            username: username,
+            role: "student",
+            board_id: boardId,
+            grade_id: gradeId
+          }
+        }
+      });
 
       if (error) {
-
-        showAlert(
-          "authAlert",
-          error.message,
-          "failure"
-        );
-
+        showAlert("authAlert", error.message, "failure");
         return;
       }
 
       if (!data.user) {
-
         showAlert(
           "authAlert",
-          "Account created. Please check your email if email confirmation is enabled.",
+          "Account creation started. Please check your email if email confirmation is enabled.",
           "success"
         );
-
         return;
       }
 
-      const userId = data.user.id;
-
-      const username =
-        email.split("@")[0];
-
-      const profileInsert =
-        await supabaseClient
-          .from("profiles")
-          .insert({
-            id: userId,
-            full_name: fullName,
-            username: username,
-            role: "student",
-            preferred_language: "both"
-          });
-
-      if (profileInsert.error) {
-
+      if (!data.session) {
         showAlert(
           "authAlert",
-          profileInsert.error.message,
-          "failure"
+          "Student account created. Please verify your email, then log in. Your 2-day trial has started.",
+          "success"
         );
-
         return;
       }
 
-      const trialStart = new Date();
-
-      const trialEnd =
-        new Date(
-          trialStart.getTime() +
-          2 * 24 * 60 * 60 * 1000
-        );
-
-      const studentInsert =
-        await supabaseClient
-          .from("students")
-          .insert({
-            id: userId,
-            board_id: Number(boardId),
-            grade_id: Number(gradeId),
-            admission_number:
-              "ST-" +
-              Date.now(),
-            trial_started_at:
-              trialStart.toISOString(),
-            trial_ends_at:
-              trialEnd.toISOString(),
-            account_status: "trial"
-          });
-
-      if (studentInsert.error) {
-
-        showAlert(
-          "authAlert",
-          studentInsert.error.message,
-          "failure"
-        );
-
-        return;
-      }
-
+      currentUser = data.user;
       showAlert(
         "authAlert",
         "Account created successfully. Your 2-day trial has started.",
         "success"
       );
 
-      currentUser = data.user;
-
       await loadDashboard();
-
     });
-
 
   // Parent registration stores the requested child in auth metadata.
   // The parent profile and request are finalized after email verification/login if required.
